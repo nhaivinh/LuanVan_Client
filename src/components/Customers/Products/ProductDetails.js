@@ -31,7 +31,7 @@ function ProductDetails() {
     let params = useParams();
 
     return (
-        <Box style={{ marginTop: 150 }}>
+        <Box style={{ }}>
             <Container maxWidth="lg" style={{ backgroundColor : 'white' , borderRadius: '10px'}}>
                 <Box style={{ border: '1px solid', height: 400 }}>
                     <Grid container spacing={3}>

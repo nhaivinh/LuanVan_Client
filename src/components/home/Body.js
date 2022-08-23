@@ -43,18 +43,54 @@ const Body = () => {
   return (
     <Box style={{}}>
       <Container maxWidth="lg">
-        <Box style={{ position: 'absolute', width: '100%' , left:0, zIndex: '-1'}}>
+        <Box style={{ position: 'absolute', width: '100%', left: 0, zIndex: '-1' }}>
           <Slider />
         </Box>
         <Grid container spacing={2}>
           <Grid item xs={2}>
-            <CatergoryList/>
+            <CatergoryList />
           </Grid>
         </Grid>
       </Container>
       <Container>
-        <Box style={{ height: 500 ,backgroundColor: "white", borderRadius: 5, marginTop: 30, marginBottom: 20}}>
-          1231321322123
+        <Box style={{ display: 'flex', flexWrap: 'wrap', marginTop: 50 }}>
+          <Box style={{ display: 'flex', flexBasis: '25%', flexDirection: 'column', alignItems: 'center' }}>
+            <Link to="/productByType/cpu" >
+              <img
+                src="https://lh3.googleusercontent.com/ALoolTUg2Y5oRNEJNJjbUC3e6joNFwiY9zX9rB0EI1riSVZvlLq7jJ579KG_55RSCS0ObvlHKnaRoF5kmJmNamMEqavd4vRi=rw-w308"
+                width={'80%'}
+              />
+            </Link>
+          </Box>
+          <Box style={{ display: 'flex', flexBasis: '25%', flexDirection: 'column', alignItems: 'center' }}>
+            <Link to="/productByType/gpu" >
+              <img
+                src="https://lh3.googleusercontent.com/ALoolTUg2Y5oRNEJNJjbUC3e6joNFwiY9zX9rB0EI1riSVZvlLq7jJ579KG_55RSCS0ObvlHKnaRoF5kmJmNamMEqavd4vRi=rw-w308"
+                width={'80%'}
+              />
+            </Link>
+          </Box>
+          <Box style={{ display: 'flex', flexBasis: '25%', flexDirection: 'column', alignItems: 'center' }}>
+            <Link to="/productByType/ram" >
+              <img
+                src="https://lh3.googleusercontent.com/ALoolTUg2Y5oRNEJNJjbUC3e6joNFwiY9zX9rB0EI1riSVZvlLq7jJ579KG_55RSCS0ObvlHKnaRoF5kmJmNamMEqavd4vRi=rw-w308"
+                width={'80%'}
+              />
+            </Link>
+          </Box>
+          <Box style={{ display: 'flex', flexBasis: '25%', flexDirection: 'column', alignItems: 'center' }}>
+            <Link to="/productByType/main" >
+              <img
+                src="https://lh3.googleusercontent.com/ALoolTUg2Y5oRNEJNJjbUC3e6joNFwiY9zX9rB0EI1riSVZvlLq7jJ579KG_55RSCS0ObvlHKnaRoF5kmJmNamMEqavd4vRi=rw-w308"
+                width={'80%'}
+              />
+            </Link>
+          </Box>
+        </Box>
+      </Container>
+      <Container>
+        <Box style={{ height: 500 }}>
+          here
         </Box>
       </Container>
     </Box>

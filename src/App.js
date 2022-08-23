@@ -10,6 +10,7 @@ import PageNotFound from './components/PageNotFound';
 import ProductByType from './components/Customers/Products/ProductByType';
 import AdminHomePage from './components/Admin/AdminHomePage';
 import Cart from './components/Customers/Cart/Cart';
+import ScrollButton from './components/Customers/ScrollToTopButton/ScrollButton';
 
 class App extends React.Component {
   componentDidMount() {
@@ -38,6 +39,7 @@ class App extends React.Component {
             <Route exact path='*' element={<PageNotFound />} />
           </Routes>
         </React.Fragment>
+        <ScrollButton />
       </div>
     );
   }

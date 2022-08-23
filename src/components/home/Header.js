@@ -32,20 +32,21 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(2),
     },
     title: {
-        // flexGrow: 1,
+        flexGrow: 1,
     },
     searchBar: {
-        // flexGrow: 1,
+        flexGrow: 1,
         alignItems: 'left'
     }
     ,
     typography: {
         padding: theme.spacing(2),
     },
+    toolbar: theme.mixins.toolbar
 }));
 
 const style = {
-    display: 'outerline',
+    display: 'flex',
     marginLeft: 3,
     marginRight: 3,
     ":hover": {
@@ -74,12 +75,23 @@ const Header = () => {
     const [searchItem, setSearchItem] = useState("");
 
     return (
-        <div className={classes.root}>
-            <AppBar position="absolute" style={{ backgroundColor: '#2d2d2d' }}>
-                <Container  maxWidth="lg">
+        <Box style={{ marginBottom: 10 }}>
+            <AppBar position="fixed" elevation={0} style={{ backgroundColor: '#2d2d2d' }}>
+                <Container maxWidth="lg" >
+                    <Toolbar variant="dense">
+                        <Box style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            width: '100%'
+                        }}>
+                            <img
+                                src={'https://lh3.googleusercontent.com/fZCbLDJ59Ioqx7aWR0qyoBXETqQezHo-ingVbETJPLVZPgZEr4f0D1uv046V4_0_DhmDfxP-e3_Duxd3avGLFdHPrUd-VrTY=w1920-rw'}
+                            />
+                        </Box>
+                    </Toolbar>
                     <Toolbar>
                         <Typography variant="h6" className={classes.title}>
-                            Website Linh Kien
+                            Website Linh Kiện
                         </Typography>
                         <SearchBar
                             className={classes.searchBar}
@@ -87,7 +99,7 @@ const Header = () => {
                             onChange={value => {
                                 setSearchItem(value);
                             }}
-                            onRequestSearch={() => console.log("onRequestSearch")}
+                            onRequestSearch={() => console.log({ searchItem })}
                             style={{
                                 margin: "0 auto",
                                 maxWidth: 800
@@ -101,7 +113,7 @@ const Header = () => {
                                     flexDirection: 'row',
                                     marginLeft: 3,
                                 }}>
-                                <ShoppingCartOutlinedIcon/>
+                                <ShoppingCartOutlinedIcon />
                                 <Box
                                     sx={{
                                         display: 'flex',
@@ -139,9 +151,7 @@ const Header = () => {
                     >
                         <Typography className={classes.typography}>Chỉnh sửa thông tin cá nhân</Typography>
                     </Popover>
-                </Container>
-                <Container >
-                    <Toolbar>
+                    <Toolbar variant="dense">
                         <Box
                             sx={style}
                         >
@@ -169,7 +179,12 @@ const Header = () => {
                     </Toolbar>
                 </Container>
             </AppBar>
-        </div >
+            <Box style={{marginBottom: 50 }}>
+                <div className={classes.toolbar}></div>
+                <div className={classes.toolbar}></div>
+            </Box>
+
+        </Box>
     );
 };
 

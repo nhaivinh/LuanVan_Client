@@ -17,16 +17,25 @@ import MemoryIcon from '@mui/icons-material/Memory';
 function CatergoryList() {
     return (
         <Box
-            style={{  backgroundColor: "White", borderRadius: 5 }}
+            style={{  
+                borderRadius: '0.5rem',
+                backgroundColor: 'rgb(255, 255, 255)',
+                position: 'relative',
+                overflow: 'hidden',
+                width: '12.375rem',
+                height: '28.5rem',
+                zIndex: 2,
+                marginTop: 20,
+            }}
         >
             <List
                 style={{ width: '100%' }}
                 component="nav"
                 aria-labelledby="nested-list-subheader"
                 subheader={
-                    <ListSubheader component="div" id="nested-list-subheader" color="inherit">
+                    <ListSubheader position='static' component="div" id="nested-list-subheader" color="inherit">
                         <Box
-                            style={{ display: 'flex', bgcolor: "#a50a06", width: '100%', height: 90, alignItems: 'center', borderRadius: 10 }}
+                            style={{ display: 'flex', bgcolor: "#a50a06", width: '100%', height: 100, alignItems: 'center', justifyContent:'center',borderRadius: 10 }}
                         >
                             <Typography variant='h5'>
                                 Danh Mục Sản Phẩm

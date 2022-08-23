@@ -32,7 +32,7 @@ function ProductByType() {
     let params = useParams();
 
     return (
-        <Box style={{ marginTop: 150 }}>
+        <Box style={{}}>
             <Container maxWidth="lg" style={{ backgroundColor: 'white', borderRadius: '10px' }}>
                 <Box style={{}}>
                     Bộ Lọc {params.productType}
