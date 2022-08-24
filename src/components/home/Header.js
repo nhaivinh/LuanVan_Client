@@ -107,7 +107,7 @@ const Header = () => {
                         />
                         <Link to="/cart">
                             <Box
-                                sx={{
+                                style={{
                                     display: 'flex',
                                     alignItems: 'center',
                                     flexDirection: 'row',
@@ -115,7 +115,7 @@ const Header = () => {
                                 }}>
                                 <ShoppingCartOutlinedIcon />
                                 <Box
-                                    sx={{
+                                    style={{
                                         display: 'flex',
                                         alignItems: 'center',
                                         flexDirection: 'column',
@@ -126,7 +126,7 @@ const Header = () => {
                                     <Typography>0 sản phẩm</Typography>
                                 </Box>
                             </Box>
-                        </Link>
+                        </Link>                       
                         {/* <Avatar
                             className={classes.orange}
                             aria-describedby={id}
@@ -179,7 +179,7 @@ const Header = () => {
                     </Toolbar>
                 </Container>
             </AppBar>
-            <Box style={{marginBottom: 50 }}>
+            <Box style={{ marginBottom: 50 }}>
                 <div className={classes.toolbar}></div>
                 <div className={classes.toolbar}></div>
             </Box>

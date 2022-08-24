@@ -3,7 +3,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import Stack from '@mui/material/Stack';
 import Modal from '@mui/material/Modal';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-
+import Register from "./Register";
 import {
     Button,
     Typography,
@@ -36,7 +36,7 @@ const Login = () => {
                         flexDirection: 'row',
                         marginLeft: 3,
                     }}>
-                    <AccountCircleOutlinedIcon fontSize="large"/>
+                    <AccountCircleOutlinedIcon fontSize="large" />
                     <Box
                         style={{
                             display: 'flex',
@@ -62,7 +62,7 @@ const Login = () => {
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    width: 500,
+                    width: 400,
                     height: 400,
                     backgroundColor: '#F8F8F8',
                     borderRadius: 10,
@@ -72,17 +72,32 @@ const Login = () => {
                     <Stack direction="column" spacing={2} alignItems="flex-end">
                         <IconButton variant="contained" onClick={handleClose}><CloseIcon /></IconButton>
                     </Stack>
-                    <Typography id="post-request-error-handling" variant="h5" style={{ paddingBottom: 40 }}>
-                        Thêm Khách Hàng Mới
-                    </Typography>
-                    <TextField
-                        required
-                        label="Họ và Tên"
-                        variant="outlined"
-                    >
-                    </TextField>
-                    <Stack direction="column" spacing={2} alignItems="flex-end">
-                        <Button variant="contained" >Thêm Khách Hàng</Button>
+                    <Stack direction="column" spacing={2} alignItems="center" marginBottom={5}>
+                        <Typography variant="h4">Đăng Nhập</Typography>
+                    </Stack>
+                    <Stack direction="column" spacing={2} alignItems="center" marginBottom={5}>
+                        <Stack direction="row" spacing={2} justifyContent="center">
+                            <Typography>Tên đăng nhập</Typography>
+                            <TextField
+                                required
+                                label="Tên"
+                                variant="outlined"
+                            >
+                            </TextField>
+                        </Stack>
+                        <Stack direction="row" spacing={2} justifyContent="center">
+                            <Typography>Mật Khẩu</Typography>
+                            <TextField
+                                required
+                                label="Mật Khẩu"
+                                variant="outlined"
+                            >
+                            </TextField>
+                        </Stack>
+                    </Stack>
+                    <Stack direction="row" spacing={2} justifyContent="center">
+                        <Button variant="outlined" >Đăng Nhập</Button>
+                        <Register handleCloseLogin={handleClose} />
                     </Stack>
                 </Box>
             </Modal>

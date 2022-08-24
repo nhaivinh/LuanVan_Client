@@ -8,7 +8,7 @@ import Footer from './components/home/Footer';
 import ProductDetails from './components/Customers/Products/ProductDetails';
 import PageNotFound from './components/PageNotFound';
 import ProductByType from './components/Customers/Products/ProductByType';
-import AdminHomePage from './components/Admin/AdminHomePage';
+import AdminHome from './components/Admin/AdminHome';
 import Cart from './components/Customers/Cart/Cart';
 import ScrollButton from './components/Customers/ScrollToTopButton/ScrollButton';
 
@@ -35,7 +35,7 @@ class App extends React.Component {
         <React.Fragment>
           <Routes>
             <Route exact path='/*' element={<Home />} />
-            <Route exact path='/admin/*' element={<AdminHomePage />} />
+            <Route exact path='/admin/*' element={<AdminHome />} />
             <Route exact path='*' element={<PageNotFound />} />
           </Routes>
         </React.Fragment>
