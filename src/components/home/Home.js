@@ -6,6 +6,9 @@ import ProductByType from '../Customers/Products/ProductByType';
 import ProductDetails from '../Customers/Products/ProductDetails';
 import Cart from '../Customers/Cart/Cart';
 import Footer from './Footer';
+import BuildPC from '../Customers/BuildPC/BuildPC';
+import SuggestBuildPC from '../Customers/BuildPC/SuggestBuildPC';
+
 // import '../../CSS/ClientHome.css'
 
 function Home() {
@@ -19,6 +22,8 @@ function Home() {
         <Route exact path='/product/:productId' element={<ProductDetails />} />
         <Route exact path='/productByType/:productType' element={<ProductByType />} />
         <Route exact path='/cart' element={<Cart />} />
+        <Route exact path='/buildpc' element={<BuildPC />} />
+        <Route exact path='/suggestbuildpc' element={<SuggestBuildPC />} />
       </Routes>
       <footer><Footer /></footer>
     </div>

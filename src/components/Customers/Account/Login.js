@@ -3,7 +3,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import Stack from '@mui/material/Stack';
 import Modal from '@mui/material/Modal';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import Register from "./Register";
+import { makeStyles } from '@material-ui/core/styles';
 import {
     Button,
     Typography,
@@ -12,11 +12,19 @@ import {
     TextField
 } from '@material-ui/core';
 
-const style = {
+import Register from "./Register";
 
-};
+const useStyles = makeStyles({
+    button: {
+      color: '#ffa500',
+      '&:hover': {
+        color: '#fff',
+    },
+  }})
 
 const Login = () => {
+
+    const classes = useStyles();
 
     const [open, setOpen] = React.useState(false);
 
@@ -28,7 +36,7 @@ const Login = () => {
 
     return (
         <div>
-            <IconButton variant="contained" onClick={handleOpen} color="default">
+            <IconButton variant="text" onClick={handleOpen} className={classes.button}>
                 <Box
                     style={{
                         display: 'flex',

@@ -1,5 +1,6 @@
 
 import { Link, Outlet } from 'react-router-dom';
+import Grid from '@mui/material/Grid';
 
 import {
     Box,
@@ -17,7 +18,7 @@ import MemoryIcon from '@mui/icons-material/Memory';
 function CatergoryList() {
     return (
         <Box
-            style={{  
+            style={{
                 borderRadius: '0.5rem',
                 backgroundColor: 'rgb(255, 255, 255)',
                 position: 'relative',
@@ -28,7 +29,20 @@ function CatergoryList() {
                 marginTop: 20,
             }}
         >
-            <List
+            <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+                Danh Mục Sản Phẩm
+            </Typography>
+            <List variant='dense'>
+                <ListItem disablePadding>
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <MemoryIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Bộ Vi Xử Lý" />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+            {/* <List
                 style={{ width: '100%' }}
                 component="nav"
                 aria-labelledby="nested-list-subheader"
@@ -100,8 +114,8 @@ function CatergoryList() {
                         <Typography>Quạt Tản Nhiệt</Typography>
                     </Link>
                 </ListItemButton>
-            </List>
-        </Box>
+            </List> */}
+        </Box >
     )
 }
 

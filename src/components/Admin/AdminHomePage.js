@@ -98,7 +98,7 @@ function AdminHomePage() {
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
 
-            <AppBar position="fixed" open={open}>
+            <AppBar position="fixed" open={open} style={{ backgroundColor: '#2d2d2d' }}>
                 <Toolbar >
                     <IconButton
                         color="inherit"

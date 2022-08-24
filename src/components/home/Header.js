@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import SearchBar from "material-ui-search-bar";
 import MenuIcon from '@material-ui/icons/Menu';
-import { deepOrange, deepPurple } from '@material-ui/core/colors';
+import { deepOrange, deepPurple, orange } from '@material-ui/core/colors';
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import Box from '@mui/material/Box';
@@ -18,7 +18,7 @@ import {
     Avatar,
     Typography,
     Container,
-    IconButton
+    IconButton,
 } from '@material-ui/core';
 
 
@@ -32,11 +32,20 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(2),
     },
     title: {
+        color: 'orange', 
         flexGrow: 1,
     },
     searchBar: {
-        flexGrow: 1,
+        flexGrow: 2,
         alignItems: 'left'
+    }
+    ,
+    toolbarTitle: {
+        color: 'orange',
+        textDecoration: 'none',
+        '&:hover': {
+            color: "white",
+         }
     }
     ,
     typography: {
@@ -49,9 +58,6 @@ const style = {
     display: 'flex',
     marginLeft: 3,
     marginRight: 3,
-    ":hover": {
-        backgroundColor: 'rgb(7, 177, 77, 0.42)'
-    }
 };
 
 const Header = () => {
@@ -105,15 +111,15 @@ const Header = () => {
                                 maxWidth: 800
                             }}
                         />
-                        <Link to="/cart">
+                        <Link to="/cart" className={classes.toolbarTitle}>
                             <Box
                                 style={{
                                     display: 'flex',
                                     alignItems: 'center',
                                     flexDirection: 'row',
-                                    marginLeft: 3,
+                                    marginLeft: 50,
                                 }}>
-                                <ShoppingCartOutlinedIcon />
+                                <ShoppingCartOutlinedIcon fontSize="large"/>
                                 <Box
                                     style={{
                                         display: 'flex',
@@ -155,26 +161,34 @@ const Header = () => {
                         <Box
                             sx={style}
                         >
-                            <Link to="/" >
-                                <Typography>Trang Chủ</Typography>
+                            <Link to="/" className={classes.toolbarTitle}>
+                                <Typography >Trang Chủ</Typography>
                             </Link>
                         </Box>
                         <Box
                             sx={style}
                         >
-                            <Typography>Giới Thiệu</Typography>
+                            <Link to="/" className={classes.toolbarTitle}>
+                                <Typography>Sản Phẩm</Typography>
+                            </Link>
                         </Box>
                         <Box
                             sx={style}>
-                            <Typography>Build PC</Typography>
+                            <Link to="/buildpc" className={classes.toolbarTitle}>
+                                <Typography>Build PC</Typography>
+                            </Link>
                         </Box>
                         <Box
                             sx={style}>
-                            <Typography>Tư Vấn Cấu Hình</Typography>
+                            <Link to="/suggestbuildpc" className={classes.toolbarTitle}>
+                                <Typography>Tư Vấn Cấu Hình</Typography>
+                            </Link>
                         </Box>
                         <Box
                             sx={style}>
-                            <Typography>Tư Vấn Cấu Hình</Typography>
+                            <Link to="/" className={classes.toolbarTitle}>
+                                <Typography>Chính Sách Bảo Hành</Typography>
+                            </Link>
                         </Box>
                     </Toolbar>
                 </Container>
