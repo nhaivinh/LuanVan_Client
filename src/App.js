@@ -2,14 +2,8 @@ import { Routes, Route } from 'react-router-dom';
 import React from 'react';
 import Home from './components/home/Home'
 import './CSS/App.css'
-import Header from './components/home/Header';
-import Body from './components/home/Body';
-import Footer from './components/home/Footer';
-import ProductDetails from './components/Customers/Products/ProductDetails';
 import PageNotFound from './components/PageNotFound';
-import ProductByType from './components/Customers/Products/ProductByType';
 import AdminHome from './components/Admin/AdminHome';
-import Cart from './components/Customers/Cart/Cart';
 import ScrollButton from './components/Customers/ScrollToTopButton/ScrollButton';
 
 class App extends React.Component {

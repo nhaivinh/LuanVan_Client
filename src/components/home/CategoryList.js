@@ -16,6 +16,7 @@ import MemoryIcon from '@mui/icons-material/Memory';
 
 
 function CatergoryList() {
+
     return (
         <Box
             style={{
@@ -29,27 +30,14 @@ function CatergoryList() {
                 marginTop: 20,
             }}
         >
-            <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-                Danh Mục Sản Phẩm
-            </Typography>
-            <List variant='dense'>
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <MemoryIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Bộ Vi Xử Lý" />
-                    </ListItemButton>
-                </ListItem>
-            </List>
-            {/* <List
+            <List
                 style={{ width: '100%' }}
                 component="nav"
                 aria-labelledby="nested-list-subheader"
                 subheader={
                     <ListSubheader position='static' component="div" id="nested-list-subheader" color="inherit">
                         <Box
-                            style={{ display: 'flex', bgcolor: "#a50a06", width: '100%', height: 100, alignItems: 'center', justifyContent:'center',borderRadius: 10 }}
+                            style={{ display: 'flex', bgcolor: "#a50a06", width: '100%', height: 100, alignItems: 'center', justifyContent: 'center', borderRadius: 10 }}
                         >
                             <Typography variant='h5'>
                                 Danh Mục Sản Phẩm
@@ -58,63 +46,71 @@ function CatergoryList() {
                     </ListSubheader>
                 }
             >
-                <ListItemButton>
-                    <ListItemIcon>
-                        <MemoryIcon />
-                    </ListItemIcon>
-                    <Link to="/productByType/CPU" >
+                <Link to={"/search/?type=cpu&page=1"}>
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <MemoryIcon />
+                        </ListItemIcon>
                         <Typography>Bộ Vi Xử Lý</Typography>
-                    </Link>
-                </ListItemButton>
-                <ListItemButton>
-                    <ListItemIcon>
-                        D
-                    </ListItemIcon>
-                    <Link to="/productByType/GPU" >
+                    </ListItemButton>
+                </Link>
+                <Link to="/search/?type=gpu&page=1" >
+                    <ListItemButton>
+                        <ListItemIcon>
+                            D
+                        </ListItemIcon>
                         <Typography>Card Đồ Hoạ</Typography>
-                    </Link>
-                </ListItemButton>
-                <ListItemButton>
-                    <ListItemIcon>
-                        D
-                    </ListItemIcon>
-                    <Link to="/productByType/Main" >
+                    </ListItemButton>
+                </Link>
+                <Link to="/search/?type=mainboard&page=1" >
+                    <ListItemButton>
+                        <ListItemIcon>
+                            D
+                        </ListItemIcon>
                         <Typography>Mainboard</Typography>
-                    </Link>
-                </ListItemButton>
-                <ListItemButton>
-                    <ListItemIcon>
-                        D
-                    </ListItemIcon>
-                    <Link to="/productByType/Ram" >
+                    </ListItemButton>
+                </Link>
+                <Link to="/search/?type=ram&page=1" >
+                    <ListItemButton>
+                        <ListItemIcon>
+                            D
+                        </ListItemIcon>
                         <Typography>Ram</Typography>
-                    </Link>
-                </ListItemButton>
-                <ListItemButton>
-                    <ListItemIcon>
-                        D
-                    </ListItemIcon>
-                    <Link to="/productByType/Disk" >
+                    </ListItemButton>
+                </Link>
+                <Link to="/search/?type=harddisk&page=1" >
+                    <ListItemButton>
+                        <ListItemIcon>
+                            D
+                        </ListItemIcon>
                         <Typography>Ổ Cứng</Typography>
-                    </Link>
-                </ListItemButton>
-                <ListItemButton>
-                    <ListItemIcon>
-                        D
-                    </ListItemIcon>
-                    <Link to="/productByType/Case" >
+                    </ListItemButton>
+                </Link>
+                <Link to="/search/?type=psu&page=1" >
+                    <ListItemButton>
+                        <ListItemIcon>
+                            D
+                        </ListItemIcon>
+                        <Typography>Nguồn</Typography>
+                    </ListItemButton>
+                </Link>
+                <Link to="/search/?type=casepc&page=1" >
+                    <ListItemButton>
+                        <ListItemIcon>
+                            D
+                        </ListItemIcon>
                         <Typography>Vỏ Case</Typography>
-                    </Link>
-                </ListItemButton>
-                <ListItemButton>
-                    <ListItemIcon>
-                        D
-                    </ListItemIcon>
-                    <Link to="/productByType/Fan" >
+                    </ListItemButton>
+                </Link>
+                <Link to="/search/?type=cooling_system&page=1" >
+                    <ListItemButton>
+                        <ListItemIcon>
+                            D
+                        </ListItemIcon>
                         <Typography>Quạt Tản Nhiệt</Typography>
-                    </Link>
-                </ListItemButton>
-            </List> */}
+                    </ListItemButton>
+                </Link>
+            </List>
         </Box >
     )
 }

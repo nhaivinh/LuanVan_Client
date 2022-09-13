@@ -1,3 +1,28 @@
 body{
     background-color: #F8F8F8;
 }
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.quantityInputNumber{
+    padding: 0;
+    margin: 0;
+    padding-left: 10px;
+    border: none;
+    width: 20px;
+    height: 20px;
+}
+.quantity input:focus {
+  outline: 0;
+}
+
+a{text-decoration: none}

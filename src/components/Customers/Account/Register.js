@@ -23,7 +23,7 @@ const Register = ({handleCloseLogin}) => {
     const [open, setOpen] = React.useState(false);
 
     const handleOpen = () => {
-        setOpen(true);
+        setOpen(true);  
     }
 
     const handleClose = () => {

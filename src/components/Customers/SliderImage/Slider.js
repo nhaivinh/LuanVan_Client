@@ -12,9 +12,9 @@ export default function Slider() {
         {slideImages.map((slide, index) => {
           return (
             <div className={styles.slide} key={slide}>
-              <div style={{ backgroundImage: `url(${slideImages[index]})` }}>
+              <div style={{ backgroundImage: `url(${slideImages[index]})` }}>       
               </div>
-            </div>
+            </div>            
           );
         })}
       </Slide>

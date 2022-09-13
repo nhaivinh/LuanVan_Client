@@ -53,8 +53,8 @@ const Login = () => {
                             marginLeft: 2,
                             marginRight: 3
                         }}>
-                        <Typography>Đăng nhập</Typography>
-                        <Typography>Đăng ký</Typography>
+                        <Typography variant="body2">Đăng nhập</Typography>
+                        <Typography variant="body2">Đăng ký</Typography>
                     </Box>
                 </Box>
             </IconButton>

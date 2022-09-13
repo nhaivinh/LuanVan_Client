@@ -21,8 +21,6 @@ import {
     IconButton,
 } from '@material-ui/core';
 
-
-
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -52,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
     },
     toolbar: theme.mixins.toolbar
+
 }));
 
 const style = {
@@ -63,6 +62,7 @@ const style = {
 const Header = () => {
 
     const classes = useStyles();
+    
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = (event) => {
@@ -128,8 +128,8 @@ const Header = () => {
                                         marginLeft: 2,
                                         marginRight: 3
                                     }}>
-                                    <Typography>Giỏ hàng của bạn</Typography>
-                                    <Typography>0 sản phẩm</Typography>
+                                    <Typography variant="body2">Giỏ hàng của bạn</Typography>
+                                    <Typography variant="body2">0 sản phẩm</Typography>
                                 </Box>
                             </Box>
                         </Link>                       
@@ -175,7 +175,7 @@ const Header = () => {
                         <Box
                             sx={style}>
                             <Link to="/buildpc" className={classes.toolbarTitle}>
-                                <Typography>Build PC</Typography>
+                                <Typography>Xây Dựng Cấu Hình</Typography>
                             </Link>
                         </Box>
                         <Box
@@ -193,7 +193,7 @@ const Header = () => {
                     </Toolbar>
                 </Container>
             </AppBar>
-            <Box style={{ marginBottom: 50 }}>
+            <Box style={{ marginBottom: 40 }}>
                 <div className={classes.toolbar}></div>
                 <div className={classes.toolbar}></div>
             </Box>

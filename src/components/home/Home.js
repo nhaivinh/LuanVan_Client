@@ -2,7 +2,7 @@ import Header from './Header'
 import Body from './Body';
 import { Routes, Route } from 'react-router-dom';
 import React from 'react';
-import ProductByType from '../Customers/Products/ProductByType';
+import ProductSearch from '../Customers/Products/ProductSearch';
 import ProductDetails from '../Customers/Products/ProductDetails';
 import Cart from '../Customers/Cart/Cart';
 import Footer from './Footer';
@@ -20,12 +20,14 @@ function Home() {
       <Routes>
         <Route exact path='/' element={<Body />} />
         <Route exact path='/product/:productId' element={<ProductDetails />} />
-        <Route exact path='/productByType/:productType' element={<ProductByType />} />
+        <Route exact path='/search' element={<ProductSearch />} />
         <Route exact path='/cart' element={<Cart />} />
         <Route exact path='/buildpc' element={<BuildPC />} />
         <Route exact path='/suggestbuildpc' element={<SuggestBuildPC />} />
       </Routes>
-      <footer><Footer /></footer>
+      <footer>
+        <Footer />
+      </footer>
     </div>
   )
 }
