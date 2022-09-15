@@ -7,9 +7,10 @@ import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import Box from '@mui/material/Box';
 import { Link, Outlet } from 'react-router-dom';
-
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Login from '../Customers/Account/Login'
-
+import { useCookies, removeCookie } from "react-cookie";
 import {
     AppBar,
     Toolbar,
@@ -30,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(2),
     },
     title: {
-        color: 'orange', 
+        color: 'orange',
         flexGrow: 1,
     },
     searchBar: {
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
         textDecoration: 'none',
         '&:hover': {
             color: "white",
-         }
+        }
     }
     ,
     typography: {
@@ -62,7 +63,7 @@ const style = {
 const Header = () => {
 
     const classes = useStyles();
-    
+
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = (event) => {
@@ -73,13 +74,24 @@ const Header = () => {
         setAnchorEl(null);
     };
 
+    const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
+    const [resetPage, setResetPage] = React.useState(false)
 
     const open = Boolean(anchorEl);
+
     const id = open ? 'simple-popover' : undefined;
 
     const [searchItem, setSearchItem] = useState("");
 
+    function handleResetPage(){
+        setResetPage(!resetPage)
+    }
+    function handleClickLogOut(){
+        handleResetPage()
+        handleClose()
+        removeCookie('Account', { path: '/' })
+    }
     return (
         <Box style={{ marginBottom: 10 }}>
             <AppBar position="fixed" elevation={0} style={{ backgroundColor: '#2d2d2d' }}>
@@ -119,7 +131,7 @@ const Header = () => {
                                     flexDirection: 'row',
                                     marginLeft: 50,
                                 }}>
-                                <ShoppingCartOutlinedIcon fontSize="large"/>
+                                <ShoppingCartOutlinedIcon fontSize="large" />
                                 <Box
                                     style={{
                                         display: 'flex',
@@ -132,31 +144,66 @@ const Header = () => {
                                     <Typography variant="body2">0 sản phẩm</Typography>
                                 </Box>
                             </Box>
-                        </Link>                       
-                        {/* <Avatar
-                            className={classes.orange}
-                            aria-describedby={id}
-                            onClick={handleClick}
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRagbYnTTxSnZDFEKCTsewsoiGdPymC_P-PYqElA1b57xMOEvGiI2rOghDqh7vQ_DNVZkE&usqp=CAU"
-                        ></Avatar> */}
-                        <Login />
+                        </Link>
+                        {cookies.Account === undefined ?
+                            <Login />
+                            :
+                            <Box
+
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    flexDirection: 'row',
+                                    marginLeft: 10,
+                                }}>
+                                <Avatar
+                                    id="basic-button"
+                                    aria-controls={open ? 'basic-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={open ? 'true' : undefined}
+                                    onClick={handleClick}
+                                    className={classes.orange}
+                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRagbYnTTxSnZDFEKCTsewsoiGdPymC_P-PYqElA1b57xMOEvGiI2rOghDqh7vQ_DNVZkE&usqp=CAU"
+                                ></Avatar>
+                                {/* <Box
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'flex-start',
+                                        flexDirection: 'column',
+                                        marginLeft: 2,
+                                        marginRight: 3
+                                    }}>
+
+                                    <Typography variant="body2">Xin chào!</Typography>
+                                    <Typography variant="body2">{cookies.Account}</Typography>
+                                </Box> */}
+                                <Menu
+                                    id="basic-menu"
+                                    anchorEl={anchorEl}
+                                    open={open}
+                                    onClose={handleClose}
+                                    MenuListProps={{
+                                        'aria-labelledby': 'basic-button',
+                                    }}
+                                >
+                                    <MenuItem onClick={handleClose}>
+                                        <Link to="/account">
+                                            Thông tin cá nhân
+                                        </Link>
+                                    </MenuItem>
+                                    <MenuItem onClick={handleClose}>
+                                        <Link to="/order">
+                                            Quản lý đơn hàng
+                                        </Link>
+                                    </MenuItem>
+                                    <MenuItem
+                                        onClick={handleClickLogOut}
+                                    >Đăng xuất</MenuItem>
+                                </Menu>
+                            </Box>
+                        }
+
                     </Toolbar>
-                    <Popover
-                        id={id}
-                        open={open}
-                        anchorEl={anchorEl}
-                        onClose={handleClose}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                    >
-                        <Typography className={classes.typography}>Chỉnh sửa thông tin cá nhân</Typography>
-                    </Popover>
                     <Toolbar variant="dense">
                         <Box
                             sx={style}
@@ -198,7 +245,7 @@ const Header = () => {
                 <div className={classes.toolbar}></div>
             </Box>
 
-        </Box>
+        </Box >
     );
 };
 

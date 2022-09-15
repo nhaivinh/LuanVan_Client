@@ -671,129 +671,129 @@ function ShowTechInfo({ ImportProduct }) {
                         }
                     </TableBody>
                 )
-            // case 'harddisk':
-            //     switch (ImportProduct[0].type_harddisk) {
-            //         case 'HDD':
-            //             return (
-            //                 <TableBody>
-            //                     {ImportProduct[0].type_harddisk !== '' ?
-            //                         <StyledTableRow key={1} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            //                         >
-            //                             <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Loại ổ cứng</StyledTableCell>
-            //                             <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].type_harddisk}</StyledTableCell>
-            //                         </StyledTableRow>
-            //                         :
-            //                         <StyledTableRow />
-            //                     }
-            //                     {ImportProduct[0].capacity_harddisk !== '' ?
-            //                         <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            //                         >
-            //                             <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Dung lượng</StyledTableCell>
-            //                             <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].capacity_harddisk}</StyledTableCell>
-            //                         </StyledTableRow>
-            //                         :
-            //                         <StyledTableRow />
-            //                     }
-            //                     {ImportProduct[0].type_connection_harddisk !== '' ?
-            //                         <StyledTableRow key={3} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            //                         >
-            //                             <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Loại kết nối</StyledTableCell>
-            //                             <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].type_connection_harddisk}</StyledTableCell>
-            //                         </StyledTableRow>
-            //                         :
-            //                         <StyledTableRow />
-            //                     }
-            //                     {ImportProduct[0].size_harddisk !== '' ?
-            //                         <StyledTableRow key={4} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            //                         >
-            //                             <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Kích thước</StyledTableCell>
-            //                             <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].size_harddisk}</StyledTableCell>
-            //                         </StyledTableRow>
-            //                         :
-            //                         <StyledTableRow />
-            //                     }
-            //                     {ImportProduct[0].rotational_speed_hdd !== '' ?
-            //                         <StyledTableRow key={5} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            //                         >
-            //                             <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Tốc độ vòng quay</StyledTableCell>
-            //                             <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].rotational_speed_hdd}</StyledTableCell>
-            //                         </StyledTableRow>
-            //                         :
-            //                         <StyledTableRow />
-            //                     }
-            //                 </TableBody>
-            //             )
-            //         case 'SSD':
-            //             return (
-            //                 <TableBody>
-            //                     {ImportProduct[0].type_harddisk !== '' ?
-            //                         <StyledTableRow key={1} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            //                         >
-            //                             <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Loại ổ cứng</StyledTableCell>
-            //                             <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].type_harddisk}</StyledTableCell>
-            //                         </StyledTableRow>
-            //                         :
-            //                         <StyledTableRow />
-            //                     }
-            //                     {ImportProduct[0].capacity_harddisk !== '' ?
-            //                         <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            //                         >
-            //                             <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Dung lượng</StyledTableCell>
-            //                             <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].capacity_harddisk}</StyledTableCell>
-            //                         </StyledTableRow>
-            //                         :
-            //                         <StyledTableRow />
-            //                     }
-            //                     {ImportProduct[0].type_connection_harddisk !== '' ?
-            //                         <StyledTableRow key={3} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            //                         >
-            //                             <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Loại kết nối</StyledTableCell>
-            //                             <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].type_connection_harddisk}</StyledTableCell>
-            //                         </StyledTableRow>
-            //                         :
-            //                         <StyledTableRow />
-            //                     }
-            //                     {ImportProduct[0].size_harddisk !== '' ?
-            //                         <StyledTableRow key={4} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            //                         >
-            //                             <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Kích thước</StyledTableCell>
-            //                             <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].size_harddisk}</StyledTableCell>
-            //                         </StyledTableRow>
-            //                         :
-            //                         <StyledTableRow />
-            //                     }
-            //                     {ImportProduct[0].nand_memory !== '' ?
-            //                         <StyledTableRow key={5} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            //                         >
-            //                             <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Bộ nhớ NAND</StyledTableCell>
-            //                             <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].nand_memory}</StyledTableCell>
-            //                         </StyledTableRow>
-            //                         :
-            //                         <StyledTableRow />
-            //                     }
-            //                     {ImportProduct[0].read_speed !== '' ?
-            //                         <StyledTableRow key={6} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            //                         >
-            //                             <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Tốc độ đọc</StyledTableCell>
-            //                             <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].read_speed}mb/s</StyledTableCell>
-            //                         </StyledTableRow>
-            //                         :
-            //                         <StyledTableRow />
-            //                     }
-            //                     {ImportProduct[0].write_speed !== '' ?
-            //                         <StyledTableRow key={7} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            //                         >
-            //                             <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Tốc độ ghi</StyledTableCell>
-            //                             <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].write_speed}mb/s</StyledTableCell>
-            //                         </StyledTableRow>
-            //                         :
-            //                         <StyledTableRow />
-            //                     }
-            //                 </TableBody>
-            //             )
-            //         default:
-            //             break;
-            //     }
+            case 'harddisk':
+                switch (ImportProduct[0].type_harddisk) {
+                    case 'HDD':
+                        return (
+                            <TableBody>
+                                {ImportProduct[0].type_harddisk !== '' ?
+                                    <StyledTableRow key={1} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Loại ổ cứng</StyledTableCell>
+                                        <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].type_harddisk}</StyledTableCell>
+                                    </StyledTableRow>
+                                    :
+                                    <StyledTableRow />
+                                }
+                                {ImportProduct[0].capacity_harddisk !== '' ?
+                                    <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Dung lượng</StyledTableCell>
+                                        <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].capacity_harddisk}</StyledTableCell>
+                                    </StyledTableRow>
+                                    :
+                                    <StyledTableRow />
+                                }
+                                {ImportProduct[0].type_connection_harddisk !== '' ?
+                                    <StyledTableRow key={3} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Loại kết nối</StyledTableCell>
+                                        <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].type_connection_harddisk}</StyledTableCell>
+                                    </StyledTableRow>
+                                    :
+                                    <StyledTableRow />
+                                }
+                                {ImportProduct[0].size_harddisk !== '' ?
+                                    <StyledTableRow key={4} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Kích thước</StyledTableCell>
+                                        <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].size_harddisk}</StyledTableCell>
+                                    </StyledTableRow>
+                                    :
+                                    <StyledTableRow />
+                                }
+                                {ImportProduct[0].rotational_speed_hdd !== '' ?
+                                    <StyledTableRow key={5} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Tốc độ vòng quay</StyledTableCell>
+                                        <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].rotational_speed_hdd}</StyledTableCell>
+                                    </StyledTableRow>
+                                    :
+                                    <StyledTableRow />
+                                }
+                            </TableBody>
+                        )
+                    case 'SSD':
+                        return (
+                            <TableBody>
+                                {ImportProduct[0].type_harddisk !== '' ?
+                                    <StyledTableRow key={1} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Loại ổ cứng</StyledTableCell>
+                                        <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].type_harddisk}</StyledTableCell>
+                                    </StyledTableRow>
+                                    :
+                                    <StyledTableRow />
+                                }
+                                {ImportProduct[0].capacity_harddisk !== '' ?
+                                    <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Dung lượng</StyledTableCell>
+                                        <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].capacity_harddisk}</StyledTableCell>
+                                    </StyledTableRow>
+                                    :
+                                    <StyledTableRow />
+                                }
+                                {ImportProduct[0].type_connection_harddisk !== '' ?
+                                    <StyledTableRow key={3} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Loại kết nối</StyledTableCell>
+                                        <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].type_connection_harddisk}</StyledTableCell>
+                                    </StyledTableRow>
+                                    :
+                                    <StyledTableRow />
+                                }
+                                {ImportProduct[0].size_harddisk !== '' ?
+                                    <StyledTableRow key={4} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Kích thước</StyledTableCell>
+                                        <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].size_harddisk}</StyledTableCell>
+                                    </StyledTableRow>
+                                    :
+                                    <StyledTableRow />
+                                }
+                                {ImportProduct[0].nand_memory !== '' ?
+                                    <StyledTableRow key={5} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Bộ nhớ NAND</StyledTableCell>
+                                        <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].nand_memory}</StyledTableCell>
+                                    </StyledTableRow>
+                                    :
+                                    <StyledTableRow />
+                                }
+                                {ImportProduct[0].read_speed !== '' ?
+                                    <StyledTableRow key={6} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Tốc độ đọc</StyledTableCell>
+                                        <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].read_speed}mb/s</StyledTableCell>
+                                    </StyledTableRow>
+                                    :
+                                    <StyledTableRow />
+                                }
+                                {ImportProduct[0].write_speed !== '' ?
+                                    <StyledTableRow key={7} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Tốc độ ghi</StyledTableCell>
+                                        <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].write_speed}mb/s</StyledTableCell>
+                                    </StyledTableRow>
+                                    :
+                                    <StyledTableRow />
+                                }
+                            </TableBody>
+                        )
+                    default:
+                        break;
+                }
             case 'cooling_system':
                 return (
                     <TableBody>

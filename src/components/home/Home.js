@@ -8,6 +8,8 @@ import Cart from '../Customers/Cart/Cart';
 import Footer from './Footer';
 import BuildPC from '../Customers/BuildPC/BuildPC';
 import SuggestBuildPC from '../Customers/BuildPC/SuggestBuildPC';
+import AccountInfo from '../Customers/Account/AccountInfo';
+import OrderInfo from '../Customers/Order/OrderInfo';
 
 // import '../../CSS/ClientHome.css'
 
@@ -22,6 +24,8 @@ function Home() {
         <Route exact path='/product/:productId' element={<ProductDetails />} />
         <Route exact path='/search' element={<ProductSearch />} />
         <Route exact path='/cart' element={<Cart />} />
+        <Route exact path='/account' element={<AccountInfo />} />
+        <Route exact path='/order' element={<OrderInfo />} />
         <Route exact path='/buildpc' element={<BuildPC />} />
         <Route exact path='/suggestbuildpc' element={<SuggestBuildPC />} />
       </Routes>

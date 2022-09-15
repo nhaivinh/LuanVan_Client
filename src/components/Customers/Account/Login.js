@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from 'axios'
 import CloseIcon from '@mui/icons-material/Close'
 import Stack from '@mui/material/Stack';
 import Modal from '@mui/material/Modal';
@@ -11,28 +12,61 @@ import {
     Box,
     TextField
 } from '@material-ui/core';
-
+import { useNavigate } from 'react-router-dom'
+import { useCookies } from "react-cookie";
 import Register from "./Register";
-
+// import { cookie, CreateCookie, GetCookie } from '../../Cookie/CookieFunc';
 const useStyles = makeStyles({
     button: {
-      color: '#ffa500',
-      '&:hover': {
-        color: '#fff',
-    },
-  }})
+        color: '#ffa500',
+        '&:hover': {
+            color: '#fff',
+        },
+    }
+})
 
 const Login = () => {
-
+    const navigate = useNavigate();
     const classes = useStyles();
-
+    const [cookies, setCookie] = useCookies(["user"]);
     const [open, setOpen] = React.useState(false);
+
+    const [StateLogin, setStateLogin] = useState("Not connect")
+    const [login, setLogin] = useState({
+        Username: '',
+        Password: ''
+    });
 
     const handleOpen = () => {
         setOpen(true);
     }
 
+    function handleCookie(id) {
+        setCookie("Account", id, {
+            path: "/"
+        });
+    }
+
     const handleClose = () => setOpen(false);
+
+    const Checklogin = () => {
+        if (login.Username.length !== 0 && login.Password.length !== 0) {
+            axios.post('https://localhost:7253/api/Login', login)
+                .then(res => res.data)
+                .then(res => {
+                    if (res === "Incorrect") {
+                        alert("Tên tài khoản hoặc mật khẩu không đúng")
+                    }
+                    else {
+                        setStateLogin(res)
+                        handleCookie(res)
+                        handleClose()
+                    }
+                })
+        } else {
+            alert("nhập mật khẩu và tên đăng nhập")
+        }
+    }
 
     return (
         <div>
@@ -90,6 +124,7 @@ const Login = () => {
                                 required
                                 label="Tên"
                                 variant="outlined"
+                                onChange={(e) => { setLogin({ ...login, Username: e.target.value }) }}
                             >
                             </TextField>
                         </Stack>
@@ -99,12 +134,13 @@ const Login = () => {
                                 required
                                 label="Mật Khẩu"
                                 variant="outlined"
+                                onChange={(e) => { setLogin({ ...login, Password: e.target.value }) }}
                             >
                             </TextField>
                         </Stack>
                     </Stack>
                     <Stack direction="row" spacing={2} justifyContent="center">
-                        <Button variant="outlined" >Đăng Nhập</Button>
+                        <Button variant="outlined" onClick={Checklogin}>Đăng Nhập</Button>
                         <Register handleCloseLogin={handleClose} />
                     </Stack>
                 </Box>

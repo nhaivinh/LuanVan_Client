@@ -8,7 +8,7 @@ import Container from '@mui/material/Container';
 const Footer = () => {
 
     return (
-        <Box style={{ backgroundColor: '#e9edf2' , height: 200}}>
+        <Box style={{ backgroundColor: '#e9edf2' , height: 200, marginTop: 20}}>
             <Container maxWidth="lg" >
                 <Typography>Here Is Footer</Typography>
             </Container>

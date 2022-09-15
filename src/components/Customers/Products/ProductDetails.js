@@ -56,6 +56,14 @@ function ProductDetails() {
                         <Link underline="hover" color="inherit" to="/">
                             <Typography color="text.primary">Trang Chủ</Typography>
                         </Link>
+                        {product[0] !== undefined ?
+                            <Link color="text.primary" to={'/search/?type=' + product[0].type_product + '&page=1'}>
+                                    {product[0].type_product.toUpperCase()}
+                            </Link>
+                            :
+                            ''
+                        }
+
                         <Typography color="text.primary">
                             {product[0] !== undefined ?
                                 product[0].name_product
@@ -101,8 +109,8 @@ function ProductDetails() {
                                     >
                                         <Typography variant="h5">{product[0].unit_price_protuct} đ</Typography>
                                     </Box>
-                                    
-                                    
+
+
                                     <Box
                                         style={{
                                             display: 'flex',
@@ -154,7 +162,6 @@ function ProductDetails() {
                 </Grid>
             </Container>
         </Box>
-
     )
 }
 
