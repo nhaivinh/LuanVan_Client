@@ -14,7 +14,7 @@ import FormLabel from '@mui/material/FormLabel';
 import Button from '@mui/material/Button';
 import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
-import { useCookies, removeCookie } from "react-cookie";
+import { useCookies } from "react-cookie";
 
 function getFormattedDate(date) {
     var year = date.getFullYear();

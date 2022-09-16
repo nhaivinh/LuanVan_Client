@@ -22,6 +22,9 @@ import 'swiper/css/navigation'
 import 'swiper/css/thumbs'
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import ShowTechInfo from './ShowTechInfo';
+import SnackBarContext from '../../SnackBar/SnackBarContext';
+import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
+import { useCookies } from "react-cookie";
 
 function ProductDetails() {
 
@@ -29,7 +32,12 @@ function ProductDetails() {
 
     const [product, setProduct] = React.useState([])
     const [images, setImages] = React.useState([])
-
+    const [, dispatch] = React.useContext(SnackBarContext);
+    const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+    const [posts, setPosts] = React.useState([]);
+    const client = axios.create({
+        baseURL: "https://localhost:7253/api/Cart"
+    });
     React.useEffect(() => {
         axios.get(`https://localhost:7253/api/Product/getproductbyid/` + params.productId)
             .then(res => {
@@ -42,6 +50,36 @@ function ProductDetails() {
                 setImages(Images);
             })
     }, [])
+
+    function handleClickAdd() {
+        addPosts(cookies.Account, params.productId);
+
+    }
+    const addPosts = (idAccount,idProduct) => {
+        client
+            .post('', {
+                "idAccount": idAccount,
+                "idProduct": idProduct,
+            })
+            .then((response) => {
+                setPosts([response.data, ...posts]);
+                dispatch(setOpenSnackBar());
+                dispatch(setMessage(response.data.message));
+                dispatch(setSeverity(response.data.severity));
+            })
+            .catch((err) => {
+                if (err.response) {
+                    // The client was given an error response (5xx, 4xx)
+                    console.log(err.response.data);
+                    console.log(err.response.status);
+                    console.log(err.response.headers);
+                } else if (err.request) {
+                    // The client never received a response, and the request was never left
+                } else {
+                    // Anything else
+                }
+            });
+    };
 
     return (
         <Box style={{}}>
@@ -58,7 +96,7 @@ function ProductDetails() {
                         </Link>
                         {product[0] !== undefined ?
                             <Link color="text.primary" to={'/search/?type=' + product[0].type_product + '&page=1'}>
-                                    {product[0].type_product.toUpperCase()}
+                                {product[0].type_product.toUpperCase()}
                             </Link>
                             :
                             ''
@@ -107,7 +145,13 @@ function ProductDetails() {
                                             justifyContent: 'space-between'
                                         }}
                                     >
-                                        <Typography variant="h5">{product[0].unit_price_protuct} đ</Typography>
+                                        <Typography variant="h5">{(
+                                            product[0].unit_price_product).toLocaleString('vi-VI',
+                                                {
+                                                    style: 'currency',
+                                                    currency: 'VND'
+                                                })}
+                                        </Typography>
                                     </Box>
 
 
@@ -123,7 +167,7 @@ function ProductDetails() {
                                         key={product[0].id_product}
                                     >
                                         <Button variant="contained">Mua Ngay</Button>
-                                        <Button variant="contained">Thêm Vào Giỏ Hàng</Button>
+                                        <Button variant="contained" onClick={handleClickAdd}>Thêm Vào Giỏ Hàng</Button>
                                     </Box>
 
                                 </Box>

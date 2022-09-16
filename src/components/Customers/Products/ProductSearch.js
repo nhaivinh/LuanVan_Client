@@ -113,14 +113,13 @@ function ProductSearch() {
                                             }}
                                         >
                                             <Typography variant='body2'>{Product.name_product}</Typography>
-
-
                                             <Typography variant='body1'>{
-                                                (Product.unit_price_protuct).toLocaleString('vi-VI',
+                                                (Product.unit_price_product).toLocaleString('vi-VI',
                                                     {
                                                         style: 'currency',
                                                         currency: 'VND'
-                                                    })}</Typography>
+                                                    })}
+                                            </Typography>
                                         </Box>
                                     </Box>
                                 </Link>
