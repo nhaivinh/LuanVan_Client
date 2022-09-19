@@ -10,6 +10,7 @@ import BuildPC from '../Customers/BuildPC/BuildPC';
 import SuggestBuildPC from '../Customers/BuildPC/SuggestBuildPC';
 import AccountInfo from '../Customers/Account/AccountInfo';
 import OrderInfo from '../Customers/Order/OrderInfo';
+import Checkout from '../Customers/Checkout/Checkout';
 
 // import '../../CSS/ClientHome.css'
 
@@ -26,6 +27,7 @@ function Home() {
         <Route exact path='/cart' element={<Cart />} />
         <Route exact path='/account' element={<AccountInfo />} />
         <Route exact path='/order' element={<OrderInfo />} />
+        <Route exact path='/checkout' element={<Checkout />} />
         <Route exact path='/buildpc' element={<BuildPC />} />
         <Route exact path='/suggestbuildpc' element={<SuggestBuildPC />} />
       </Routes>

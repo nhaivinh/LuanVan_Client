@@ -6,15 +6,17 @@ import Modal from '@mui/material/Modal';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-    Button,
     Typography,
     IconButton,
     Box,
     TextField
 } from '@material-ui/core';
+import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from "react-cookie";
 import Register from "./Register";
+import { hover } from "@testing-library/user-event/dist/hover";
+import { color } from "@mui/system";
 // import { cookie, CreateCookie, GetCookie } from '../../Cookie/CookieFunc';
 const useStyles = makeStyles({
     button: {
@@ -22,11 +24,17 @@ const useStyles = makeStyles({
         '&:hover': {
             color: '#fff',
         },
+    },
+    orangeButton: {
+        color: '#ffa500',
+        '&:hover': {
+            color: '#fff',
+        },
     }
 })
 
-const Login = () => {
-    const navigate = useNavigate();
+const Login = ({ handleResetPage, typeButton }) => {
+
     const classes = useStyles();
     const [cookies, setCookie] = useCookies(["user"]);
     const [open, setOpen] = React.useState(false);
@@ -45,6 +53,8 @@ const Login = () => {
         setCookie("Account", id, {
             path: "/"
         });
+
+
     }
 
     const handleClose = () => setOpen(false);
@@ -60,6 +70,7 @@ const Login = () => {
                     else {
                         setStateLogin(res)
                         handleCookie(res)
+                        handleResetPage();
                         handleClose()
                     }
                 })
@@ -70,28 +81,48 @@ const Login = () => {
 
     return (
         <div>
-            <IconButton variant="text" onClick={handleOpen} className={classes.button}>
+            {typeButton === "from_product" ?
                 <Box
                     style={{
                         display: 'flex',
-                        alignItems: 'center',
                         flexDirection: 'row',
-                        marginLeft: 3,
-                    }}>
-                    <AccountCircleOutlinedIcon fontSize="large" />
+                        alignItems: 'left',
+                        width: 300,
+                        justifyContent: 'space-between'
+                    }}
+                >
+                    <Button variant="contained" onClick={handleOpen} >Mua Ngay</Button>
+                    <Button variant="contained" onClick={handleOpen} >Thêm Vào Giỏ Hàng</Button>
+                </Box>
+                :
+
+                <IconButton
+                    variant="text"
+                    onClick={handleOpen}
+                    className={classes.orangeButton}
+                    >
                     <Box
                         style={{
                             display: 'flex',
-                            alignItems: 'flex-start',
-                            flexDirection: 'column',
-                            marginLeft: 2,
-                            marginRight: 3
+                            alignItems: 'center',
+                            flexDirection: 'row',
+                            marginLeft: 3,
                         }}>
-                        <Typography variant="body2">Đăng nhập</Typography>
-                        <Typography variant="body2">Đăng ký</Typography>
+                        <AccountCircleOutlinedIcon fontSize="large" />
+                        <Box
+                            style={{
+                                display: 'flex',
+                                alignItems: 'flex-start',
+                                flexDirection: 'column',
+                                marginLeft: 2,
+                                marginRight: 3
+                            }}>
+                            <Typography variant="body2">Đăng nhập</Typography>
+                            <Typography variant="body2">Đăng ký</Typography>
+                        </Box>
                     </Box>
-                </Box>
-            </IconButton>
+                </IconButton>
+            }
 
             <Modal
                 open={open}

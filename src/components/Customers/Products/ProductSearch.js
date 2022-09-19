@@ -59,13 +59,21 @@ function ProductSearch() {
                 return (product.type_product === params.type)
             })
         }
+
+        if (params.name !== undefined) {
+            filteredProducts = Products.filter(function (product) {
+                return (product.name_product.toLowerCase().includes(params.name.toLowerCase()))
+            })
+        }
+
+        console.log(params.name)
         if (params.sort === 'byprice') {
             filteredProducts.sort(function (a, b) {
                 switch (params.order) {
                     case 'desc':
-                        return a.unit_price_protuct - b.unit_price_protuct
+                        return a.unit_price_product - b.unit_price_product
                     case 'asc':
-                        return b.unit_price_protuct - a.unit_price_protuct
+                        return b.unit_price_product - a.unit_price_product
                     default:
                         break;
                 }
@@ -162,7 +170,6 @@ function ProductSearch() {
             </Container>
             <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', borderRadius: '10px', marginTop: 10 }}>
                 <Box style={{
-                    // display: 'flex', alignItems: 'center', marginTop: 20 
                     width: '100%',
                     borderBottom: '1px solid rgb(234, 234, 234)',
                     WebkitBoxPack: 'justify',

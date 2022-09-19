@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
+import { useNavigate, useParams } from "react-router-dom";
 import SearchBar from "material-ui-search-bar";
 import MenuIcon from '@material-ui/icons/Menu';
 import { deepOrange, deepPurple, orange } from '@material-ui/core/colors';
@@ -21,6 +23,7 @@ import {
     Container,
     IconButton,
 } from '@material-ui/core';
+import AccountInfo from "../Customers/Account/AccountInfo";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -74,6 +77,12 @@ const Header = () => {
         setAnchorEl(null);
     };
 
+    const navigate = useNavigate();
+
+    const [countCart, setCountCart] = React.useState(0)
+
+    const [accountInfo, setAccountInfo] = React.useState({})
+
     const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
     const [resetPage, setResetPage] = React.useState(false)
@@ -84,13 +93,28 @@ const Header = () => {
 
     const [searchItem, setSearchItem] = useState("");
 
-    function handleResetPage(){
+    React.useEffect(() => {
+        if (cookies.Account !== undefined) {
+            axios.get(`https://localhost:7253/api/Cart/getcountcartbyid/` + cookies.Account)
+                .then(res => {
+                    const CountCart = res.data;
+                    setCountCart(CountCart);
+                })
+            axios.get(`https://localhost:7253/api/Login/getinfobyid/` + cookies.Account)
+                .then(res => {
+                    const AccountInfo = res.data;
+                    setAccountInfo(AccountInfo[0]);
+                })
+        }
+    }, [])
+
+    function handleResetPage() {
         setResetPage(!resetPage)
     }
-    function handleClickLogOut(){
-        handleResetPage()
-        handleClose()
+    function handleClickLogOut() {
         removeCookie('Account', { path: '/' })
+        handleResetPage();
+        handleClose();
     }
     return (
         <Box style={{ marginBottom: 10 }}>
@@ -117,7 +141,7 @@ const Header = () => {
                             onChange={value => {
                                 setSearchItem(value);
                             }}
-                            onRequestSearch={() => console.log({ searchItem })}
+                            onRequestSearch={() => navigate('/search/?page=1&name=' + searchItem)}
                             style={{
                                 margin: "0 auto",
                                 maxWidth: 800
@@ -141,12 +165,12 @@ const Header = () => {
                                         marginRight: 3
                                     }}>
                                     <Typography variant="body2">Giỏ hàng của bạn</Typography>
-                                    <Typography variant="body2">0 sản phẩm</Typography>
+                                    <Typography variant="body2">{countCart} sản phẩm</Typography>
                                 </Box>
                             </Box>
                         </Link>
                         {cookies.Account === undefined ?
-                            <Login />
+                            <Login handleResetPage={handleResetPage} />
                             :
                             <Box
 
@@ -156,15 +180,17 @@ const Header = () => {
                                     flexDirection: 'row',
                                     marginLeft: 10,
                                 }}>
-                                <Avatar
-                                    id="basic-button"
-                                    aria-controls={open ? 'basic-menu' : undefined}
-                                    aria-haspopup="true"
-                                    aria-expanded={open ? 'true' : undefined}
-                                    onClick={handleClick}
-                                    className={classes.orange}
-                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRagbYnTTxSnZDFEKCTsewsoiGdPymC_P-PYqElA1b57xMOEvGiI2rOghDqh7vQ_DNVZkE&usqp=CAU"
-                                ></Avatar>
+                                {accountInfo.picture_link_account === undefined &&
+                                    <Avatar
+                                        id="basic-button"
+                                        aria-controls={open ? 'basic-menu' : undefined}
+                                        aria-haspopup="true"
+                                        aria-expanded={open ? 'true' : undefined}
+                                        onClick={handleClick}
+                                        className={classes.orange}
+                                        src={"data:image/png;base64, " + accountInfo.picture_link_account}
+                                    />
+                                }
                                 {/* <Box
                                     style={{
                                         display: 'flex',
@@ -196,9 +222,20 @@ const Header = () => {
                                             Quản lý đơn hàng
                                         </Link>
                                     </MenuItem>
+                                    {accountInfo.role === "staff" &&
+                                        <MenuItem
+                                            onClick={handleClose}
+                                        >
+                                            <Link to="/admin">
+                                                Trang quản lý
+                                            </Link>
+                                        </MenuItem>
+                                    }
+
                                     <MenuItem
                                         onClick={handleClickLogOut}
-                                    >Đăng xuất</MenuItem>
+                                    >Đăng xuất
+                                    </MenuItem>
                                 </Menu>
                             </Box>
                         }

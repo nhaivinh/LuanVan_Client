@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -25,10 +25,25 @@ import ShowTechInfo from './ShowTechInfo';
 import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
 import { useCookies } from "react-cookie";
+import { makeStyles } from '@material-ui/core/styles';
+import Login from '../Account/Login';
+const useStyles = makeStyles({
+    addToCartButton: {
+        color: 'black',
+        backgroundColor: '#ffa500',
+        '&:hover': {
+            color: '#fff',
+            backgroundColor: '#e69500'
+        },
+    }
+})
 
 function ProductDetails() {
 
+    const classes = useStyles();
+
     let params = useParams();
+    const navigate = useNavigate();
 
     const [product, setProduct] = React.useState([])
     const [images, setImages] = React.useState([])
@@ -55,7 +70,12 @@ function ProductDetails() {
         addPosts(cookies.Account, params.productId);
 
     }
-    const addPosts = (idAccount,idProduct) => {
+
+    function handleClickBuyNow(){
+        addPosts(cookies.Account, params.productId);
+        navigate('/cart')
+    }
+    const addPosts = (idAccount, idProduct) => {
         client
             .post('', {
                 "idAccount": idAccount,
@@ -94,19 +114,15 @@ function ProductDetails() {
                         <Link underline="hover" color="inherit" to="/">
                             <Typography color="text.primary">Trang Chủ</Typography>
                         </Link>
-                        {product[0] !== undefined ?
+                        {product[0] !== undefined &&
                             <Link color="text.primary" to={'/search/?type=' + product[0].type_product + '&page=1'}>
                                 {product[0].type_product.toUpperCase()}
                             </Link>
-                            :
-                            ''
                         }
 
                         <Typography color="text.primary">
-                            {product[0] !== undefined ?
+                            {product[0] !== undefined &&
                                 product[0].name_product
-                                :
-                                ''
                             }
                         </Typography>
                     </Breadcrumbs>
@@ -166,8 +182,15 @@ function ProductDetails() {
                                         }}
                                         key={product[0].id_product}
                                     >
-                                        <Button variant="contained">Mua Ngay</Button>
-                                        <Button variant="contained" onClick={handleClickAdd}>Thêm Vào Giỏ Hàng</Button>
+                                        {cookies.Account === undefined ?
+                                            <Login typeButton={"from_product"}/>
+                                            :
+                                            <>
+                                                <Button variant="contained" className={classes.addToCartButton} onClick={handleClickBuyNow}>Mua Ngay</Button>
+                                                <Button variant="contained" className={classes.addToCartButton} onClick={handleClickAdd}>Thêm Vào Giỏ Hàng</Button>
+                                            </>
+                                        }
+
                                     </Box>
 
                                 </Box>

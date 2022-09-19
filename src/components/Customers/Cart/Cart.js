@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -21,6 +22,7 @@ function Cart() {
     const [cart, setCart] = React.useState([])
     const [cookies, setCookie] = useCookies(["user"]);
 
+    const navigate = useNavigate();
 
     const [totalPrice, setTotalPrice] = React.useState(0)
 
@@ -53,14 +55,14 @@ function Cart() {
                         <Typography color="text.primary">Trang Chủ</Typography>
                     </Link>
                     <Typography color="text.primary">
-                        Thông tin cá nhân
+                        Giỏ hàng
                     </Typography>
                 </Breadcrumbs>
             </Box>
             <Grid container spacing={2}>
                 <Grid item xs={8} >
                     <Box style={{}}>
-                        <TableContainer component={Paper} sx={{maxHeight: 500}}>
+                        <TableContainer component={Paper} sx={{maxHeight: 600}}>
                             <Table stickyHeader={true} sx={{ minWidth: 650 }} size="small" aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
@@ -143,7 +145,7 @@ function Cart() {
                                     currency: 'VND'
                                 })}
                         </Typography>
-                        <Button variant='contained'>Đặt mua</Button>
+                        <Button variant='contained' onClick={() => navigate('/checkout')}>Đặt mua</Button>
                     </Box>
                 </Grid>
             </Grid>
