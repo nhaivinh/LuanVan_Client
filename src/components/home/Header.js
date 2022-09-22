@@ -11,8 +11,8 @@ import Box from '@mui/material/Box';
 import { Link, Outlet } from 'react-router-dom';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Login from '../Customers/Account/Login'
 import { useCookies, removeCookie } from "react-cookie";
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import {
     AppBar,
     Toolbar,
@@ -108,13 +108,81 @@ const Header = () => {
         }
     }, [])
 
+    function handleShowAvatar() {
+        if (cookies.Account === undefined) {
+            return (
+                <Link to="/login" className={classes.toolbarTitle}>
+                    <Box
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            flexDirection: 'row',
+                            marginLeft: 3,
+                        }}>
+                        <AccountCircleOutlinedIcon fontSize="large" />
+                        <Box
+                            style={{
+                                display: 'flex',
+                                alignItems: 'flex-start',
+                                flexDirection: 'column',
+                                marginLeft: 2,
+                                marginRight: 3
+                            }}>
+                            <Typography variant="body2">Đăng nhập</Typography>
+                            <Typography variant="body2">Đăng ký</Typography>
+                        </Box>
+                    </Box>
+                </Link>)
+        } else {
+            return (
+                <Box
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                        marginLeft: 10,
+                    }}>
+                    <Box 
+                    style={{
+                        display: 'flex'
+                    }}>
+                        {accountInfo !== undefined &&
+                            <Avatar
+                                id="basic-button"
+                                aria-controls={open ? 'basic-menu' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={open ? 'true' : undefined}
+                                onClick={handleClick}
+                                className={classes.orange}
+                            // src={"data:image/png;base64, " + accountInfo.picture_link_account}
+                            >
+                            </Avatar>
+                        }
+                        <Box
+                            style={{
+                                display: 'flex',
+                                alignItems: 'flex-start',
+                                flexDirection: 'column',
+                                marginLeft: 5,
+                                marginRight: 3
+                            }}>
+
+                            <Typography variant="body2">Xin chào!</Typography>
+                            <Typography variant="body2">{accountInfo.name_customer}</Typography>
+                        </Box>
+                    </Box>
+
+                </Box>
+            )
+        }
+    }
     function handleResetPage() {
         setResetPage(!resetPage)
     }
     function handleClickLogOut() {
         removeCookie('Account', { path: '/' })
-        handleResetPage();
         handleClose();
+        window.location.reload()
     }
     return (
         <Box style={{ marginBottom: 10 }}>
@@ -169,77 +237,42 @@ const Header = () => {
                                 </Box>
                             </Box>
                         </Link>
-                        {cookies.Account === undefined ?
-                            <Login handleResetPage={handleResetPage} />
-                            :
-                            <Box
-
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    flexDirection: 'row',
-                                    marginLeft: 10,
-                                }}>
-                                {accountInfo.picture_link_account === undefined &&
-                                    <Avatar
-                                        id="basic-button"
-                                        aria-controls={open ? 'basic-menu' : undefined}
-                                        aria-haspopup="true"
-                                        aria-expanded={open ? 'true' : undefined}
-                                        onClick={handleClick}
-                                        className={classes.orange}
-                                        src={"data:image/png;base64, " + accountInfo.picture_link_account}
-                                    />
-                                }
-                                {/* <Box
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'flex-start',
-                                        flexDirection: 'column',
-                                        marginLeft: 2,
-                                        marginRight: 3
-                                    }}>
-
-                                    <Typography variant="body2">Xin chào!</Typography>
-                                    <Typography variant="body2">{cookies.Account}</Typography>
-                                </Box> */}
-                                <Menu
-                                    id="basic-menu"
-                                    anchorEl={anchorEl}
-                                    open={open}
-                                    onClose={handleClose}
-                                    MenuListProps={{
-                                        'aria-labelledby': 'basic-button',
-                                    }}
+                        {handleShowAvatar()}
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            MenuListProps={{
+                                'aria-labelledby': 'basic-button',
+                            }}
+                        >
+                            <MenuItem onClick={handleClose}>
+                                <Link to="/account">
+                                    Thông tin cá nhân
+                                </Link>
+                            </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                <Link to="/order">
+                                    Quản lý đơn hàng
+                                </Link>
+                            </MenuItem>
+                            {accountInfo.role === "staff" &&
+                                <MenuItem
+                                    onClick={handleClose}
                                 >
-                                    <MenuItem onClick={handleClose}>
-                                        <Link to="/account">
-                                            Thông tin cá nhân
-                                        </Link>
-                                    </MenuItem>
-                                    <MenuItem onClick={handleClose}>
-                                        <Link to="/order">
-                                            Quản lý đơn hàng
-                                        </Link>
-                                    </MenuItem>
-                                    {accountInfo.role === "staff" &&
-                                        <MenuItem
-                                            onClick={handleClose}
-                                        >
-                                            <Link to="/admin">
-                                                Trang quản lý
-                                            </Link>
-                                        </MenuItem>
-                                    }
+                                    <Link to="/admin">
+                                        Trang quản lý
+                                    </Link>
+                                </MenuItem>
+                            }
 
-                                    <MenuItem
-                                        onClick={handleClickLogOut}
-                                    >Đăng xuất
-                                    </MenuItem>
-                                </Menu>
-                            </Box>
-                        }
-
+                            <MenuItem
+                                onClick={handleClickLogOut}
+                            >
+                                Đăng xuất
+                            </MenuItem>
+                        </Menu>
                     </Toolbar>
                     <Toolbar variant="dense">
                         <Box

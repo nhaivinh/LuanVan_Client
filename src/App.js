@@ -7,6 +7,8 @@ import AdminHome from './components/Admin/AdminHome';
 import ScrollButton from './components/Customers/ScrollToTopButton/ScrollButton';
 
 class App extends React.Component {
+
+  
   componentDidMount() {
     // Include the Crisp code here, without the <script></script> tags
     window.$crisp = [];
@@ -21,7 +23,6 @@ class App extends React.Component {
       d.getElementsByTagName("head")[0].appendChild(s);
     })();
   };
-
 
   render() {
     return (

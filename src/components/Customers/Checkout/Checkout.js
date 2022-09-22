@@ -14,31 +14,136 @@ import Paper from '@mui/material/Paper';
 import TableHead from '@mui/material/TableHead';
 import { useCookies } from "react-cookie";
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import TextField from '@mui/material/TextField';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import SnackBarContext from '../../SnackBar/SnackBarContext';
+import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
+
 function Checkout() {
 
     const [cart, setCart] = React.useState([])
+
+    const [infoPayment, setInfoPayment] = React.useState({
+        NameDelivery: '',
+        PhoneDelivery: '',
+        AddressDelivery: '',
+        TypePayment: 'cod'
+    })
+
+    const navigate = useNavigate();
+
+    const [customer, setCustomer] = React.useState({})
+
+    const [posts, setPosts] = React.useState([]);
+
+    const client = axios.create({
+        baseURL: "https://localhost:7253/api/OrderCustomer"
+    });
+
+    const [, dispatch] = React.useContext(SnackBarContext);
+
     const [cookies, setCookie] = useCookies(["user"]);
 
-
     const [totalPrice, setTotalPrice] = React.useState(0)
+
+    const [totalDiscount, setTotalDiscount] = React.useState(0)
 
     React.useEffect(() => {
         axios.get(`https://localhost:7253/api/Cart/getcartbyid/` + cookies.Account)
             .then(res => {
                 const Cart = res.data;
                 setCart(Cart);
-
-                if (Cart.length === 1)
-                    setTotalPrice(Cart[0].unit_price_product * Cart[0].quantity_product_cart)
+                if (Cart.length === 1) {
+                    setTotalPrice((Cart[0].unit_price_product * Cart[0].quantity_product_cart))
+                    setTotalDiscount((Cart[0].unit_price_product * Cart[0].quantity_product_cart) * (Cart[0].discount_product * 0.01));
+                }
                 else {
                     var result = Cart.reduce((total, currentValue) =>
-                        total + currentValue.unit_price_product, 0
+                        total + ((currentValue.unit_price_product * currentValue.quantity_product_cart) * (1 - currentValue.discount_product * 0.01)), 0
+                    );
+                    var resultDiscount = Cart.reduce((total, currentValue) =>
+                        total + ((currentValue.unit_price_product * currentValue.quantity_product_cart) * (currentValue.discount_product * 0.01)), 0
                     );
                     setTotalPrice(result);
+                    setTotalDiscount(resultDiscount);
                 }
             })
+        axios.get(`https://localhost:7253/api/Customer/getcustomerbyid/` + cookies.Account)
+            .then(res => {
+                const Customer = res.data;
+                setCustomer(Customer[0]);
+            })
     }, [])
+    function handleClickBuy() {
+
+        let thongbao = "Hãy thêm thông tin đúng dạng cho :";
+
+        let validName = false;
+        let validPhoneNumber = false;
+        let validAddress = false;
+        let validTypePayment = false;
+
+
+        if (infoPayment.NameDelivery === "" || infoPayment.NameDelivery.search(/[0-9]/) >= 0) {
+            thongbao = thongbao + "\nHọ và Tên"
+        } else validName = true
+
+        if (!/^[0-9\b]+$/i.test(infoPayment.PhoneDelivery) || infoPayment.PhoneDelivery.length !== 10) {
+            thongbao = thongbao + "\nSố điện thoại"
+        } else validPhoneNumber = true
+
+        if (infoPayment.AddressDelivery === "") {
+            thongbao = thongbao + "\nĐịa chỉ"
+        } else validAddress = true
+
+        if (infoPayment.TypePayment === "") {
+            thongbao = thongbao + "\nLoại thanh toán"
+        } else validTypePayment = true
+
+        if (validName && validPhoneNumber && validAddress && validTypePayment) {
+            addPosts(customer, infoPayment, totalPrice);
+        } else {
+            alert(thongbao);
+        }
+    }
+    const addPosts = (customer, infoPayment, totalPrice) => {
+        client
+            .post('', {
+                "idCustomer": customer.id_customer,
+                "totalPayment": totalPrice,
+                "paymentType": infoPayment.TypePayment,
+                "paymentStatus": 0,
+                "deliveryName": infoPayment.NameDelivery,
+                "deliveryPhone": infoPayment.PhoneDelivery,
+                "deliveryAddress": infoPayment.AddressDelivery,
+                "deliveryStatus": 0,
+            })
+            .then((response) => {
+                setPosts([response.data, ...posts]);
+                dispatch(setOpenSnackBar());
+                dispatch(setMessage(response.data.message));
+                dispatch(setSeverity(response.data.severity));
+                navigate("/order");
+            })
+            .catch((err) => {
+                if (err.response) {
+                    // The client was given an error response (5xx, 4xx)
+                    console.log(err.response.data);
+                    console.log(err.response.status);
+                    console.log(err.response.headers);
+                } else if (err.request) {
+                    // The client never received a response, and the request was never left
+                } else {
+                    // Anything else
+                }
+            });
+    };
+
     return (
         <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', borderRadius: '10px', marginTop: 50 }}>
             <Box
@@ -66,9 +171,57 @@ function Checkout() {
                             padding: 20,
                             marginBottom: 10,
                             borderRadius: 10,
-                            height: 500
+                            alignItems: 'center'
                         }}
-                    >                        
+                    >
+                        <Box
+                            style={{
+                                display: 'flex',
+                                width: '80%',
+                                justifyContent: 'space-between',
+                                flexDirection: 'column',
+                                backgroundColor: 'white',
+                                padding: 20,
+                                borderRadius: 10,
+                                height: 300
+                            }}>
+                            <Typography>Họ tên người nhận</Typography>
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                size="small"
+                                defaultValue={infoPayment.NameDelivery}
+                                onChange={(e) => { setInfoPayment({ ...infoPayment, NameDelivery: e.target.value }) }}
+                            />
+                            <Typography>Số điện thoại người nhận</Typography>
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                size="small"
+                                defaultValue={infoPayment.PhoneDelivery}
+                                onChange={(e) => { setInfoPayment({ ...infoPayment, PhoneDelivery: e.target.value }) }}
+                            />
+                            <Typography>Địa chỉ giao hàng</Typography>
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined" size="small"
+                                defaultValue={infoPayment.AddressDelivery}
+                                onChange={(e) => { setInfoPayment({ ...infoPayment, AddressDelivery: e.target.value }) }}
+                            />
+                            <FormControl>
+                                <FormLabel id="demo-controlled-radio-buttons-group">Phương thức thanh toán</FormLabel>
+                                <RadioGroup
+                                    row
+                                    aria-labelledby="demo-row-radio-buttons-group-label"
+                                    name="row-radio-buttons-group"
+                                    defaultValue={infoPayment.TypePayment}
+                                    onChange={(e) => { setInfoPayment({ ...infoPayment, gender_customer: e.target.value }) }}
+                                >
+                                    <FormControlLabel value="cod" control={<Radio />} label="Giao hàng nhận tiền - COD" />
+                                    <FormControlLabel value="card" control={<Radio />} label="Thanh toán trực tuyến bằng thẻ ngân hàng" />
+                                </RadioGroup>
+                            </FormControl>
+                        </Box>
                     </Box>
                 </Grid>
                 <Grid item xs={4}>
@@ -104,6 +257,7 @@ function Checkout() {
                             {cart.map(function (row) {
                                 return (
                                     <Box
+                                        key={row.id_product}
                                         style={{
                                             display: 'flex',
                                             justifyContent: 'space-between',
@@ -122,7 +276,6 @@ function Checkout() {
                                         >
                                             <img src={"data:image/png;base64, " + row.picture_link_product} alt="product images" width={'100%'} height={'100%'} />
                                         </Grid>
-
                                         <Grid item xs={9} >
                                             <Box
                                                 style={{
@@ -135,12 +288,23 @@ function Checkout() {
                                                 <Typography variant='body2'>{row.name_product}</Typography>
                                                 <Typography variant='body2'>Số lượng: {row.quantity_product_cart}</Typography>
                                                 <Typography>
-                                                    {row.unit_price_product.toLocaleString('vi-VI',
+                                                    {(row.unit_price_product * (1 - row.discount_product * 0.01)).toLocaleString('vi-VI',
                                                         {
                                                             style: 'currency',
                                                             currency: 'VND'
                                                         })}
                                                 </Typography>
+                                                {row.discount_product !== 0 &&
+                                                            <Typography variant='body2'>
+                                                                <del>
+                                                                    {row.unit_price_product.toLocaleString('vi-VI',
+                                                                        {
+                                                                            style: 'currency',
+                                                                            currency: 'VND'
+                                                                        })}
+                                                                </del>
+                                                            </Typography>
+                                                        }  
                                             </Box>
                                         </Grid>
 
@@ -169,20 +333,20 @@ function Checkout() {
                                 })}
                         </Typography>
                         <Typography>{"Giảm giá: " +
-                            (30000).toLocaleString('vi-VI',
+                            (totalDiscount).toLocaleString('vi-VI',
                                 {
                                     style: 'currency',
                                     currency: 'VND'
                                 })}
                         </Typography>
                         <Typography>{"Thành tiền: " +
-                            (totalPrice - 30000).toLocaleString('vi-VI',
+                            (totalPrice - totalDiscount).toLocaleString('vi-VI',
                                 {
                                     style: 'currency',
                                     currency: 'VND'
                                 })}
                         </Typography>
-                        <Button variant='contained'>Đặt mua</Button>
+                        <Button variant='contained' onClick={handleClickBuy}>Đặt mua</Button>
                     </Box>
                 </Grid>
             </Grid>

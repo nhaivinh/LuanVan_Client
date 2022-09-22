@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -17,37 +18,45 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { Link } from 'react-router-dom';
 import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
+import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
 
-function DeleteCart({ idAccount, idProduct, handleResetPage }) {
+function DecreaseCart({ idAccount, idProduct, handleResetPage }) {
 
     const [, dispatch] = React.useContext(SnackBarContext);
     const [posts, setPosts] = React.useState([]);
     const client = axios.create({
-        baseURL: "https://localhost:7253/api/Cart"
+        baseURL: "https://localhost:7253/api/Cart/putminuscart"
     });
     function handleClick() {
-        deletePost(idAccount, idProduct);
+        addPutMinus(idAccount, idProduct);
     }
-    const deletePost = (idAccount, idProduct) => {
-        client.delete(`${idAccount}/${idProduct}`)
+    const addPutMinus = (idAccount , idProduct) => {
+        client
+            .put('', {
+                "idAccount": idAccount,
+                "idProduct": idProduct,
+            })
             .then((response) => {
                 setPosts([response.data, ...posts]);
-                dispatch(setOpenSnackBar());
-                dispatch(setMessage(response.data.message));
-                dispatch(setSeverity(response.data.severity));
                 handleResetPage();
-            });
-        setPosts(
-            posts.filter((post) => {
-                return post.idAccount !== idAccount && post.idProduct !== idProduct;
             })
-        );
-
+            .catch((err) => {
+                if (err.response) {
+                    // The client was given an error response (5xx, 4xx)
+                    console.log(err.response.data);
+                    console.log(err.response.status);
+                    console.log(err.response.headers);
+                } else if (err.request) {
+                    // The client never received a response, and the request was never left
+                } else {
+                    // Anything else
+                }
+            });
     };
 
     return (
-        <Button variant='outlined'  onClick={handleClick}> Xóa </Button>
+        <IconButton onClick={handleClick}><RemoveOutlinedIcon/></IconButton>
     )
 }
 
-export default DeleteCart
+export default DecreaseCart

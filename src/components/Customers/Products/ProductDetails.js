@@ -26,7 +26,6 @@ import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
 import { useCookies } from "react-cookie";
 import { makeStyles } from '@material-ui/core/styles';
-import Login from '../Account/Login';
 const useStyles = makeStyles({
     addToCartButton: {
         color: 'black',
@@ -71,7 +70,7 @@ function ProductDetails() {
 
     }
 
-    function handleClickBuyNow(){
+    function handleClickBuyNow() {
         addPosts(cookies.Account, params.productId);
         navigate('/cart')
     }
@@ -154,23 +153,32 @@ function ProductDetails() {
                                     <Box
                                         style={{
                                             display: 'flex',
-                                            flexDirection: 'row',
+                                            flexDirection: 'column',
                                             alignItems: 'left',
                                             paddingTop: 30,
                                             width: 300,
                                             justifyContent: 'space-between'
                                         }}
                                     >
-                                        <Typography variant="h5">{(
-                                            product[0].unit_price_product).toLocaleString('vi-VI',
+                                        <Typography variant="h5">{
+                                        (product[0].unit_price_product * (1 - product[0].discount_product*0.01)).toLocaleString('vi-VI',
                                                 {
                                                     style: 'currency',
                                                     currency: 'VND'
                                                 })}
                                         </Typography>
+                                        {product[0].discount_product !== 0 &&
+                                        <Typography variant='body2'>
+                                            <del>
+                                                {product[0].unit_price_product.toLocaleString('vi-VI',
+                                                    {
+                                                        style: 'currency',
+                                                        currency: 'VND'
+                                                    })}
+                                            </del>
+                                        </Typography>
+                                        }                                  
                                     </Box>
-
-
                                     <Box
                                         style={{
                                             display: 'flex',
@@ -183,7 +191,10 @@ function ProductDetails() {
                                         key={product[0].id_product}
                                     >
                                         {cookies.Account === undefined ?
-                                            <Login typeButton={"from_product"}/>
+                                            <>
+                                                <Button variant="contained" className={classes.addToCartButton} onClick={() => navigate('/login')}>Mua Ngay</Button>
+                                                <Button variant="contained" className={classes.addToCartButton} onClick={() => navigate('/login')}>Thêm Vào Giỏ Hàng</Button>
+                                            </>
                                             :
                                             <>
                                                 <Button variant="contained" className={classes.addToCartButton} onClick={handleClickBuyNow}>Mua Ngay</Button>

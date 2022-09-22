@@ -12,12 +12,13 @@ import {
     TextField
 } from '@material-ui/core';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useCookies } from "react-cookie";
 import Register from "./Register";
-import { hover } from "@testing-library/user-event/dist/hover";
-import { color } from "@mui/system";
-// import { cookie, CreateCookie, GetCookie } from '../../Cookie/CookieFunc';
+import Container from '@mui/material/Container';
+import SnackBarContext from '../../SnackBar/SnackBarContext';
+import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
+
 const useStyles = makeStyles({
     button: {
         color: '#ffa500',
@@ -33,12 +34,12 @@ const useStyles = makeStyles({
     }
 })
 
-const Login = ({ handleResetPage, typeButton }) => {
-
+const Login = () => {
+    const navigate = useNavigate();
     const classes = useStyles();
     const [cookies, setCookie] = useCookies(["user"]);
     const [open, setOpen] = React.useState(false);
-
+    const [, dispatch] = React.useContext(SnackBarContext);
     const [StateLogin, setStateLogin] = useState("Not connect")
     const [login, setLogin] = useState({
         Username: '',
@@ -70,8 +71,11 @@ const Login = ({ handleResetPage, typeButton }) => {
                     else {
                         setStateLogin(res)
                         handleCookie(res)
-                        handleResetPage();
-                        handleClose()
+                        navigate('/')
+                        dispatch(setOpenSnackBar());
+                        dispatch(setMessage("Đăng nhập thành công"));
+                        dispatch(setSeverity("success"));
+                        window.location.reload()
                     }
                 })
         } else {
@@ -81,103 +85,47 @@ const Login = ({ handleResetPage, typeButton }) => {
 
     return (
         <div>
-            {typeButton === "from_product" ?
-                <Box
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'left',
-                        width: 300,
-                        justifyContent: 'space-between'
-                    }}
-                >
-                    <Button variant="contained" onClick={handleOpen} >Mua Ngay</Button>
-                    <Button variant="contained" onClick={handleOpen} >Thêm Vào Giỏ Hàng</Button>
-                </Box>
-                :
-
-                <IconButton
-                    variant="text"
-                    onClick={handleOpen}
-                    className={classes.orangeButton}
-                    >
-                    <Box
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            flexDirection: 'row',
-                            marginLeft: 3,
-                        }}>
-                        <AccountCircleOutlinedIcon fontSize="large" />
-                        <Box
-                            style={{
-                                display: 'flex',
-                                alignItems: 'flex-start',
-                                flexDirection: 'column',
-                                marginLeft: 2,
-                                marginRight: 3
-                            }}>
-                            <Typography variant="body2">Đăng nhập</Typography>
-                            <Typography variant="body2">Đăng ký</Typography>
-                        </Box>
-                    </Box>
-                </IconButton>
-            }
-
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
+            <Container maxWidth="lg" style={{ backgroundColor: 'white', borderRadius: '10px', marginTop: 50 , height: 400}}>
                 <Box style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 400,
-                    height: 400,
-                    backgroundColor: '#F8F8F8',
+                    display: 'flex',
                     borderRadius: 10,
                     boxShadow: 24,
                     p: 4,
+                    flexDirection: 'column',
                 }}>
-                    <Stack direction="column" spacing={2} alignItems="flex-end">
-                        <IconButton variant="contained" onClick={handleClose}><CloseIcon /></IconButton>
-                    </Stack>
-                    <Stack direction="column" spacing={2} alignItems="center" marginBottom={5}>
+                    <Stack direction="column" spacing={2} alignItems="center" marginBottom={5} marginTop={5}>
                         <Typography variant="h4">Đăng Nhập</Typography>
-                    </Stack>
-                    <Stack direction="column" spacing={2} alignItems="center" marginBottom={5}>
-                        <Stack direction="row" spacing={2} justifyContent="center">
+                        <Box
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                width: 400,
+                            }}>
                             <Typography>Tên đăng nhập</Typography>
                             <TextField
                                 required
-                                label="Tên"
                                 variant="outlined"
+                                
                                 onChange={(e) => { setLogin({ ...login, Username: e.target.value }) }}
                             >
                             </TextField>
-                        </Stack>
-                        <Stack direction="row" spacing={2} justifyContent="center">
                             <Typography>Mật Khẩu</Typography>
                             <TextField
                                 required
-                                label="Mật Khẩu"
+                                type={'password'}
                                 variant="outlined"
                                 onChange={(e) => { setLogin({ ...login, Password: e.target.value }) }}
                             >
                             </TextField>
-                        </Stack>
+                        </Box>
                     </Stack>
-                    <Stack direction="row" spacing={2} justifyContent="center">
-                        <Button variant="outlined" onClick={Checklogin}>Đăng Nhập</Button>
-                        <Register handleCloseLogin={handleClose} />
+                    <Stack direction="row" spacing={2} justifyContent="center" marginBottom={5}>
+                        <Button variant="contained" onClick={Checklogin}>Đăng Nhập</Button>
+                        <Link to="/register"><Button variant="contained">Đăng ký</Button></Link>
                     </Stack>
                 </Box>
-            </Modal>
-        </div>
+            </Container>
+        </div >
     )
 }
-
 export default Login

@@ -85,8 +85,7 @@ function AccountInfo() {
             thongbao = thongbao + "\nNgày Cấp Phải Trước Ngày Hiện tại"
         } else validDayOfBirth = true
 
-        if (validName && validEmail && validPhoneNumber && validDayOfBirth && validIdentityCard && validGender) {
-            alert("ok");           
+        if (validName && validEmail && validPhoneNumber && validDayOfBirth && validIdentityCard && validGender) {      
             addPosts(editAccount);
         } else {
             alert(thongbao);
