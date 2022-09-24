@@ -416,11 +416,11 @@ function ShowTechInfo({ ImportProduct }) {
                             :
                             <StyledTableRow />
                         }
-                        {ImportProduct[0].type_cooling_cpu !== '' ?
+                        {ImportProduct[0].type_cooling_gpu !== '' ?
                             <StyledTableRow key={11} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                                 <StyledTableCell component="th" scope="row" style={{ width: '40%' }}>Loại tản nhiệt</StyledTableCell>
-                                <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].type_cooling_cpu}</StyledTableCell>
+                                <StyledTableCell align="left" style={{ width: '60%' }}>{ImportProduct[0].type_cooling_gpu}</StyledTableCell>
                             </StyledTableRow>
                             :
                             <StyledTableRow />

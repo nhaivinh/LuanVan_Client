@@ -3,6 +3,10 @@ import React from 'react';
 import '../../CSS/AdminHome.css'
 import AdminHomePage from './AdminHomePage'
 import ProductManagementHome from './ProductManagement/ProductManagementHome';
+import StaffManagementHome from './StaffManagement/StaffManagementHome';
+import OrderManagementHome from './OrderManagement/OrderManagementHome';
+import ImportProductHome from './ImportProduct/ImportProductHome';
+import CustomerManagementHome from './CustomerManagement/CustomerManagementHome';
 
 function AdminHome() {
   return (
@@ -11,7 +15,11 @@ function AdminHome() {
         <Routes>
           <Route path='/' element={<AdminHomePage />}>
             {/* <Route path='admin' element={<Admin />} /> */}
-            <Route path='productmanagement' element={<ProductManagementHome />} />
+            <Route path='product' element={<ProductManagementHome />} />
+            <Route path='customer' element={<CustomerManagementHome />} />
+            <Route path='import' element={<ImportProductHome />} />
+            <Route path='order' element={<OrderManagementHome />} />
+            <Route path='staff' element={<StaffManagementHome />} />
           </Route>
         </Routes>
       </React.Fragment>

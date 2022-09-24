@@ -65,8 +65,6 @@ function ProductSearch() {
                 return (product.name_product.toLowerCase().includes(params.name.toLowerCase()))
             })
         }
-
-        console.log(params.name)
         if (params.sort === 'byprice') {
             filteredProducts.sort(function (a, b) {
                 switch (params.order) {

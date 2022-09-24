@@ -9,7 +9,7 @@ const QuyenChung = [
         child : [
             {
                 title : 'Quản Lý Nhân Viên',
-                path :'/admin/statistical'
+                path :'/admin/staff'
             }, 
         ]
     },
@@ -22,25 +22,22 @@ const QuyenChung = [
         child : [
             {
                 title : 'Quản Lý Sản Phẩm',
-                path :'/admin/productmanagement'
-            },
-            {
-                title : 'Quản Lý Khách Hàng',
-                path :''
-            },
-            {
-                title : 'Quản Lý Nhập Hàng',
-                path :''
+                path :'/admin/product'
             },
             {
                 title : 'Quản Lý Đơn Hàng',
-                path :''
+                path :'/admin/order'
+            },
+            {
+                title : 'Quản Lý Nhập Hàng',
+                path :'/admin/import'
+            },
+            {
+                title : 'Quản Lý Thông Tin Khách Hàng',
+                path :'/admin/customer'
             },
         ]
     },
 ]
-
-
-
 
 export {QuyenChung,};

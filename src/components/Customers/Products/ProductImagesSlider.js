@@ -29,35 +29,10 @@ const ProductImagesSlider = props => {
                         </ImageViewer>
                     </SwiperSlide>
                 ))
-                // <ImageGroup>
-                //     <ul className="images">
-                //         {props.images.map((item, index) => (
-                //             <li key={item}>
-                //                 <SwiperSlide key={index}>
-                //                     <Image
-                //                         src={"data:image/png;base64, " + item.picture_link_product}
-                //                         alt="nature"
-                //                         style={{
-                //                             position: 'absolute',
-                //                             top: 0,
-                //                             left: 0,
-                //                             right: 0,
-                //                             bottom: 0,
-                //                             height: '100%',
-                //                             width: '100%',
-                //                             objectFit: 'cover',
-                //                         }}
-                //                     />
-                //                 </SwiperSlide>
-                //             </li>
-                //         ))}
-                //     </ul>
-                // </ImageGroup>
             }
         </Swiper>
         <Swiper
             onSwiper={setActiveThumb}
-            // loop={true}
             spaceBetween={10}
             slidesPerView={4}
             modules={[Navigation, Thumbs]}

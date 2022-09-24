@@ -18,7 +18,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { QuyenChung } from './AdminHomeMenuData'
 // import logo from '../../image/Logo.jpg';
-import { Link, Outlet} from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import { Container } from '@mui/system';
 
 function AdminHomePage() {
@@ -88,10 +88,6 @@ function AdminHomePage() {
 
 
     const [open1, setOpen1] = React.useState(false);
-
-
-
-
 
 
     return (
