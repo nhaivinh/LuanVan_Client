@@ -18,6 +18,29 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import TableHead from '@mui/material/TableHead';
 import Typography from '@mui/material/Typography';
+import ProductManagementFormView from './ProductManagementFormView';
+import { styled } from '@mui/material/styles';
+import { tableCellClasses } from '@mui/material/TableCell';
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+        backgroundColor: 'var(--color3)',
+        color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+        fontSize: 14,
+    },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+        border: 0,
+    },
+}));
 
 function TablePaginationActions(props) {
     const theme = useTheme();
@@ -99,7 +122,7 @@ function ProductManagementHome() {
     }, [resetPage])
 
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - products.length) : 0;
@@ -113,68 +136,142 @@ function ProductManagementHome() {
         setPage(0);
     };
 
-    return (
-        <div>
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell style={{ width: '55%' }} colSpan={2}><Typography variant='h6'>Thông tin sản phẩm</Typography></TableCell>
-                            <TableCell style={{ width: '20%' }} align="left">Đơn giá</TableCell>
-                            <TableCell style={{ width: '15%' }} align="left">Số lượng</TableCell>
-                            <TableCell style={{ width: '20%' }} align="left">Thành tiền</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {(rowsPerPage > 0
-                            ? products.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            : products
-                        ).map((row) => (
-                            <TableRow key={row.id_product}>
-                                <TableCell component="th" scope="row">
-                                    {row.name_product}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {row.brand_product}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {row.quantity_product}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {row.id_product}
-                                </TableCell>
-                            </TableRow>
-                        ))}
+    function showTypeProduct(type) {
+        switch (type) {
+            case 'cpu':
+                return (
+                    "Vi xử lý"
+                )
+            case 'gpu':
+                return (
+                    "Card đồ họa"
+                )
+            case 'mainboard':
+                return (
+                    "Bo mạch chủ"
+                )
+            case 'ram':
+                return (
+                    "Ram"
+                )
+            case 'psu':
+                return (
+                    "Nguồn"
+                )
+            case 'casepc':
+                return (
+                    "Case máy tính"
+                )
+            case 'harddisk':
+                return (
+                    "Ổ cứng"
+                )
+            case 'cooling_system':
+                return (
+                    "Tản nhiệt"
+                )
 
-                        {emptyRows > 0 && (
-                            <TableRow style={{ height: 53 * emptyRows }}>
-                                <TableCell colSpan={6} />
-                            </TableRow>
-                        )}
-                    </TableBody>
-                    <TableFooter>
-                        <TableRow>
-                            <TablePagination
-                                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                                colSpan={3}
-                                count={products.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                SelectProps={{
-                                    inputProps: {
-                                        'aria-label': 'rows per page',
-                                    },
-                                    native: true,
-                                }}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                                ActionsComponent={TablePaginationActions}
-                            />
-                        </TableRow>
-                    </TableFooter>
-                </Table>
-            </TableContainer>
-        </div>
+            default:
+                break;
+        }
+    }
+
+    return (
+        <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                <TableHead>
+                    <TableRow>
+                        <TableCell style={{ width: '5%' }} align="left">Mã sản phẩm</TableCell>
+                        <TableCell style={{ width: '20%' }} align="left">Tên sản phẩm</TableCell>
+                        <TableCell style={{ width: '10%' }} align="left">Thương hiệu</TableCell>
+                        <TableCell style={{ width: '10%' }} align="left">Loại</TableCell>
+                        <TableCell style={{ width: '5%' }} align="left">Số lượng</TableCell>
+                        <TableCell style={{ width: '10%' }} align="left">Đơn giá</TableCell>
+                        <TableCell style={{ width: '10%' }} align="left">Giảm giá</TableCell>
+                        <TableCell style={{ width: '10%' }} align="left">Bảo hành</TableCell>
+                        <TableCell style={{ width: '10%' }} align="left">Trạng thái</TableCell>
+                        <TableCell style={{ width: '10%' }} align="center">Thao Tác</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {(rowsPerPage > 0
+                        ? products.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        : products
+                    ).map((row) => (
+                        <StyledTableRow key={row.id_product}>
+                            <StyledTableCell component="th" scope="row" align="left">
+                                {row.id_product}
+                            </StyledTableCell>
+                            <StyledTableCell align="left">
+                                {row.name_product}
+                            </StyledTableCell>
+                            <StyledTableCell align="left">
+                                {row.brand_product}
+                            </StyledTableCell>
+                            <StyledTableCell align="left">
+                                {showTypeProduct(row.type_product)}
+                            </StyledTableCell>
+                            <StyledTableCell align="left">
+                                {row.quantity_product}
+                            </StyledTableCell>
+                            <StyledTableCell align="left">
+                                {row.unit_price_product.toLocaleString('vi-VI',
+                                    {
+                                        style: 'currency',
+                                        currency: 'VND'
+                                    })}
+                            </StyledTableCell>
+                            <StyledTableCell align="left">
+                                {row.discount_product === 0 ?
+                                    "không có"
+                                    :
+                                    <Typography variant='body2'>{row.discount_product} %</Typography>
+                                }
+                            </StyledTableCell>
+                            <StyledTableCell align="left">
+                                {row.insurance_product} Tháng
+                            </StyledTableCell>
+                            <StyledTableCell align="left">
+                                {row.status_product === 1 ?
+                                    "kinh doanh"
+                                    :
+                                    "tạm dừng"
+                                }
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                                <ProductManagementFormView IDProduct={row.id_product} />
+                            </StyledTableCell>
+                        </StyledTableRow>
+                    ))}
+
+                    {emptyRows > 0 && (
+                        <StyledTableRow style={{ height: 53 * emptyRows }}>
+                            <StyledTableCell colSpan={6} />
+                        </StyledTableRow>
+                    )}
+                </TableBody>
+                <TableFooter>
+                    <StyledTableRow>
+                        <TablePagination
+                            rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
+                            colSpan={10}
+                            count={products.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            SelectProps={{
+                                inputProps: {
+                                    'aria-label': 'rows per page',
+                                },
+                                native: true,
+                            }}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                            ActionsComponent={TablePaginationActions}
+                        />
+                    </StyledTableRow>
+                </TableFooter>
+            </Table>
+        </TableContainer>
     )
 }
 
