@@ -146,7 +146,7 @@ const Header = () => {
                     style={{
                         display: 'flex'
                     }}>
-                        {accountInfo !== undefined &&
+                        {accountInfo.picture_link_avatar !== undefined &&
                             <Avatar
                                 id="basic-button"
                                 aria-controls={open ? 'basic-menu' : undefined}
@@ -154,7 +154,7 @@ const Header = () => {
                                 aria-expanded={open ? 'true' : undefined}
                                 onClick={handleClick}
                                 className={classes.orange}
-                            // src={"data:image/png;base64, " + accountInfo.picture_link_account}
+                                src={"data:image/png;base64, " + accountInfo.picture_link_avatar}
                             >
                             </Avatar>
                         }
