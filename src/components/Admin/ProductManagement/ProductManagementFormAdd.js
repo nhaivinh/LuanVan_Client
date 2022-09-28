@@ -507,8 +507,8 @@ export default function ProductManagementFormAdd() {
 
     return (
         <div>
-            <Stack direction="column" spacing={2} alignItems="flex-end">
-                <Button variant="contained" onClick={handleOpen} >Thêm Sản Phẩm Mới</Button>
+            <Stack direction="column" spacing={2} alignItems="flex-end" marginBottom={2}>
+                <Button variant="contained" onClick={handleOpen} sx={{ backgroundColor: 'var(--color4)' }}>Thêm Sản Phẩm Mới</Button>
             </Stack>
             <Modal
                 open={open}

@@ -42,7 +42,6 @@ function DeleteCart({ idAccount, idProduct, handleResetPage }) {
                 return post.idAccount !== idAccount && post.idProduct !== idProduct;
             })
         );
-
     };
 
     return (

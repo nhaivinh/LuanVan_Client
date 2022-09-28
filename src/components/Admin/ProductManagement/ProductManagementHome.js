@@ -186,17 +186,17 @@ function ProductManagementHome() {
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
                     <TableHead>
-                        <TableRow>
-                            <TableCell style={{ width: '5%' }} align="left">Mã sản phẩm</TableCell>
-                            <TableCell style={{ width: '20%' }} align="left">Tên sản phẩm</TableCell>
-                            <TableCell style={{ width: '10%' }} align="left">Thương hiệu</TableCell>
-                            <TableCell style={{ width: '10%' }} align="left">Loại</TableCell>
-                            <TableCell style={{ width: '5%' }} align="left">Số lượng</TableCell>
-                            <TableCell style={{ width: '10%' }} align="left">Đơn giá</TableCell>
-                            <TableCell style={{ width: '10%' }} align="left">Giảm giá</TableCell>
-                            <TableCell style={{ width: '10%' }} align="left">Bảo hành</TableCell>
-                            <TableCell style={{ width: '10%' }} align="left">Trạng thái</TableCell>
-                            <TableCell style={{ width: '10%' }} align="center">Thao Tác</TableCell>
+                        <TableRow style={{ backgroundColor: '#474747' , color: 'white' }}>
+                            <TableCell style={{ width: '5%' , color: 'white'}} align="left">Mã sản phẩm</TableCell>
+                            <TableCell style={{ width: '20%' , color: 'white'}} align="left">Tên sản phẩm</TableCell>
+                            <TableCell style={{ width: '10%' , color: 'white'}} align="left">Thương hiệu</TableCell>
+                            <TableCell style={{ width: '10%' , color: 'white'}} align="left">Loại</TableCell>
+                            <TableCell style={{ width: '5%' , color: 'white'}} align="left">Số lượng</TableCell>
+                            <TableCell style={{ width: '10%' , color: 'white'}} align="left">Đơn giá</TableCell>
+                            <TableCell style={{ width: '10%' , color: 'white'}} align="left">Giảm giá</TableCell>
+                            <TableCell style={{ width: '10%' , color: 'white'}} align="left">Bảo hành</TableCell>
+                            <TableCell style={{ width: '10%' , color: 'white'}} align="center">Thao Tác</TableCell>
+                            <TableCell style={{ width: '10%' , color: 'white'}} align="left">Trạng thái</TableCell>                        
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -237,20 +237,20 @@ function ProductManagementHome() {
                                 <StyledTableCell align="left">
                                     {row.insurance_product} Tháng
                                 </StyledTableCell>
-                                <StyledTableCell align="left">
-                                    {row.status_product === 1 ?
-                                        "kinh doanh"
-                                        :
-                                        "tạm dừng"
-                                    }
-                                </StyledTableCell>
                                 <StyledTableCell align="center">
                                     <Stack direction="row" spacing={2} justifyContent={'center'}>
                                         <ProductManagementFormView IDProduct={row.id_product} />
                                         <ProductManagementFormEdit IDProduct={row.id_product} />
-                                        <ProductManagementStatus product={row} handleResetPage={handleResetPage}/>
+                                        <ProductManagementStatus product={row} handleResetPage={handleResetPage} />
                                     </Stack>
                                 </StyledTableCell>
+                                <StyledTableCell align="left">
+                                    {row.status_product === 1 ?
+                                        <Typography variant='body2' sx={{ color: "var(--color3)" }}>kinh doanh</Typography>
+                                        :
+                                        <Typography variant='body2' sx={{ color: "var(--color9)" }}>Tạm dừng</Typography>
+                                    }
+                                </StyledTableCell>                             
                             </StyledTableRow>
                         ))}
 

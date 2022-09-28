@@ -142,11 +142,22 @@ const Header = () => {
                         flexDirection: 'row',
                         marginLeft: 10,
                     }}>
-                    <Box 
-                    style={{
-                        display: 'flex'
-                    }}>
-                        {accountInfo.picture_link_avatar !== undefined &&
+                    <Box
+                        style={{
+                            display: 'flex'
+                        }}>
+                        {accountInfo.picture_char !== null ?
+                            <Avatar
+                                id="basic-button"
+                                aria-controls={open ? 'basic-menu' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={open ? 'true' : undefined}
+                                onClick={handleClick}
+                                className={classes.orange}
+                                src={accountInfo.picture_char}
+                            >
+                            </Avatar>
+                            :
                             <Avatar
                                 id="basic-button"
                                 aria-controls={open ? 'basic-menu' : undefined}
@@ -172,7 +183,7 @@ const Header = () => {
                         </Box>
                     </Box>
 
-                </Box>
+                </Box >
             )
         }
     }

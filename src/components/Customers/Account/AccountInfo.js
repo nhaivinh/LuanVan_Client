@@ -32,12 +32,12 @@ function getFormattedDate(date) {
 function AccountInfo() {
 
     const [selectedImage, setSelectedImage] = React.useState(null);
-
-
+    const [resetpage, setResetPage] = React.useState(false)
     const [account, setAccount] = React.useState({})
     const [editAccount, setEditAccount] = React.useState({});
     const [cookies, setCookie, removeCookie] = useCookies(["user"]);
     const [, dispatch] = React.useContext(SnackBarContext);
+    const [avatar, setAvatar] = React.useState();
     const [posts, setPosts] = React.useState([]);
     const client = axios.create({
         baseURL: "https://localhost:7253/api/Customer"
@@ -51,8 +51,37 @@ function AccountInfo() {
                 setAccount(Account);
                 setEditAccount(Account[0])
             })
-    }, [])
+    }, [resetpage])
 
+    function handleResetPage(){
+        setResetPage(!resetpage)
+    }
+
+    const saveFile = (e) => {
+        setAvatar(e.target.files)    
+    }
+
+    function saveImage(){
+        let reader = new FileReader();
+        reader.readAsDataURL(avatar[0])
+        reader.onload = (e) => {
+            fetch("https://localhost:7253/api/Login/uploadavatar", {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "IDAccount": account[0].id_account,
+                    "pictureChar": e.target.result
+                })
+            })
+            .then(res => res.json())
+            .then((result) => {
+                handleResetPage()
+            })                                   
+        }
+    }
     function handleClickUpadte() {
         const current = new Date();
         const date = getFormattedDate(current);
@@ -127,7 +156,7 @@ function AccountInfo() {
                 }
             });
     };
-    
+
     if (account[0] !== undefined) {
         const DateOfBirthCustomer = new Date(account[0].date_of_birth_customer)
         return (
@@ -163,23 +192,16 @@ function AccountInfo() {
                                         <img alt="not found" width={"250px"} src={URL.createObjectURL(selectedImage)} />
                                         <br />
                                         <button onClick={() => setSelectedImage(null)}>Remove</button>
-                                        
+
                                     </div>
                                     :
                                     <div>
-                                        <img alt="not found" width={"250px"} src={"data:image/png;base64, " + account[0].picture_link_avatar} />
+                                        <img alt="not found" width={"250px"} src={account[0].picture_char} /> 
                                         <br />
                                     </div>
                                 }
-                                <input
-                                    type="file"
-                                    name="myImage"
-                                    onChange={(event) => {
-                                        console.log(event.target.files[0]);
-                                        setSelectedImage(event.target.files[0]);
-                                    }}
-                                />
-                                <Button variant='contained'>Cập nhật ảnh đại diện</Button>
+                                <input id="imgs" type="file" onChange={saveFile}/>
+                                <Button variant='contained' onClick={saveImage}>Cập nhật ảnh đại diện</Button>
                             </Box>
                         </Grid>
                         <Grid item xs={7} >
