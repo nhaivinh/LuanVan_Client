@@ -102,7 +102,7 @@ export default function ProductManagementFormView({ IDProduct }) {
 
     return (
         <div>
-            <IconButton onClick={handleOpen} variant="text" color="primary">
+            <IconButton onClick={handleOpen} variant="text" color="success">
                 <Tooltip title="Xem Chi Tiết">
                     <VisibilityIcon
                         sx={{ color: 'var(--color7)' }}

@@ -21,7 +21,7 @@ import Typography from '@mui/material/Typography';
 import ProductManagementFormView from './ProductManagementFormView';
 import ProductManagementFormAdd from './ProductManagementFormAdd';
 import ProductManagementFormEdit from './ProductManagementFormEdit';
-
+import ProductManagementStatus from './ProductManagementStatus';
 import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { Stack } from '@mui/system';
@@ -248,6 +248,7 @@ function ProductManagementHome() {
                                     <Stack direction="row" spacing={2} justifyContent={'center'}>
                                         <ProductManagementFormView IDProduct={row.id_product} />
                                         <ProductManagementFormEdit IDProduct={row.id_product} />
+                                        <ProductManagementStatus product={row} handleResetPage={handleResetPage}/>
                                     </Stack>
                                 </StyledTableCell>
                             </StyledTableRow>
