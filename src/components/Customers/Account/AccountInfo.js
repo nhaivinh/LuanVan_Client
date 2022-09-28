@@ -180,10 +180,6 @@ function AccountInfo() {
                                     }}
                                 />
                                 <Button variant='contained'>Cập nhật ảnh đại diện</Button>
-                                {selectedImage &&
-                                console.log(URL.createObjectURL(selectedImage))
-                                }
-                                <Link to={'"/'+URL.createObjectURL(selectedImage)+'"'} target="_blank" download>Download</Link>
                             </Box>
                         </Grid>
                         <Grid item xs={7} >

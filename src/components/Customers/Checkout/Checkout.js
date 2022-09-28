@@ -307,7 +307,6 @@ function Checkout() {
                                                         }  
                                             </Box>
                                         </Grid>
-
                                     </Box>
                                 )
                             })}

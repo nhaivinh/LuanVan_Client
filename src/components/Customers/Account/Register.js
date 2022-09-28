@@ -98,11 +98,11 @@ const Register = () => {
         let validGender = false;
 
         if (register.Username === "") {
-            thongbao = thongbao + "\nHọ và Tên"
+            thongbao = thongbao + "\nTên đăng nhập"
         } else validUsername = true
 
         if (register.Password !== register.RepeatPassword) {
-            thongbao = thongbao + "\nHọ và Tên"
+            thongbao = thongbao + "\nNhập lại mật khẩu"
         } else validUsername = true
 
         if (register.Name === "" || register.Name.search(/[0-9]/) >= 0) {

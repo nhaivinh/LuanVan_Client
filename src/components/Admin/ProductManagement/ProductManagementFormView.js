@@ -12,9 +12,10 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
-
+import ProductImagesSlider from '../../Customers/Products/ProductImagesSlider'
 import ProductManagementTechInfo from './ProductManagementTechInfo';
-
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation, Thumbs } from 'swiper'
 const style = {
     position: 'absolute',
     top: '50%',
@@ -43,6 +44,8 @@ export default function ProductManagementFormView({ IDProduct }) {
     const handleClose = () => setOpen(false);
 
     const [product, setProduct] = React.useState({})
+
+    const [pictures, setPictures] = React.useState([])
 
     function showTypeProduct(type) {
         switch (type) {
@@ -90,6 +93,11 @@ export default function ProductManagementFormView({ IDProduct }) {
                 const Product = res.data;
                 setProduct(Product[0]);
             })
+        axios.get(`https://localhost:7253/api/Picture/getpicturebyid/` + IDProduct)
+            .then(res => {
+                const Pictures = res.data;
+                setPictures(Pictures);
+            })
     }, [])
 
     return (
@@ -109,112 +117,44 @@ export default function ProductManagementFormView({ IDProduct }) {
             >
                 {product !== {} &&
                     <Box sx={style}>
-                        <Stack direction="row" spacing={1} alignItems="flex-end" justifyContent="space-between" marginBottom={5}>
+                        <Stack direction="row" spacing={1} alignItems="flex-end" justifyContent="space-between" marginBottom={2}>
                             <Typography variant="h4">
                                 Chi Tiết Sản Phẩm
                             </Typography>
                             <IconButton variant="contained" onClick={handleClose}><CloseIcon /></IconButton>
                         </Stack>
                         <Box sx={Info__style}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={3} >
-                                    <Typography variant="h6" paddingBottom={2}>
-                                        Thông số sản phẩm:
-                                    </Typography>
-                                    <Typography variant="body1" style={{ paddingBottom: 20 }}>
-                                        Mã sản phẩm: {product.id_product}
-                                    </Typography>
-                                    <Typography variant="body1">
-                                        Tên sản phẩm:
-                                    </Typography>
-                                    <Typography variant="body1" style={{ paddingBottom: 20 }}>
-                                        {product.name_product}
-                                    </Typography>
-                                    <Typography variant="body1">
-                                        Trạng thái sản phẩm:
-                                    </Typography>
-                                    <Typography variant="body1" style={{ paddingBottom: 20 }}>
-                                        {product.status_product === 1 ?
-                                            ' Còn kinh doanh'
-                                            :
-                                            ' Tạm dừng kinh doanh'
-                                        }
-                                    </Typography>
-                                    
-                                </Grid>
-                                <Grid item xs={3} >
-                                    <Typography variant="h6" paddingBottom={6}>
+                            <Typography variant="h6" paddingBottom={2}>
+                                Thông số sản phẩm:
+                            </Typography>
+                            <Grid container spacing={2} >
+                                <Grid item xs={6} style={{ borderRight: '2px solid lightgrey' }}>
 
-                                    </Typography>
-                                    <Typography variant="body1" style={{ paddingBottom: 20 }}>
-                                        Loại sản phẩm: {showTypeProduct(product.type_product)}
-                                    </Typography>
-                                    <Typography variant="body1" style={{ paddingBottom: 20 }}>
-                                        Thương hiệu: {product.brand_product}
-                                    </Typography>
-                                    <Typography variant="body1" style={{ paddingBottom: 20 }}>
-                                        Số lượng: {product.quantity_product}
-                                    </Typography>
-                                    <Typography variant="body1" style={{ paddingBottom: 20 }}>
-                                        Đơn giá: &nbsp;
-                                        {product.unit_price_product !== undefined &&
-                                            product.unit_price_product.toLocaleString('vi-VI',
-                                                {
-                                                    style: 'currency',
-                                                    currency: 'VND'
-                                                })}
-                                    </Typography>
-                                    <Typography variant="body1" style={{ paddingBottom: 20 }}>
-                                        Giảm giá: &nbsp;
-                                        {product.discount_product === 0 ?
-                                            "không có"
-                                            :
-                                            <>
-                                                {product.discount_product + "%"}
-                                            </>
-                                        }
-                                    </Typography>
-                                    <Typography variant="body1" style={{ paddingBottom: 20 }}>
-                                        Bảo hành: {product.insurance_product} Tháng
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={6} >
-                                    <Typography variant="h6" paddingBottom={2}>
-                                        Thông số kỹ thuật:
-                                    </Typography>
-                                    <TableContainer component={Paper} sx={{ maxHeight: 300 }}>
-                                        <Table sx={{ maxWidth: 500 }} aria-label="custom pagination table">
-                                            <ProductManagementTechInfo product={product} />
-                                        </Table>
-                                    </TableContainer>
-                                </Grid>
-                            </Grid>
-                            {/* <Grid container spacing={2}>
-                                <Grid item xs={6} >
                                     <Typography variant="body1" style={{ paddingBottom: 20 }}>
                                         Mã sản phẩm: {product.id_product}
                                     </Typography>
                                     <Typography variant="body1" style={{ paddingBottom: 20 }}>
                                         Tên sản phẩm: {product.name_product}
                                     </Typography>
-                                    <Typography variant="body1" style={{ paddingBottom: 20 }}>
-                                        Trạng thái sản phẩm:
+                                    <Typography variant="body1">
+                                        Trạng thái sản phẩm: 
                                         {product.status_product === 1 ?
                                             ' Còn kinh doanh'
                                             :
                                             ' Tạm dừng kinh doanh'
                                         }
                                     </Typography>
+
                                 </Grid>
-                                <Grid item xs={3} >
+                                <Grid item xs={3} style={{ borderRight: '2px solid lightgrey' }}>
+                                    <Typography variant="body1" style={{ paddingBottom: 20 }}>
+                                        Số lượng: {product.quantity_product}
+                                    </Typography>
                                     <Typography variant="body1" style={{ paddingBottom: 20 }}>
                                         Loại sản phẩm: {showTypeProduct(product.type_product)}
                                     </Typography>
                                     <Typography variant="body1" style={{ paddingBottom: 20 }}>
                                         Thương hiệu: {product.brand_product}
-                                    </Typography>
-                                    <Typography variant="body1" style={{ paddingBottom: 20 }}>
-                                        Số lượng: {product.quantity_product}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={3} >
@@ -241,7 +181,25 @@ export default function ProductManagementFormView({ IDProduct }) {
                                         Bảo hành: {product.insurance_product} Tháng
                                     </Typography>
                                 </Grid>
-                            </Grid> */}
+                                <Grid item xs={3}>
+                                    <Box>
+                                        <Typography variant="h6" paddingBottom={2}>
+                                            Hình ảnh sản phẩm:
+                                        </Typography>
+                                        <ProductImagesSlider images={pictures} />
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={9}>
+                                    <Typography variant="h6" paddingBottom={2}>
+                                        Thông số kỹ thuật:
+                                    </Typography>
+                                    <TableContainer component={Paper} sx={{ maxHeight: 300 }}>
+                                        <Table sx={{}} aria-label="custom pagination table">
+                                            <ProductManagementTechInfo product={product} />
+                                        </Table>
+                                    </TableContainer>
+                                </Grid>
+                            </Grid>
                         </Box>
                     </Box>
                 }
