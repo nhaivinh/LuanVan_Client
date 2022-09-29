@@ -161,11 +161,10 @@ function ImportProductHome() {
             return (ImportNote.id_import_note === IDImportNote)
         })
         var result = filteredImportNotes.reduce((total, currentValue) =>
-            total + currentValue.name_product + " - ", ""
+            total + currentValue.name_product + " |\n", ""
         );
-
         return (
-            result.slice(0,200) + "..."
+            result.slice(0, 200) + "..."
         )
     }
 
