@@ -165,6 +165,7 @@ function AccountInfo() {
 
     if (account[0] !== undefined) {
         const DateOfBirthCustomer = new Date(account[0].date_of_birth_customer)
+        console.log(getFormattedDate(DateOfBirthCustomer))
         return (
             <Box style={{}}>
                 <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', borderRadius: '10px', marginTop: 50 }}>

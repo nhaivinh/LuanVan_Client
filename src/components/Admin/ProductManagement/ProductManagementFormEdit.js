@@ -507,7 +507,7 @@ export default function ProductManagementFormEdit({ IDProduct }) {
             <IconButton onClick={handleOpen} variant="text" color="warning">
                 <Tooltip title="Xem Chi Tiết">
                     <EditIcon
-                        sx={{ color: 'var(--color7)' }}
+                        sx={{ color: 'var(--color8)' }}
                     />
                 </Tooltip>
             </IconButton>

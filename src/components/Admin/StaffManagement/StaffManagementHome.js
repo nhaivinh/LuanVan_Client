@@ -22,6 +22,7 @@ import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { Stack } from '@mui/system';
 import Divider from '@mui/material/Divider';
+import StaffFormView from './StaffFormView';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: 'var(--color3)',
@@ -105,9 +106,9 @@ TablePaginationActions.propTypes = {
 
 function StaffManagementHome() {
 
-    const [importNotes, setImportNotes] = React.useState([])
+    const [staffs, setStaffs] = React.useState([])
 
-    const [detailImportNotes, setDetailImportNotes] = React.useState([])
+    const [roles, setRoles] = React.useState([])
 
     const [resetPage, setResetPage] = React.useState(false);
 
@@ -127,11 +128,16 @@ function StaffManagementHome() {
         return day + '/' + month + '/' + year;
     }
 
-    React.useEffect(() => {
+    React.useEffect(() => {    
         axios.get(`https://localhost:7253/api/Staff`)
             .then(res => {
-                const ImportNotes = res.data;
-                setImportNotes(ImportNotes);
+                const Staffs = res.data;
+                setStaffs(Staffs);
+            })
+        axios.get(`https://localhost:7253/api/Staff/getRoleStaff`)
+            .then(res => {
+                const Roles = res.data;
+                setRoles(Roles);
             })
     }, [resetPage])
 
@@ -139,7 +145,7 @@ function StaffManagementHome() {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - importNotes.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - staffs.length) : 0;
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -150,23 +156,17 @@ function StaffManagementHome() {
         setPage(0);
     };
 
-    function showGender(gender) {
-        switch (gender) {
-            case 'male':
-                return (
-                    <Typography variant='body2'>Nam</Typography>
-                )
-            case 'female':
-                return (
-                    <Typography variant='body2'>Nữ</Typography>
-                )
-            case 'other':
-                return (
-                    <Typography variant='body2'>Khác</Typography>
-                )
-            default:
-                break;
-        }
+    function showRole(IDStaff) {
+        var filteredRoles = roles
+        filteredRoles  = roles.filter(function (role) {
+            return (role.id_staff === IDStaff)
+        })
+        var result = filteredRoles.reduce((total, currentValue) =>
+            total + currentValue.name_permission + " |\n", ""
+        );
+        return (
+            result
+        )
     }
 
     return (
@@ -191,6 +191,7 @@ function StaffManagementHome() {
                             <TableCell style={{ width: '15%', color: 'white' }} align="left">Tên nhân viên</TableCell>
                             <TableCell style={{ width: '10%', color: 'white' }} align="left">Email</TableCell>
                             <TableCell style={{ width: '10%', color: 'white' }} align="left">Chức vụ</TableCell>
+                            <TableCell style={{ width: '20%', color: 'white' }} align="left">Quyền hạn</TableCell>
                             <TableCell style={{ width: '10%', color: 'white' }} align="left">Số điện thoại</TableCell>
                             <TableCell style={{ width: '20%', color: 'white' }} align="left">Địa chỉ</TableCell>
                             <TableCell style={{ width: '10%', color: 'white' }} align="center">Thao tác</TableCell>
@@ -198,8 +199,8 @@ function StaffManagementHome() {
                     </TableHead>
                     <TableBody>
                         {(rowsPerPage > 0
-                            ? importNotes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            : importNotes
+                            ? staffs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            : staffs
                         ).map((row) => (
                             <StyledTableRow key={row.id_staff}>
                                 <StyledTableCell component="th" scope="row" align="left">
@@ -215,6 +216,9 @@ function StaffManagementHome() {
                                     {row.position}
                                 </StyledTableCell>
                                 <StyledTableCell component="th" scope="row" align="left">
+                                    {showRole(row.id_staff)}
+                                </StyledTableCell>
+                                <StyledTableCell component="th" scope="row" align="left">
                                     {row.phone_number_staff}
                                 </StyledTableCell>
                                 <StyledTableCell component="th" scope="row" align="left">
@@ -222,12 +226,11 @@ function StaffManagementHome() {
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
                                     <Stack direction="row" spacing={2} justifyContent={'center'}>
-
+                                        <StaffFormView Staff={row} />
                                     </Stack>
                                 </StyledTableCell>
                             </StyledTableRow>
                         ))}
-
                         {emptyRows > 0 && (
                             <StyledTableRow style={{ height: 53 * emptyRows }}>
                                 <StyledTableCell colSpan={10} />
@@ -239,7 +242,7 @@ function StaffManagementHome() {
                             <TablePagination
                                 rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
                                 colSpan={10}
-                                count={importNotes.length}
+                                count={staffs.length}
                                 rowsPerPage={rowsPerPage}
                                 page={page}
                                 SelectProps={{

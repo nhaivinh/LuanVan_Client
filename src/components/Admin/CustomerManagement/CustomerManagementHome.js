@@ -22,6 +22,9 @@ import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { Stack } from '@mui/system';
 import Divider from '@mui/material/Divider';
+
+import CustomerFormEdit from './CustomerFormEdit';
+import CustomerFormView from './CustomerFormView';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: 'var(--color3)',
@@ -105,9 +108,7 @@ TablePaginationActions.propTypes = {
 
 function CustomerManagementHome() {
 
-    const [importNotes, setImportNotes] = React.useState([])
-
-    const [detailImportNotes, setDetailImportNotes] = React.useState([])
+    const [customers, setCustomers] = React.useState([])
 
     const [resetPage, setResetPage] = React.useState(false);
 
@@ -130,8 +131,8 @@ function CustomerManagementHome() {
     React.useEffect(() => {
         axios.get(`https://localhost:7253/api/Customer`)
             .then(res => {
-                const ImportNotes = res.data;
-                setImportNotes(ImportNotes);
+                const Customers = res.data;
+                setCustomers(Customers);
             })
     }, [resetPage])
 
@@ -139,7 +140,7 @@ function CustomerManagementHome() {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - importNotes.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - customers.length) : 0;
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -177,6 +178,7 @@ function CustomerManagementHome() {
                         fontSize: 30,
                         color: "var(--color4)",
                         fontWeight: "bold",
+
                     }
                 }
             >
@@ -200,8 +202,8 @@ function CustomerManagementHome() {
                     </TableHead>
                     <TableBody>
                         {(rowsPerPage > 0
-                            ? importNotes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            : importNotes
+                            ? customers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            : customers
                         ).map((row) => (
                             <StyledTableRow key={row.id_customer}>
                                 <StyledTableCell component="th" scope="row" align="left">
@@ -238,7 +240,8 @@ function CustomerManagementHome() {
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
                                     <Stack direction="row" spacing={2} justifyContent={'center'}>
-
+                                        <CustomerFormView Customer={row}/>
+                                        <CustomerFormEdit Customer={row} handleResetPage={handleResetPage}/>
                                     </Stack>
                                 </StyledTableCell>
                             </StyledTableRow>
@@ -255,7 +258,7 @@ function CustomerManagementHome() {
                             <TablePagination
                                 rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
                                 colSpan={10}
-                                count={importNotes.length}
+                                count={customers.length}
                                 rowsPerPage={rowsPerPage}
                                 page={page}
                                 SelectProps={{

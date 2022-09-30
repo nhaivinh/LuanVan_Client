@@ -183,10 +183,9 @@ function AdminHomePage() {
                 }
 
             </Drawer>
-            {/* Content */}
 
             <Main open={open}>
-                <DrawerHeader />
+                <DrawerHeader/>
                 <Outlet />
             </Main>
         </Box>

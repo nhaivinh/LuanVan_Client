@@ -183,19 +183,21 @@ function ProductManagementHome() {
 
     return (
         <Box>
-            <Typography variant="p"
-                sx={
-                    {
-                        fontSize: 30,
-                        color: "var(--color4)",
-                        fontWeight: "bold",
+            <Stack direction="row" spacing={2} justifyContent="space-between">
+                <Typography variant="p"
+                    sx={
+                        {
+                            fontSize: 30,
+                            color: "var(--color4)",
+                            fontWeight: "bold",
+                        }
                     }
-                }
-            >
-                Quản lý sản phẩm
-            </Typography>
+                >
+                    Quản lý sản phẩm
+                </Typography>               
+                <ProductManagementFormAdd />
+            </Stack>
             <Divider sx={{ marginBottom: 3 }}></Divider>
-            <ProductManagementFormAdd />
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
                     <TableHead>
@@ -227,7 +229,7 @@ function ProductManagementHome() {
                                         <img src={"data:image/png;base64, " + row.picture_link_product} alt="product images" width={'100%'} height={'100%'} />
                                         :
                                         <img src={row.picture_product} alt="product images" width={'100%'} height={'100%'} />
-                                    }                                
+                                    }
                                 </StyledTableCell>
                                 <StyledTableCell align="left">
                                     {row.name_product}
