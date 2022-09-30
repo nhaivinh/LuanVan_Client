@@ -21,6 +21,8 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { Stack } from '@mui/system';
+import { useCookies } from "react-cookie";
+import Divider from '@mui/material/Divider';
 
 import OrderManagementFormView from './OrderManagementFormView';
 import OrderManagementFormChangeStatus from './OrderManagementFormChangeStatus';
@@ -112,15 +114,23 @@ function OrderManagementHome() {
 
     const [resetPage, setResetPage] = React.useState(false);
 
+    const [account, setAccount] = React.useState({})
+
+    const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+
     function handleResetPage() {
         setResetPage(!resetPage);
     }
-
     React.useEffect(() => {
         axios.get(`https://localhost:7253/api/OrderCustomer`)
             .then(res => {
                 const Orders = res.data;
                 setOrders(Orders);
+            })
+        axios.get(`https://localhost:7253/api/Login/getinfobyid/` + cookies.Account)
+            .then(res => {
+                const Account = res.data;
+                setAccount(Account[0]);
             })
     }, [resetPage])
 
@@ -196,20 +206,31 @@ function OrderManagementHome() {
 
     return (
         <Box>
-            {/* <ProductManagementFormAdd /> */}
+            <Typography variant="p"
+                sx={
+                    {
+                        fontSize: 30,
+                        color: "var(--color4)",
+                        fontWeight: "bold",
+                    }
+                }
+            >
+                Quản lý đơn hàng
+            </Typography>
+            <Divider sx={{ marginBottom: 3 }}></Divider>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
                     <TableHead>
-                        <TableRow style={{ backgroundColor: '#474747' , color: 'white' }}>
-                            <TableCell style={{ width: '5%' , color: 'white'}} align="left">Mã đơn hàng</TableCell>
-                            <TableCell style={{ width: '5%' , color: 'white'}} align="left">Mã khách hàng</TableCell>
-                            <TableCell style={{ width: '8%' , color: 'white'}} align="left">Mã nhân viên</TableCell>
-                            <TableCell style={{ width: '15%' , color: 'white'}} align="left">Tên người nhận</TableCell>
-                            <TableCell style={{ width: '15%' , color: 'white'}} align="left">Phương thức thanh toán</TableCell>
-                            <TableCell style={{ width: '12%' , color: 'white'}} align="left">Tổng tiền</TableCell>
-                            <TableCell style={{ width: '10%' , color: 'white'}} align="left">Ngày đặt hàng</TableCell>
-                            <TableCell style={{ width: '20%' , color: 'white', paddingLeft: 100}} align="left">Thao Tác</TableCell>
-                            <TableCell style={{ width: '10%' , color: 'white'}} align="center">Trạng thái đơn hàng</TableCell>
+                        <TableRow style={{ backgroundColor: '#474747', color: 'white' }}>
+                            <TableCell style={{ width: '5%', color: 'white' }} align="left">Mã đơn hàng</TableCell>
+                            <TableCell style={{ width: '5%', color: 'white' }} align="left">Mã khách hàng</TableCell>
+                            <TableCell style={{ width: '8%', color: 'white' }} align="left">Mã nhân viên</TableCell>
+                            <TableCell style={{ width: '15%', color: 'white' }} align="left">Tên người nhận</TableCell>
+                            <TableCell style={{ width: '15%', color: 'white' }} align="left">Phương thức thanh toán</TableCell>
+                            <TableCell style={{ width: '12%', color: 'white' }} align="left">Tổng tiền</TableCell>
+                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Ngày đặt hàng</TableCell>
+                            <TableCell style={{ width: '20%', color: 'white', paddingLeft: 100 }} align="left">Thao Tác</TableCell>
+                            <TableCell style={{ width: '10%', color: 'white' }} align="center">Trạng thái đơn hàng</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -249,8 +270,8 @@ function OrderManagementHome() {
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
                                     <Stack direction="row" spacing={2} justifyContent={'left'}>
-                                        <OrderManagementFormView idOrder={row.id_order} Order={row}/>
-                                        <OrderManagementFormChangeStatus idOrder={row.id_order} Order={row} handleResetPage={handleResetPage}/>
+                                        <OrderManagementFormView idOrder={row.id_order} Order={row} />
+                                        <OrderManagementFormChangeStatus idOrder={row.id_order} Order={row} idStaff={account.id_staff} handleResetPage={handleResetPage} />
                                     </Stack>
                                 </StyledTableCell>
                                 <StyledTableCell component="th" scope="row" align="center">

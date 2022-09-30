@@ -25,6 +25,7 @@ import ProductManagementStatus from './ProductManagementStatus';
 import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { Stack } from '@mui/system';
+import Divider from '@mui/material/Divider';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -118,7 +119,7 @@ function ProductManagementHome() {
     }
 
     React.useEffect(() => {
-        axios.get(`https://localhost:7253/api/Product/getinfo`)
+        axios.get(`https://localhost:7253/api/Product`)
             .then(res => {
                 const Products = res.data;
                 setProducts(Products);
@@ -182,21 +183,34 @@ function ProductManagementHome() {
 
     return (
         <Box>
+            <Typography variant="p"
+                sx={
+                    {
+                        fontSize: 30,
+                        color: "var(--color4)",
+                        fontWeight: "bold",
+                    }
+                }
+            >
+                Quản lý sản phẩm
+            </Typography>
+            <Divider sx={{ marginBottom: 3 }}></Divider>
             <ProductManagementFormAdd />
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
                     <TableHead>
-                        <TableRow style={{ backgroundColor: '#474747' , color: 'white' }}>
-                            <TableCell style={{ width: '5%' , color: 'white'}} align="left">Mã sản phẩm</TableCell>
-                            <TableCell style={{ width: '20%' , color: 'white'}} align="left">Tên sản phẩm</TableCell>
-                            <TableCell style={{ width: '10%' , color: 'white'}} align="left">Thương hiệu</TableCell>
-                            <TableCell style={{ width: '10%' , color: 'white'}} align="left">Loại</TableCell>
-                            <TableCell style={{ width: '5%' , color: 'white'}} align="left">Số lượng</TableCell>
-                            <TableCell style={{ width: '10%' , color: 'white'}} align="left">Đơn giá</TableCell>
-                            <TableCell style={{ width: '10%' , color: 'white'}} align="left">Giảm giá</TableCell>
-                            <TableCell style={{ width: '10%' , color: 'white'}} align="left">Bảo hành</TableCell>
-                            <TableCell style={{ width: '10%' , color: 'white'}} align="center">Thao Tác</TableCell>
-                            <TableCell style={{ width: '10%' , color: 'white'}} align="left">Trạng thái</TableCell>                        
+                        <TableRow style={{ backgroundColor: '#474747', color: 'white' }}>
+                            <TableCell style={{ width: '5%', color: 'white' }} align="left">Mã </TableCell>
+                            <TableCell style={{ width: '7%', color: 'white' }} align="left">Ảnh </TableCell>
+                            <TableCell style={{ width: '15%', color: 'white' }} align="left">Tên</TableCell>
+                            <TableCell style={{ width: '8%', color: 'white' }} align="left">Thương hiệu</TableCell>
+                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Loại</TableCell>
+                            <TableCell style={{ width: '5%', color: 'white' }} align="left">Số lượng</TableCell>
+                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Đơn giá</TableCell>
+                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Giảm giá</TableCell>
+                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Bảo hành</TableCell>
+                            <TableCell style={{ width: '10%', color: 'white' }} align="center">Thao Tác</TableCell>
+                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Trạng thái</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -207,6 +221,13 @@ function ProductManagementHome() {
                             <StyledTableRow key={row.id_product}>
                                 <StyledTableCell component="th" scope="row" align="left">
                                     {row.id_product}
+                                </StyledTableCell>
+                                <StyledTableCell align="left">
+                                    {row.picture_product === null ?
+                                        <img src={"data:image/png;base64, " + row.picture_link_product} alt="product images" width={'100%'} height={'100%'} />
+                                        :
+                                        <img src={row.picture_product} alt="product images" width={'100%'} height={'100%'} />
+                                    }                                
                                 </StyledTableCell>
                                 <StyledTableCell align="left">
                                     {row.name_product}
@@ -250,7 +271,7 @@ function ProductManagementHome() {
                                         :
                                         <Typography variant='body2' sx={{ color: "var(--color9)" }}>Tạm dừng</Typography>
                                     }
-                                </StyledTableCell>                             
+                                </StyledTableCell>
                             </StyledTableRow>
                         ))}
 
@@ -264,7 +285,7 @@ function ProductManagementHome() {
                         <StyledTableRow>
                             <TablePagination
                                 rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
-                                colSpan={10}
+                                colSpan={11}
                                 count={products.length}
                                 rowsPerPage={rowsPerPage}
                                 page={page}

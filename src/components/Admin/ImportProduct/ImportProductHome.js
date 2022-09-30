@@ -21,6 +21,8 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { Stack } from '@mui/system';
+import Divider from '@mui/material/Divider';
+import ImportProductFormView from './ImportProductFormView';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -170,16 +172,29 @@ function ImportProductHome() {
 
     return (
         <Box>
+            <Typography variant="p"
+                sx={
+                    {
+                        fontSize: 30,
+                        color: "var(--color4)",
+                        fontWeight: "bold",
+                    }
+                }
+            >
+                Quản lý nhập hàng
+            </Typography>
+            <Divider sx={{ marginBottom: 3 }}></Divider>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
                     <TableHead>
                         <TableRow style={{ backgroundColor: '#474747', color: 'white' }}>
                             <TableCell style={{ width: '10%', color: 'white' }} align="left">Mã nhập hàng</TableCell>
-                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Mã nhà cung cấp</TableCell>
-                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Mã nhân viên</TableCell>
-                            <TableCell style={{ width: '40%', color: 'white' }} align="left">Tên các sản phẩm </TableCell>
+                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Tên nhà cung cấp</TableCell>
+                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Tên nhân viên</TableCell>
+                            <TableCell style={{ width: '30%', color: 'white' }} align="left">Tên các sản phẩm </TableCell>             
+                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Tiền nhập hàng</TableCell>
                             <TableCell style={{ width: '10%', color: 'white' }} align="left">Ngày nhập hàng</TableCell>
-                            <TableCell style={{ width: '20%', color: 'white' }} align="left">Thao tác</TableCell>
+                            <TableCell style={{ width: '20%', color: 'white' }} align="center">Thao tác</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -192,20 +207,27 @@ function ImportProductHome() {
                                     {row.id_import_note}
                                 </StyledTableCell>
                                 <StyledTableCell component="th" scope="row" align="left">
-                                    {row.id_supplier}
+                                    {row.name_supplier}
                                 </StyledTableCell>
                                 <StyledTableCell component="th" scope="row" align="left">
-                                    {row.id_staff}
+                                    {row.name_staff}
                                 </StyledTableCell>
                                 <StyledTableCell component="th" scope="row" align="left">
                                     {showNameProducts(row.id_import_note)}
+                                </StyledTableCell>
+                                <StyledTableCell component="th" scope="row" align="left">
+                                    {row.total_price_import.toLocaleString('vi-VI',
+                                        {
+                                            style: 'currency',
+                                            currency: 'VND'
+                                        })}
                                 </StyledTableCell>
                                 <StyledTableCell component="th" scope="row" align="left">
                                     {getFormattedDate(new Date(row.import_date))}
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
                                     <Stack direction="row" spacing={2} justifyContent={'center'}>
-
+                                        <ImportProductFormView ImportNotes={row}/>
                                     </Stack>
                                 </StyledTableCell>
                             </StyledTableRow>

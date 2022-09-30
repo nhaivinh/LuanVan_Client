@@ -24,90 +24,90 @@ function CatergoryList() {
                 backgroundColor: 'rgb(255, 255, 255)',
                 position: 'relative',
                 overflow: 'hidden',
-                width: '12.375rem',
+                width: '14.375rem',
                 height: '28.5rem',
                 zIndex: 2,
                 marginTop: 20,
             }}
         >
             <List
-                style={{ width: '100%' }}
-                component="nav"
-                aria-labelledby="nested-list-subheader"
-                subheader={
-                    <ListSubheader position='static' component="div" id="nested-list-subheader" color="inherit">
-                        <Box
-                            style={{ display: 'flex', bgcolor: "#a50a06", width: '100%', height: 100, alignItems: 'center', justifyContent: 'center', borderRadius: 10 }}
-                        >
-                            <Typography variant='h5'>
-                                Danh Mục Sản Phẩm
-                            </Typography>
-                        </Box>
-                    </ListSubheader>
-                }
+                // style={{ width: '100%' }}
+                // component="nav"
+                // aria-labelledby="nested-list-subheader"
+                // subheader={
+                //     <ListSubheader position='static' component="div" id="nested-list-subheader" color="inherit">
+                //         <Box
+                //             style={{ display: 'flex', bgcolor: "#a50a06", width: '100%', height: 60, alignItems: 'flex-end', justifyContent: 'flex-start', borderRadius: 10 }}
+                //         >
+                //             <Typography variant='h6'>
+                //                 Danh Mục Sản Phẩm
+                //             </Typography>
+                //         </Box>
+                //     </ListSubheader>
+                // }
             >
                 <Link to={"/search/?type=cpu&page=1"}>
                     <ListItemButton>
                         <ListItemIcon>
-                            <MemoryIcon />
+                            <img src={require('../../images/Icon/cpu.svg').default} width={40}/>
                         </ListItemIcon>
-                        <Typography>Bộ Vi Xử Lý</Typography>
+                        <Typography style={{color:'#2E2EFF'}}>Bộ Vi Xử Lý</Typography>
                     </ListItemButton>
                 </Link>
                 <Link to="/search/?type=gpu&page=1" >
                     <ListItemButton>
                         <ListItemIcon>
-                            D
+                            <img src={require('../../images/Icon/vga.svg').default} width={40} />
                         </ListItemIcon>
-                        <Typography>Card Đồ Hoạ</Typography>
+                        <Typography style={{color:'#2E2EFF'}}>Card Đồ Hoạ</Typography>
                     </ListItemButton>
                 </Link>
                 <Link to="/search/?type=mainboard&page=1" >
                     <ListItemButton>
                         <ListItemIcon>
-                            D
+                            <img src={require('../../images/Icon/main.svg').default} width={40} />
                         </ListItemIcon>
-                        <Typography>Mainboard</Typography>
+                        <Typography style={{color:'#2E2EFF'}}>Mainboard</Typography>
                     </ListItemButton>
                 </Link>
                 <Link to="/search/?type=ram&page=1" >
                     <ListItemButton>
                         <ListItemIcon>
-                            D
+                            <img src={require('../../images/Icon/ram.svg').default} width={40} />
                         </ListItemIcon>
-                        <Typography>Ram</Typography>
+                        <Typography style={{color:'#2E2EFF'}}>Ram</Typography>
                     </ListItemButton>
                 </Link>
                 <Link to="/search/?type=harddisk&page=1" >
                     <ListItemButton>
                         <ListItemIcon>
-                            D
+                            <img src={require('../../images/Icon/ssd.svg').default} width={40} />
                         </ListItemIcon>
-                        <Typography>Ổ Cứng</Typography>
+                        <Typography style={{color:'#2E2EFF'}}>Ổ Cứng</Typography>
                     </ListItemButton>
                 </Link>
                 <Link to="/search/?type=psu&page=1" >
                     <ListItemButton>
                         <ListItemIcon>
-                            D
+                            <img src={require('../../images/Icon/psu.svg').default} width={40} />
                         </ListItemIcon>
-                        <Typography>Nguồn</Typography>
+                        <Typography style={{color:'#2E2EFF'}}>Nguồn</Typography>
                     </ListItemButton>
                 </Link>
                 <Link to="/search/?type=casepc&page=1" >
                     <ListItemButton>
                         <ListItemIcon>
-                            D
+                            <img src={require('../../images/Icon/case.svg').default} width={40} />
                         </ListItemIcon>
-                        <Typography>Vỏ Case</Typography>
+                        <Typography style={{color:'#2E2EFF'}}>Vỏ Case</Typography>
                     </ListItemButton>
                 </Link>
                 <Link to="/search/?type=cooling_system&page=1" >
                     <ListItemButton>
                         <ListItemIcon>
-                            D
+                            <img src={require('../../images/Icon/fan.svg').default} width={40} />
                         </ListItemIcon>
-                        <Typography>Quạt Tản Nhiệt</Typography>
+                        <Typography style={{color:'#2E2EFF'}}>Quạt Tản Nhiệt</Typography>
                     </ListItemButton>
                 </Link>
             </List>

@@ -8,6 +8,7 @@ import OrderManagementHome from './OrderManagement/OrderManagementHome';
 import ImportProductHome from './ImportProduct/ImportProductHome';
 import CustomerManagementHome from './CustomerManagement/CustomerManagementHome';
 
+
 function AdminHome() {
   return (
     <div className="App">
@@ -15,11 +16,11 @@ function AdminHome() {
         <Routes>
           <Route path='/' element={<AdminHomePage />}>
             {/* <Route path='admin' element={<Admin />} /> */}
-            <Route path='product' element={<ProductManagementHome />} />
-            <Route path='customer' element={<CustomerManagementHome />} />
-            <Route path='import' element={<ImportProductHome />} />
-            <Route path='order' element={<OrderManagementHome />} />
-            <Route path='staff' element={<StaffManagementHome />} />
+            <Route path='/product' element={<ProductManagementHome />} />
+            <Route path='/customer' element={<CustomerManagementHome />} />
+            <Route path='/import' element={<ImportProductHome />} />
+            <Route path='/order' element={<OrderManagementHome />} />
+            <Route path='/staff' element={<StaffManagementHome />} />
           </Route>
         </Routes>
       </React.Fragment>

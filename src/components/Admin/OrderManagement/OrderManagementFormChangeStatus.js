@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
 
-function OrderManagementFormChangeStatus({ idOrder, Order, handleResetPage }) {
+function OrderManagementFormChangeStatus({ idOrder, Order, idStaff, handleResetPage }) {
 
     let client
 
@@ -15,7 +15,7 @@ function OrderManagementFormChangeStatus({ idOrder, Order, handleResetPage }) {
 
     const handleSubmit = (status) => {
         client = axios.create({
-            baseURL: "https://localhost:7253/api/OrderCustomer/"+ idOrder +"/"+ status
+            baseURL: "https://localhost:7253/api/OrderCustomer/"+ idOrder +"/"+ status + "/" + idStaff
         });
         client
             .put('', {
@@ -61,28 +61,6 @@ function OrderManagementFormChangeStatus({ idOrder, Order, handleResetPage }) {
                 break;
         }
     }
-
-    // function showFunction() {
-    //     switch (Order.delivery_status) {
-    //         case 0:
-    //             return (
-    //                 <>
-    //                     <Button variant='contained' size='small' sx={{ marginRight: 1 }} onClick={handleSubmit(1)}> Duyệt </Button>
-    //                     <Button variant='contained' size='small' color='error' onClick={handleSubmit(4)}> Huỷ </Button>
-    //                 </>
-    //             )
-    //         case 1:
-    //             return (
-    //                 <Button variant='contained' size='small' color='success' onClick={handleSubmit(2)}>Vận chuyển</Button>
-    //             )
-    //         case 2:
-    //             return (
-    //                 <Button variant='contained' size='small' color='success' onClick={handleSubmit(3)}>Hoàn thành vận chuyển</Button>
-    //             )
-    //         default:
-    //             break;
-    //     }
-    // }
     return (
         <Box>
             {

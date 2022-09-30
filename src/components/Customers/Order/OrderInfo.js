@@ -140,7 +140,7 @@ function OrderInfo() {
                     </TabContext>
                 </Box>
                 <Box style={{ height: 450 }}>
-                    <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
+                    <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
                         <Table stickyHeader={true} sx={{ minWidth: 650 }} size="small" aria-label="simple table">
                             <TableHead>
                                 <TableRow>
@@ -174,13 +174,17 @@ function OrderInfo() {
                                                     {getFormattedDate(new Date(row.order_date))}
                                                 </TableCell>
                                                 <TableCell align="left">
-                                                    {row.total_payment}
+                                                    {row.total_payment.toLocaleString('vi-VI',
+                                                        {
+                                                            style: 'currency',
+                                                            currency: 'VND'
+                                                        })}
                                                 </TableCell>
                                                 <TableCell align="left">
                                                     {showStatusOrder(row.delivery_status)}
                                                 </TableCell>
                                                 <TableCell align="left">
-                                                    <ShowDetailsOrder Order={row} idOrder={row.id_order}/>
+                                                    <ShowDetailsOrder Order={row} idOrder={row.id_order} />
                                                 </TableCell>
                                             </TableRow>
                                         )

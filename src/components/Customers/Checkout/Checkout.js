@@ -23,8 +23,12 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
-
+import { useSearchParams } from 'react-router-dom';
 function Checkout() {
+
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const params = Object.fromEntries([...searchParams]);
 
     const [cart, setCart] = React.useState([])
 
@@ -34,6 +38,37 @@ function Checkout() {
         AddressDelivery: '',
         TypePayment: 'cod'
     })
+
+    const clientStatusPayment = axios.create({
+        baseURL: "https://localhost:7253/api/OrderCustomer/setpaymentstatuswhencreateorder"
+    });
+
+    if (params.status !== undefined) {
+        if (params.status == 'success') {
+            clientStatusPayment
+                .put('', {                  
+                })
+                .then((response) => {
+                    setPosts([response.data, ...posts]);
+                    dispatch(setOpenSnackBar());
+                    dispatch(setMessage(response.data.message));
+                    dispatch(setSeverity(response.data.severity));
+                    navigate("/order");
+                })
+                .catch((err) => {
+                    if (err.response) {
+                        // The client was given an error response (5xx, 4xx)
+                        console.log(err.response.data);
+                        console.log(err.response.status);
+                        console.log(err.response.headers);
+                    } else if (err.request) {
+                        // The client never received a response, and the request was never left
+                    } else {
+                        // Anything else
+                    }
+                });
+        }
+    }
 
     const navigate = useNavigate();
 
@@ -106,11 +141,63 @@ function Checkout() {
         } else validTypePayment = true
 
         if (validName && validPhoneNumber && validAddress && validTypePayment) {
-            addPosts(customer, infoPayment, totalPrice);
+            switch (infoPayment.TypePayment) {
+                case 'cod':
+                    addPosts(customer, infoPayment, totalPrice);
+                    navigate("/order");
+                    break;
+                case 'card':
+                    addPosts(customer, infoPayment, totalPrice);
+                    handleStripe()
+                    break;
+                default:
+                    break;
+            }
+
         } else {
             alert(thongbao);
         }
     }
+    function handlePaymentCart (Cart){
+        var chosenPaymentCart = [];
+        if (Cart.length > 0) {
+            Cart
+                .map(function (product) {
+                    var chosenPaymentProduct = {
+                        "name_product": product.name_product,
+                        "unit_price_product": product.unit_price_product,
+                        "quantity_product_cart": product.quantity_product_cart,
+                    }
+                    chosenPaymentCart.push(chosenPaymentProduct)
+                }
+                )
+        }
+        return (chosenPaymentCart)
+    }
+
+    function handleStripe() {
+        fetch("http://localhost:4000/create-checkout-session", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                items: handlePaymentCart(cart),
+            }),
+        })
+            .then(res => {
+                if (res.ok)
+                    return res.json()
+                return res.json().then(json => Promise.reject(json))
+            })
+            .then(({ url }) => {
+                window.location = url
+            })
+            .catch(e => {
+                console.error(e.error)
+            })
+    }
+
     const addPosts = (customer, infoPayment, totalPrice) => {
         client
             .post('', {
@@ -128,7 +215,6 @@ function Checkout() {
                 dispatch(setOpenSnackBar());
                 dispatch(setMessage(response.data.message));
                 dispatch(setSeverity(response.data.severity));
-                navigate("/order");
             })
             .catch((err) => {
                 if (err.response) {
@@ -214,8 +300,8 @@ function Checkout() {
                                     row
                                     aria-labelledby="demo-row-radio-buttons-group-label"
                                     name="row-radio-buttons-group"
-                                    defaultValue={infoPayment.TypePayment}
-                                    onChange={(e) => { setInfoPayment({ ...infoPayment, gender_customer: e.target.value }) }}
+                                    value={infoPayment.TypePayment}
+                                    onChange={(e) => { setInfoPayment({ ...infoPayment, TypePayment: e.target.value }) }}
                                 >
                                     <FormControlLabel value="cod" control={<Radio />} label="Giao hàng nhận tiền - COD" />
                                     <FormControlLabel value="card" control={<Radio />} label="Thanh toán trực tuyến bằng thẻ ngân hàng" />
@@ -295,16 +381,16 @@ function Checkout() {
                                                         })}
                                                 </Typography>
                                                 {row.discount_product !== 0 &&
-                                                            <Typography variant='body2'>
-                                                                <del>
-                                                                    {row.unit_price_product.toLocaleString('vi-VI',
-                                                                        {
-                                                                            style: 'currency',
-                                                                            currency: 'VND'
-                                                                        })}
-                                                                </del>
-                                                            </Typography>
-                                                        }  
+                                                    <Typography variant='body2'>
+                                                        <del>
+                                                            {row.unit_price_product.toLocaleString('vi-VI',
+                                                                {
+                                                                    style: 'currency',
+                                                                    currency: 'VND'
+                                                                })}
+                                                        </del>
+                                                    </Typography>
+                                                }
                                             </Box>
                                         </Grid>
                                     </Box>

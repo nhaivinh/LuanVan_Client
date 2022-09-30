@@ -31,14 +31,20 @@ function getFormattedDate(date) {
 
 function AccountInfo() {
 
-    const [selectedImage, setSelectedImage] = React.useState(null);
     const [resetpage, setResetPage] = React.useState(false)
+
     const [account, setAccount] = React.useState({})
+
     const [editAccount, setEditAccount] = React.useState({});
+
     const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+
     const [, dispatch] = React.useContext(SnackBarContext);
-    const [avatar, setAvatar] = React.useState();
+
+    const [avatar, setAvatar] = React.useState(null);
+
     const [posts, setPosts] = React.useState([]);
+
     const client = axios.create({
         baseURL: "https://localhost:7253/api/Customer"
     });
@@ -53,15 +59,15 @@ function AccountInfo() {
             })
     }, [resetpage])
 
-    function handleResetPage(){
+    function handleResetPage() {
         setResetPage(!resetpage)
     }
 
     const saveFile = (e) => {
-        setAvatar(e.target.files)    
+        setAvatar(e.target.files)
     }
 
-    function saveImage(){
+    function saveImage() {
         let reader = new FileReader();
         reader.readAsDataURL(avatar[0])
         reader.onload = (e) => {
@@ -129,7 +135,7 @@ function AccountInfo() {
     const addPosts = (Account) => {
         client
             .put('', {
-                "idCustomer": Account.id_account,
+                "idCustomer": Account.id_customer,
                 "nameCustomer": Account.name_customer,
                 "emailCustomer": Account.email_customer,
                 "phoneNumberCustomer": Account.phone_number_customer,
@@ -187,20 +193,10 @@ function AccountInfo() {
                                     flexDirection: 'column',
                                     paddingBottom: 30
                                 }}>
-                                {selectedImage ?
-                                    <div>
-                                        <img alt="not found" width={"250px"} src={URL.createObjectURL(selectedImage)} />
-                                        <br />
-                                        <button onClick={() => setSelectedImage(null)}>Remove</button>
-
-                                    </div>
-                                    :
-                                    <div>
-                                        <img alt="not found" width={"250px"} src={account[0].picture_char} /> 
-                                        <br />
-                                    </div>
-                                }
-                                <input id="imgs" type="file" onChange={saveFile}/>
+                                <div>
+                                    <img alt="not found" width={"250px"} src={account[0].picture_char} />
+                                </div>
+                                <input type="file" onChange={saveFile} />
                                 <Button variant='contained' onClick={saveImage}>Cập nhật ảnh đại diện</Button>
                             </Box>
                         </Grid>
