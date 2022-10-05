@@ -232,7 +232,7 @@ function ShowDetailsOrder({ idOrder, Order }) {
                                                     </TableCell>
                                                     <TableCell align="left">
                                                         <Typography variant='body1'>
-                                                            {row.quantiry_product_order}
+                                                            {row.quantity_product_order}
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell align="left">

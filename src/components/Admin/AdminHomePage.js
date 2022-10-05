@@ -18,13 +18,18 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { QuyenChung } from './AdminHomeMenuData'
 // import logo from '../../image/Logo.jpg';
-import { Link, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { Container } from '@mui/system';
+import Sidebar from './Sidebar/Sidebar';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import '../Admin/Sidebar/sidebar.scss';
+
 
 function AdminHomePage() {
 
     // Chiều dài của menu
-    const drawerWidth = 260;
+    const drawerWidth = 300;
     // đặt lại nội dung sau khi mở
     const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
         ({ theme, open }) => ({
@@ -89,11 +94,30 @@ function AdminHomePage() {
 
     const [open1, setOpen1] = React.useState(false);
 
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [stepHeight, setStepHeight] = useState(0);
+    const sidebarRef = useRef();
+    const indicatorRef = useRef();
+    const location = useLocation();
+
+    useEffect(() => {
+        setTimeout(() => {
+            const sidebarItem = sidebarRef.current.querySelector('.sidebar__menu__item');
+            indicatorRef.current.style.height = `${sidebarItem.clientHeight}px`;
+            setStepHeight(sidebarItem.clientHeight);
+        }, 100);
+    }, []);
+
+    // change active index
+    useEffect(() => {
+        const curPath = window.location.pathname;
+        const activeItem = QuyenChung.findIndex(item => item.to === curPath);
+        setActiveIndex(curPath.length === 0 ? 0 : activeItem);
+    }, [location]);
 
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-
             <AppBar position="fixed" open={open} style={{ backgroundColor: '#2d2d2d' }}>
                 <Toolbar >
                     <IconButton
@@ -111,6 +135,7 @@ function AdminHomePage() {
 
                 </Toolbar>
             </AppBar>
+
             <Drawer
                 sx={{
                     width: drawerWidth,
@@ -124,10 +149,7 @@ function AdminHomePage() {
                 variant="persistent"
                 anchor="left"
                 open={open}
-
-
             >
-
                 <DrawerHeader
                     sx={{
                         display: 'flex',
@@ -135,60 +157,76 @@ function AdminHomePage() {
                         paddingLeft: '35px',
                         paddingRight: '10px'
                     }}>
-                    {/* <img src={logo} href='Logo' style={{ width: '50px' }} /> */}
 
+
+
+                </DrawerHeader>
+                <div className='sidebar'>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>
-                </DrawerHeader>
-                <Divider />
+                    <div ref={sidebarRef} className="sidebar__menu">
+                        <div
+                            ref={indicatorRef}
+                            className="sidebar__menu__indicator"
+                            style={{
+                                transform: `translateX(-50%) translateY(${activeIndex * stepHeight}px)`
+                            }}
+                        ></div>
+                        {
+                            QuyenChung.map((item, index) => (
+                                <Link to={item.to} key={index}>
+                                    <div className={`sidebar__menu__item ${activeIndex === index ? 'active' : ''}`}>
+                                        <div className="sidebar__menu__item__icon">
+                                            {item.icon}
+                                        </div>
+                                        <div className="sidebar__menu__item__text">
+                                            {item.display}
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))
+                        }
+                    </div>
+                </div>;
+                {/* <Divider />
                 {
                     QuyenChung.map(item => (
-                        // List
-                        <List
-                            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-                            key={item.id}
-                        >
-                            {/* UL */}
-                            <ListItem disablePadding
-                                sx={{ color: "var(--color2)" }}
+                        
+                        <Link to={item.path} className="Home__Link" key={item.title}>
+                            <List
+                                sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+                                key={item.id}
                             >
+                                <ListItem disablePadding
+                                    sx={{ color: "var(--color2)" }}
+                                >
+                                    <ListItemIcon
+                                        sx={{
+                                            marginLeft: '15px',
+                                        }}>
+                                        <i className={item.icon}></i>
+                                    </ListItemIcon>
 
-                                {/* Icon */}
-                                <ListItemIcon
-                                    sx={{
-                                        marginLeft: '15px',
-                                    }}>
-                                    <i className={item.icon}></i>
-                                </ListItemIcon>
-
-                                {/* Text */}
-                                <ListItemText primary={item.title} />
-                            </ListItem>
-                            {/* LI */}
-                            {item.child.map(itemchild => (
-                                <Link to={itemchild.path} className="Home__Link" key={itemchild.title}>
-                                    <ListItem disablePadding >
+                                    <ListItem disablePadding>
                                         <ListItemButton>
-                                            <ListItemText inset primary={itemchild.title} />
+                                            <ListItemText  primary={item.title} />
                                         </ListItemButton>
                                     </ListItem>
-                                </Link>
-                            ))}
-                            <Divider />
-
-                        </List>
-
+                                </ListItem>
+                                <Divider />
+                            </List>
+                        </Link>
                     ))
-                }
-
+                } */}
             </Drawer>
 
             <Main open={open}>
-                <DrawerHeader/>
+                <DrawerHeader />
+
                 <Outlet />
             </Main>
-        </Box>
+        </Box >
     )
 }
 

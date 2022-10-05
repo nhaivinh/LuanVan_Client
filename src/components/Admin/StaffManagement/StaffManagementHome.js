@@ -23,6 +23,9 @@ import { tableCellClasses } from '@mui/material/TableCell';
 import { Stack } from '@mui/system';
 import Divider from '@mui/material/Divider';
 import StaffFormView from './StaffFormView';
+import StaffFormEdit from './StaffFormEdit';
+import StaffFormAdd from './StaffFormAdd';
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: 'var(--color3)',
@@ -108,36 +111,17 @@ function StaffManagementHome() {
 
     const [staffs, setStaffs] = React.useState([])
 
-    const [roles, setRoles] = React.useState([])
-
     const [resetPage, setResetPage] = React.useState(false);
 
     function handleResetPage() {
         setResetPage(!resetPage);
     }
 
-    function getFormattedDate(date) {
-        var year = date.getFullYear();
-
-        var month = (1 + date.getMonth()).toString();
-        month = month.length > 1 ? month : '0' + month;
-
-        var day = date.getDate().toString();
-        day = day.length > 1 ? day : '0' + day;
-
-        return day + '/' + month + '/' + year;
-    }
-
-    React.useEffect(() => {    
+    React.useEffect(() => {
         axios.get(`https://localhost:7253/api/Staff`)
             .then(res => {
                 const Staffs = res.data;
                 setStaffs(Staffs);
-            })
-        axios.get(`https://localhost:7253/api/Staff/getRoleStaff`)
-            .then(res => {
-                const Roles = res.data;
-                setRoles(Roles);
             })
     }, [resetPage])
 
@@ -156,32 +140,22 @@ function StaffManagementHome() {
         setPage(0);
     };
 
-    function showRole(IDStaff) {
-        var filteredRoles = roles
-        filteredRoles  = roles.filter(function (role) {
-            return (role.id_staff === IDStaff)
-        })
-        var result = filteredRoles.reduce((total, currentValue) =>
-            total + currentValue.name_permission + " |\n", ""
-        );
-        return (
-            result
-        )
-    }
-
     return (
         <Box>
-            <Typography variant="p"
-                sx={
-                    {
-                        fontSize: 30,
-                        color: "var(--color4)",
-                        fontWeight: "bold",
+            <Stack direction="row" spacing={2} justifyContent="space-between">
+                <Typography variant="p"
+                    sx={
+                        {
+                            fontSize: 30,
+                            color: "var(--color4)",
+                            fontWeight: "bold",
+                        }
                     }
-                }
-            >
-                Quản lý nhân viên
-            </Typography>
+                >
+                    Quản lý nhân viên
+                </Typography>
+                <StaffFormAdd handleResetPage={handleResetPage}/>
+            </Stack>
             <Divider sx={{ marginBottom: 3 }}></Divider>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
@@ -191,7 +165,7 @@ function StaffManagementHome() {
                             <TableCell style={{ width: '15%', color: 'white' }} align="left">Tên nhân viên</TableCell>
                             <TableCell style={{ width: '10%', color: 'white' }} align="left">Email</TableCell>
                             <TableCell style={{ width: '10%', color: 'white' }} align="left">Chức vụ</TableCell>
-                            <TableCell style={{ width: '20%', color: 'white' }} align="left">Quyền hạn</TableCell>
+                            <TableCell style={{ width: '10%', color: 'white' }} align="left">CCCD</TableCell>
                             <TableCell style={{ width: '10%', color: 'white' }} align="left">Số điện thoại</TableCell>
                             <TableCell style={{ width: '20%', color: 'white' }} align="left">Địa chỉ</TableCell>
                             <TableCell style={{ width: '10%', color: 'white' }} align="center">Thao tác</TableCell>
@@ -216,7 +190,7 @@ function StaffManagementHome() {
                                     {row.position}
                                 </StyledTableCell>
                                 <StyledTableCell component="th" scope="row" align="left">
-                                    {showRole(row.id_staff)}
+                                    {row.identity_card_staff}
                                 </StyledTableCell>
                                 <StyledTableCell component="th" scope="row" align="left">
                                     {row.phone_number_staff}
@@ -227,6 +201,7 @@ function StaffManagementHome() {
                                 <StyledTableCell align="center">
                                     <Stack direction="row" spacing={2} justifyContent={'center'}>
                                         <StaffFormView Staff={row} />
+                                        <StaffFormEdit Staff={row} handleResetPage={handleResetPage} />
                                     </Stack>
                                 </StyledTableCell>
                             </StyledTableRow>

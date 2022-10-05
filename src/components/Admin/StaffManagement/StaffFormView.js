@@ -9,13 +9,6 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Modal from '@mui/material/Modal';
 import Grid from '@mui/material/Grid';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import TableHead from '@mui/material/TableHead';
 
 const style = {
     position: 'absolute',
@@ -29,6 +22,18 @@ const style = {
     p: 4,
 };
 
+function getFormattedDate(date) {
+    var year = date.getFullYear();
+
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+
+    var day = date.getDate().toString();
+    day = day.length > 1 ? day : '0' + day;
+
+    return day + '/' + month + '/' + year;
+}
+
 function StaffFormView({ Staff }) {
     const [open, setOpen] = React.useState(false);
 
@@ -40,24 +45,30 @@ function StaffFormView({ Staff }) {
     const [roles, setRoles] = React.useState([])
 
     React.useEffect(() => {
-        axios.get(`https://localhost:7253/api/Staff/getRoleStaff`)
+        axios.get(`https://localhost:7253/api/Staff/getRoleStaffByID/` + Staff.id_staff)
             .then(res => {
                 const Roles = res.data;
                 setRoles(Roles);
             })
     }, [])
 
-    function showRole(IDStaff) {
-        var filteredRoles = roles
-        filteredRoles = roles.filter(function (role) {
-            return (role.id_staff === IDStaff)
-        })
-        var result = filteredRoles.reduce((total, currentValue) =>
-            total + currentValue.name_permission + " |\n", ""
-        );
-        return (
-            result
-        )
+    function showGender(gender) {
+        switch (gender) {
+            case 'male':
+                return (
+                    'Nam'
+                )
+            case 'female':
+                return (
+                    'Nữ'
+                )
+            case 'other':
+                return (
+                    'Khác'
+                )
+            default:
+                break;
+        }
     }
 
     return (
@@ -94,6 +105,9 @@ function StaffFormView({ Staff }) {
                                 Địa chỉ: {Staff.address_staff}
                             </Typography>
                             <Typography variant="body1" style={{ paddingBottom: 20 }}>
+                                CCCD: {Staff.identity_card_staff}
+                            </Typography>
+                            <Typography variant="body1" style={{ paddingBottom: 20 }}>
                                 Email: {Staff.email_staff}
                             </Typography>
                         </Grid>
@@ -104,11 +118,27 @@ function StaffFormView({ Staff }) {
                             <Typography variant="body1" style={{ paddingBottom: 20 }}>
                                 Chức vụ: {Staff.position}
                             </Typography>
+                            <Typography variant="body1" style={{ paddingBottom: 20 }}>
+                                Giới tính: {showGender(Staff.gender_staff)}
+                            </Typography>
+                            <Typography variant="body1" style={{ paddingBottom: 20 }}>
+                                Ngày tạo: &nbsp;
+                                {Staff.gender_staff !== null ?
+                                    getFormattedDate(new Date(Staff.create_date))
+                                    :
+                                    "Chưa có thông tin"
+                                }
+                            </Typography>
                         </Grid>
                         <Grid item xs={12} >
                             <Typography>
                                 Các chức năng có thể sử dụng:
                             </Typography>
+                            {roles.map((row) => (
+                                <Typography key={row.id_permission}>
+                                   {"-  "+ row.name_permission}
+                                </Typography>
+                            ))}
                         </Grid>
                     </Grid>
                 </Box>

@@ -23,6 +23,9 @@ import { tableCellClasses } from '@mui/material/TableCell';
 import { Stack } from '@mui/system';
 import Divider from '@mui/material/Divider';
 import ImportProductFormView from './ImportProductFormView';
+import ImportProductFormAdd from './ImportProductFormAdd';
+import ImportProductFormEdit from './ImportProductFormEdit';
+import ImportProductFormDelete from './ImportProductFormDelete';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -165,24 +168,34 @@ function ImportProductHome() {
         var result = filteredImportNotes.reduce((total, currentValue) =>
             total + currentValue.name_product + " |\n", ""
         );
-        return (
-            result.slice(0, 200) + "..."
-        )
+        if (result.length > 200) {
+            return (
+                result.slice(0, 200) + "..."
+            )
+        } else {
+            return (
+                result
+            )
+        }
+
     }
 
     return (
         <Box>
-            <Typography variant="p"
-                sx={
-                    {
-                        fontSize: 30,
-                        color: "var(--color4)",
-                        fontWeight: "bold",
+            <Stack direction="row" spacing={2} justifyContent="space-between">
+                <Typography variant="p"
+                    sx={
+                        {
+                            fontSize: 30,
+                            color: "var(--color4)",
+                            fontWeight: "bold",
+                        }
                     }
-                }
-            >
-                Quản lý nhập hàng
-            </Typography>
+                >
+                    Quản lý nhập hàng
+                </Typography>
+                <ImportProductFormAdd handleResetPage={handleResetPage} />
+            </Stack>
             <Divider sx={{ marginBottom: 3 }}></Divider>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
@@ -191,7 +204,7 @@ function ImportProductHome() {
                             <TableCell style={{ width: '10%', color: 'white' }} align="left">Mã nhập hàng</TableCell>
                             <TableCell style={{ width: '10%', color: 'white' }} align="left">Tên nhà cung cấp</TableCell>
                             <TableCell style={{ width: '10%', color: 'white' }} align="left">Tên nhân viên</TableCell>
-                            <TableCell style={{ width: '30%', color: 'white' }} align="left">Tên các sản phẩm </TableCell>             
+                            <TableCell style={{ width: '30%', color: 'white' }} align="left">Tên các sản phẩm </TableCell>
                             <TableCell style={{ width: '10%', color: 'white' }} align="left">Tiền nhập hàng</TableCell>
                             <TableCell style={{ width: '10%', color: 'white' }} align="left">Ngày nhập hàng</TableCell>
                             <TableCell style={{ width: '20%', color: 'white' }} align="center">Thao tác</TableCell>
@@ -227,7 +240,9 @@ function ImportProductHome() {
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
                                     <Stack direction="row" spacing={2} justifyContent={'center'}>
-                                        <ImportProductFormView ImportNotes={row}/>
+                                        <ImportProductFormView ImportNotes={row} />
+                                        <ImportProductFormEdit ImportNote={row} handleResetPage={handleResetPage}/>
+                                        <ImportProductFormDelete idImportNote={row.id_import_note} handleResetPage={handleResetPage} />
                                     </Stack>
                                 </StyledTableCell>
                             </StyledTableRow>

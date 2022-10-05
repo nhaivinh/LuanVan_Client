@@ -241,12 +241,12 @@ function OrderManagementFormView({ idOrder, Order }) {
                                                     </TableCell>
                                                     <TableCell align="left">
                                                         <Typography variant='body1'>
-                                                            {row.quantiry_product_order}
+                                                            {row.quantity_product_order}
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell align="left">
                                                         <Typography variant='body1'>
-                                                            {(row.quantiry_product_order * row.unit_price_order).toLocaleString('vi-VI',
+                                                            {(row.quantity_product_order * row.unit_price_order).toLocaleString('vi-VI',
                                                                 {
                                                                     style: 'currency',
                                                                     currency: 'VND'
