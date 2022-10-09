@@ -67,7 +67,6 @@ function ProductDetails() {
 
     function handleClickAdd() {
         addPosts(cookies.Account, params.productId);
-
     }
 
     function handleClickBuyNow() {
@@ -79,6 +78,7 @@ function ProductDetails() {
             .post('', {
                 "idAccount": idAccount,
                 "idProduct": idProduct,
+                "quantity": 1
             })
             .then((response) => {
                 setPosts([response.data, ...posts]);

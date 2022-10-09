@@ -89,7 +89,7 @@ export default function ProductManagementFormEdit({ IDProduct }) {
             thongbao = thongbao + "\nBảo hành"
         } else validInsuranceProduct = true
 
-        if (product.discount_product === 0) {
+        if (product.discount_product === "") {
             thongbao = thongbao + "\nGiảm giá"
         } else validDiscountProduct = true
 

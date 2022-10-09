@@ -272,7 +272,7 @@ const Header = () => {
                                 <MenuItem
                                     onClick={handleClose}
                                 >
-                                    <Link to="/admin">
+                                    <Link to="/admin/dashboard">
                                         Trang quản lý
                                     </Link>
                                 </MenuItem>

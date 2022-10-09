@@ -14,8 +14,7 @@ import Checkout from '../Customers/Checkout/Checkout';
 import Login from '../Customers/Account/Login';
 import Register from '../Customers/Account/Register'
 // import '../../CSS/ClientHome.css'
-
-
+import './home.scss'
 
 function Home() {
   

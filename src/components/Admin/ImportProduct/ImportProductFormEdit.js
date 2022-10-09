@@ -126,7 +126,6 @@ export default function ImportProductFormEdit({ handleResetPage, ImportNote }) {
             setTotalImportPrice(totalImportPrice + (importQuantity * importPrice) - importProduct.find(element => element.id_product === IDProduct).unit_price_import * importProduct.find(element => element.id_product === IDProduct).quantity_import_product)
             setTotalImportQuantity(totalImportQuantity + parseInt(importQuantity) - parseInt(importProduct.find(element => element.id_product === IDProduct).quantity_import_product))       
             const index = importProduct.findIndex(element => element.id_product === IDProduct)
-            console.log(importProduct.findIndex(element => element.id_product === IDProduct))
             const arr = importProduct
             const ChosenImportProduct = arr.splice(index, 1)
             ChosenImportProduct[0].quantity_product = ChosenImportProduct[0].quantity_product - ChosenImportProduct[0].quantity_import_product + parseInt(importQuantity)

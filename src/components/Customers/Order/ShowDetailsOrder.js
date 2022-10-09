@@ -18,7 +18,6 @@ import Paper from '@mui/material/Paper';
 import TableHead from '@mui/material/TableHead';
 
 const style = {
-
     position: 'absolute',
     top: '50%',
     left: '50%',

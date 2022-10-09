@@ -2,38 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './sidebar.scss';
 
-const sidebarNavItems = [
-    {
-        icon: <i className='bx bx-home'></i>,
-        display : 'Quản Lý Nhân Viên',
-        to :'/admin/staff'
-    },
-    {
-        icon: <i className='bx bx-home'></i>,
-        display : 'Quản Lý Sản Phẩm',
-        to :'/admin/product'
-    },
-    {
-        icon: <i className='bx bx-home'></i>,
-        display : 'Quản Lý Đơn Hàng',
-        to :'/admin/order'
-    },
-    {
-        icon: <i className='bx bx-home'></i>,
-        display : 'Quản Lý Nhập Hàng',
-        to :'/admin/import'
-    },
-    {
-        icon: <i className='bx bx-home'></i>,
-        display : 'Quản Lý Khách Hàng',
-        to :'/admin/customer'
-    },
-    {
-        icon: <i className='bx bx-home'></i>,
-        display : 'Thống kê báo cáo',
-        to :'/admin/customer'
-    },
-]
+const sidebarNavItems = []
 
 const Sidebar = () => {
     const [activeIndex, setActiveIndex] = useState(0);
