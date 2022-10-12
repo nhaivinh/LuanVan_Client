@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -21,6 +20,23 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { Doughnut, Line, Bar } from 'react-chartjs-2';
+import { ArcElement } from "chart.js";
+import Chart from "chart.js/auto";
+import "chartjs-plugin-datalabels";
+
+
+function getFormattedDate(date) {
+    var year = date.getFullYear();
+
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+
+    var day = date.getDate().toString();
+    day = day.length > 1 ? day : '0' + day;
+
+    return day + '/' + month + '/' + year;
+}
 
 export default function StatisticHome() {
 
@@ -30,14 +46,23 @@ export default function StatisticHome() {
     const [countSelling, setCountSelling] = React.useState([]);
     const [countOrder, setCountOrder] = React.useState([]);
     const [incomeOrder, setIncomeOrder] = React.useState([]);
+    const [sellingProducts, setSellingProducts] = React.useState([]);
+    const [products, setProducts] = React.useState([]);
+    const [countLastImportSellingProduct, setCountLastImportSellingProduct] = React.useState([]);
 
     const [period, setPeriod] = React.useState({});
+    const [typeShowSellingProduct, setTypeShowSellingProduct] = React.useState(0);
 
     const handleChange = (event) => {
         setPeriod(handleShowPeriod(incomeOrder).find(element => element.period === event.target.value));
     };
 
     React.useEffect(() => {
+        axios.get(`https://localhost:7253/api/product`)
+            .then(res => {
+                const items = res.data;
+                setProducts(items);
+            })
         axios.get(`https://localhost:7253/api/Statistic/GetCountRegisterCustomer`)
             .then(res => {
                 const items = res.data;
@@ -67,6 +92,16 @@ export default function StatisticHome() {
             .then(res => {
                 const items = res.data;
                 setIncomeOrder(items);
+            })
+        axios.get(`https://localhost:7253/api/Statistic/GetSellingProduct`)
+            .then(res => {
+                const items = res.data;
+                setSellingProducts(items);
+            })
+        axios.get(`https://localhost:7253/api/Statistic/GetCountDayLastImportAndSelling`)
+            .then(res => {
+                const items = res.data;
+                setCountLastImportSellingProduct(items);
             })
     }, [])
 
@@ -101,129 +136,101 @@ export default function StatisticHome() {
         return (items.find(element => element.month === period.month && element.year === period.year))
     }
 
-    function handleShowChartSellingProductPercent(type) {
-        var result = handleInfoArrayFromPeriod(countSellingByType).reduce((total, currentValue) =>
-            total + currentValue.number_of_products, 0
-        );  
-        if(handleInfoArrayFromPeriod(countSellingByType).find(element => element.type_product === type) != undefined){
-            return(handleInfoArrayFromPeriod(countSellingByType).find(element => element.type_product === type).number_of_products / result * 100)
+    function handleChooseOutdateProduct(items) {
+        var filterOutdateProduct = items.filter(function (element) {
+            if (element.days_count_last_import === null) {
+                return (false)
+            } else {
+                if (element.days_count_last_selling === null) {
+                    if (element.days_count_last_import > 60) {
+                        return (true)
+                    } else {
+                        return (false)
+                    }
+                } else {
+                    if (element.days_count_last_selling > 60) {
+                        return (false)
+                    } else {
+                        return (false)
+                    }
+                }
+            }
         }
-        else{
+        )
+        return (filterOutdateProduct)
+    }
+
+    function handleShowChartSellingProduct(type) {
+        switch (typeShowSellingProduct) {
+            case 0:
+                if (handleInfoArrayFromPeriod(countSellingByType).find(element => element.type_product === type) !== undefined) {
+                    return (handleInfoArrayFromPeriod(countSellingByType).find(element => element.type_product === type).number_of_products)
+                } else {
+                    return 0
+                }
+            case 1:
+                if (handleInfoArrayFromPeriod(countSellingByType).find(element => element.type_product === type) !== undefined) {
+                    return (handleInfoArrayFromPeriod(countSellingByType).find(element => element.type_product === type).imcome)
+                } else {
+                    return 0
+                }
+            default:
+                break;
+        }
+
+    }
+
+    function handleShowChartStockProductCount(type) {
+        if (countStockByType.find(element => element.type_product === type) !== undefined) {
+            return (countStockByType.find(element => element.type_product === type).number_of_products)
+        } else {
             return 0
         }
     }
 
-    function handleShowChartSellingProductCount(type) { 
-        if(handleInfoArrayFromPeriod(countSellingByType).find(element => element.type_product === type) != undefined){
-            return(handleInfoArrayFromPeriod(countSellingByType).find(element => element.type_product === type).number_of_products)
-        }else{
+    function handleShowChartOrderCountByStatus(status) {
+        if (handleInfoArrayFromPeriod(countOrder).find(element => element.delivery_status === status) !== undefined) {
+            return (handleInfoArrayFromPeriod(countOrder).find(element => element.delivery_status === status).number_of_order)
+        } else {
             return 0
         }
-    }
-
-    const optionsProductSell = {
-        height: 300,
-        //animationEnabled: true,
-        exportEnabled: true,
-        theme: "light1", // "light1", "dark1", "dark2"
-        data: [{
-            type: "doughnut",
-            indexLabel: "{name}: {y}: SL: {count}",
-            yValueFormatString: "#,###'%'",
-            dataPoints: [
-                { name: "Vi xử lý", y: handleShowChartSellingProductPercent('cpu') ,count: handleShowChartSellingProductCount('cpu')},
-                { name: "Mainboard", y: handleShowChartSellingProductPercent('mainboard') ,count: handleShowChartSellingProductCount('mainboard')},
-                { name: "GPU", y: handleShowChartSellingProductPercent('gpu') ,count: handleShowChartSellingProductCount('gpu')},
-                { name: "Ram", y: handleShowChartSellingProductPercent('ram') ,count: handleShowChartSellingProductCount('ram')},
-                { name: "PSU", y: handleShowChartSellingProductPercent('psu') ,count: handleShowChartSellingProductCount('psu')},
-                { name: "CasePC", y: handleShowChartSellingProductPercent('casepc') ,count: handleShowChartSellingProductCount('casepc')},
-                { name: "Ổ cứng", y: handleShowChartSellingProductPercent('harddisk') ,count: handleShowChartSellingProductCount('harddisk')},
-                { name: "Tản nhiệt", y: handleShowChartSellingProductPercent('cooling_system') ,count : handleShowChartSellingProductCount('cooling_system')}
-
-                // { name: "CPU", y: handleShowChartSellingProductCount('cpu') ,count : 2},
-                // { name: "Mainboard", y: handleShowChartSellingProductCount('mainboard') ,count : 2},
-                // { name: "GPU", y: handleShowChartSellingProductCount('gpu') ,count : 2},
-                // { name: "Ram", y: handleShowChartSellingProductCount('ram') ,count : 2},
-                // { name: "PSU", y: handleShowChartSellingProductCount('psu') ,count : 2},
-                // { name: "CasePC", y: handleShowChartSellingProductCount('casepc') ,count : 2},
-                // { name: "Ổ cứng", y: handleShowChartSellingProductCount('harddisk') ,count : 2},
-                // { name: "Tản nhiệt", y: handleShowChartSellingProductCount('cooling_system') ,count : 2}
-            ]
-        }]
-    }
-
-    const optionsProductStock = {
-        height: 300,
-        //animationEnabled: true,
-        exportEnabled: true,
-        theme: "light1", // "light1", "dark1", "dark2"
-        data: [{
-            type: "doughnut",
-            indexLabel: "{name}: {y}",
-            yValueFormatString: "#,###'%'",
-            dataPoints: [
-                { name: "Unsatisfied", y: 5 },
-                { name: "Very Unsatisfied", y: 31 },
-                { name: "Very Satisfied", y: 40 },
-                { name: "Satisfied", y: 17 },
-                { name: "Neutral", y: 7 }
-            ]
-        }]
-    }
-
-    const optionsOrder = {
-        height: 300,
-        //animationEnabled: true,
-        exportEnabled: true,
-        theme: "light1", // "light1", "dark1", "dark2"
-        data: [{
-            type: "doughnut",
-            indexLabel: "{name}: {y}",
-            yValueFormatString: "#,###'%'",
-            dataPoints: [
-                { name: "Unsatisfied", y: 5 },
-                { name: "Very Unsatisfied", y: 31 },
-                { name: "Very Satisfied", y: 40 },
-                { name: "Satisfied", y: 17 },
-                { name: "Neutral", y: 7 }
-            ]
-        }]
-    }
-
-    const optionsLineGraph = {
-        //animationEnabled: true,
-        title: {
-            text: "Nuclear Electricity Generation in US"
-        },
-        axisY: {
-            title: "Net Generation (in Billion kWh)",
-            suffix: " kWh"
-        },
-        data: [{
-            type: "splineArea",
-            xValueFormatString: "MM",
-            yValueFormatString: "#,##0.## Sản phẩm",
-            showInLegend: true,
-            legendText: "kWh = one kilowatt hour",
-            dataPoints: [
-                { x: new Date(2022, 1), y: 0 },
-                { x: new Date(2022, 2), y: 0 },
-                { x: new Date(2022, 3), y: 0 },
-                { x: new Date(2022, 4), y: 72.743 },
-                { x: new Date(2022, 5), y: 85.381 },
-                { x: new Date(2022, 6), y: 71.406 },
-                { x: new Date(2022, 7), y: 73.163 },
-                { x: new Date(2022, 8), y: 92.270 },
-                { x: new Date(2022, 9), y: 72.525 },
-                { x: new Date(2022, 10), y: 109.121 },
-                { x: new Date(2022, 11), y: 73.121 },
-                { x: new Date(2022, 12), y: 12.121 }
-            ]
-        }]
     }
 
     function isEmptyObject(obj) {
         return JSON.stringify(obj) === '{}';
+    }
+
+    function handleGetIDProduct(products) {
+        var chosenProducts = [];
+        if (products.length > 0) {
+            products
+                .map(function (product) {
+                    chosenProducts.push(product.id_product)
+                })
+        }
+        return (chosenProducts)
+    }
+
+    function showProduct(ChosenProduct) {
+        var exportProduct = products.filter(function (product) {
+            return (handleGetIDProduct(ChosenProduct).includes(product.id_product))
+        })
+        return (exportProduct)
+    }
+
+    function showTypeSort() {
+        switch (typeShowSellingProduct) {
+            case 0:
+                return (
+                    'Số Lượng'
+                )
+            case 1:
+                return (
+                    'Doanh Thu'
+                )
+            default:
+                break;
+        }
     }
 
     return (
@@ -394,11 +401,6 @@ export default function StatisticHome() {
                         </Box>
                     </Grid>
                     <Grid item xs={12}>
-                        <CanvasJSChart options={optionsLineGraph}
-                        /* onRef={ref => this.chart = ref} */
-                        />
-                    </Grid>
-                    <Grid item xs={6}>
                         <Box
                             style={{
                                 display: 'flex',
@@ -408,9 +410,211 @@ export default function StatisticHome() {
                                 borderRadius: 10,
                             }}
                         >
-                            <Typography variant='h6'><b>Sản phẩm</b></Typography>
-                            <Typography variant='body1' style={{ color: "darkgrey" }}>Cơ cấu sản phẩm bán ra</Typography>
-                            <CanvasJSChart options={optionsProductSell} />
+                            <Box
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between'
+                                }}
+                            >
+                                <Box
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                    }}
+                                >
+                                    <Typography variant='h6'><b>Sản phẩm</b></Typography>
+                                    <Typography variant='body1' style={{ color: "darkgrey" }}>Biểu đồ sản phẩm bán ra</Typography>
+                                </Box>
+
+                                <Box sx={{ minWidth: 200 }}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">Lọc</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={typeShowSellingProduct}
+                                            label="Lọc"
+                                            onChange={(e) => { setTypeShowSellingProduct(e.target.value) }}
+                                        >
+                                            <MenuItem key={0} value={0}>Theo số lượng</MenuItem>
+                                            <MenuItem key={1} value={1}>Theo doanh thu</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                            </Box>
+                            {/* <Doughnut
+                                data={{
+                                    labels: [
+                                        "Vi xử lý",
+                                        "Bo mạch chủ",
+                                        "Ram",
+                                        "Card đồ hoạ",
+                                        "Nguồn",
+                                        "Ổ cứng",
+                                        "Tản nhiệt",
+                                    ],
+                                    datasets: [
+                                        {
+                                            label: "Population (millions)",
+                                            backgroundColor: [
+                                                "#3e95cd",
+                                                "#8e5ea2",
+                                                "#3cba9f",
+                                                "#cd76fb",
+                                                "#c45850",
+                                                "#ffaa00",
+                                                "#254661"
+                                            ],
+                                            data: [
+                                                handleShowChartSellingProduct('cpu'),
+                                                handleShowChartSellingProduct('mainboard'),
+                                                handleShowChartSellingProduct('ram'),
+                                                handleShowChartSellingProduct('gpu'),
+                                                handleShowChartSellingProduct('psu'),
+                                                handleShowChartSellingProduct('harddisk'),
+                                                handleShowChartSellingProduct('cooling_system'),
+                                            ]
+                                        }
+                                    ]
+                                }}
+                                option={{
+
+                                }}
+                            /> */}
+                            <Bar
+                                data={{
+                                    labels: [
+                                        "Vi xử lý",
+                                        "Bo mạch chủ",
+                                        "Ram",
+                                        "Card đồ hoạ",
+                                        "Nguồn",
+                                        "Ổ cứng",
+                                        "Tản nhiệt",
+                                    ],
+                                    datasets: [
+                                        {
+                                            label: showTypeSort(),
+                                            backgroundColor: [
+                                                "#3e95cd",
+                                                "#8e5ea2",
+                                                "#3cba9f",
+                                                "#cd76fb",
+                                                "#c45850",
+                                                "#ffaa00",
+                                                "#254661"
+                                            ],
+                                            data: [
+                                                handleShowChartSellingProduct('cpu'),
+                                                handleShowChartSellingProduct('mainboard'),
+                                                handleShowChartSellingProduct('ram'),
+                                                handleShowChartSellingProduct('gpu'),
+                                                handleShowChartSellingProduct('psu'),
+                                                handleShowChartSellingProduct('harddisk'),
+                                                handleShowChartSellingProduct('cooling_system'),
+                                            ]
+                                        }
+                                    ],
+                                }}
+                                options={{
+                                    legend: { display: true },
+                                    title: {
+                                        display: true,
+                                        text: "Predicted world population (millions) in 2050"
+                                    }
+                                }}
+                            />
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Box
+                            style={{
+                                display: 'flex',
+                                backgroundColor: 'white',
+                                flexDirection: 'column',
+                            }}
+                        >
+                            <Typography variant='h6' style={{ paddingTop: 20, paddingLeft: 20 }}><b>Sản phẩm bán trong tháng</b></Typography>
+                            <Typography variant='body1' style={{ color: "darkgrey", paddingLeft: 20 }}>Tổng quản sản phẩm bán ra trong tháng</Typography>
+                            <TableContainer style={{ maxHeight: 400 }}>
+                                <Table sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader={true}>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell colSpan={2} style={{ width: '45%' }} align="left">Sản phẩm</TableCell>
+                                            <TableCell style={{ width: '20%' }} align="left">Đơn giá</TableCell>
+                                            <TableCell style={{ width: '15%' }} align="left">Số lượng bán</TableCell>
+                                            <TableCell style={{ width: '20%' }} align="left">Tổng</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {
+                                            showProduct(handleInfoArrayFromPeriod(sellingProducts)).map(function (Product) {
+                                                return (
+                                                    <TableRow key={Product.id_product}>
+                                                        <TableCell align="left">
+                                                            {Product.picture_product !== null ?
+                                                                <img src={Product.picture_product} alt="product images" width={'100px'} />
+                                                                :
+                                                                <img src={"data:image/png;base64, " + Product.picture_link_product} alt="product images" width={'100px'} height={'100px'} />
+                                                            }
+                                                        </TableCell>
+                                                        <TableCell align="left">{Product.name_product}</TableCell>
+                                                        <TableCell align="left">
+                                                            <Box
+                                                                style={{
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    flexDirection: 'column',
+                                                                    width: '25%',
+                                                                }}
+                                                            >
+                                                                <Typography variant='body1'>
+                                                                    {(Product.unit_price_product * (1 - Product.discount_product * 0.01)).toLocaleString('vi-VI',
+                                                                        {
+                                                                            style: 'currency',
+                                                                            currency: 'VND'
+                                                                        })}
+                                                                </Typography>
+                                                                {Product.discount_product !== 0 &&
+                                                                    <Typography variant='body2'>
+                                                                        <del>
+                                                                            {Product.unit_price_product.toLocaleString('vi-VI',
+                                                                                {
+                                                                                    style: 'currency',
+                                                                                    currency: 'VND'
+                                                                                })}
+                                                                        </del>
+                                                                    </Typography>
+                                                                }
+                                                            </Box>
+                                                        </TableCell>
+                                                        <TableCell align="left">
+                                                            {
+                                                                handleInfoArrayFromPeriod(sellingProducts).find(element => element.id_product === Product.id_product).quantity
+                                                            }
+                                                        </TableCell>
+                                                        <TableCell align="left">
+                                                            <Typography variant='body1'>
+                                                                {
+                                                                    ((Product.unit_price_product * (1 - Product.discount_product * 0.01))
+                                                                        *
+                                                                        handleInfoArrayFromPeriod(sellingProducts).find(element => element.id_product === Product.id_product).quantity)
+                                                                        .toLocaleString('vi-VI',
+                                                                            {
+                                                                                style: 'currency',
+                                                                                currency: 'VND'
+                                                                            })
+                                                                }
+                                                            </Typography>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                )
+                                            })
+                                        }
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
                         </Box>
                     </Grid>
                     <Grid item xs={6}>
@@ -425,50 +629,45 @@ export default function StatisticHome() {
                         >
                             <Typography variant='h6'><b>Đơn hàng</b></Typography>
                             <Typography variant='body1' style={{ color: "darkgrey" }}>Cơ cấu trạng thái đơn hàng</Typography>
-                            <CanvasJSChart options={optionsOrder} />
+                            <Doughnut
+                                data={{
+                                    labels: [
+                                        "Đang chờ xử lý",
+                                        "Đã duyệt",
+                                        "Đang vận chuyển",
+                                        "Giao hàng thành công",
+                                        "Đã huỷ",
+                                    ],
+                                    datasets: [
+                                        {
+                                            label: "Population (millions)",
+                                            backgroundColor: [
+                                                "#5F9DF7",
+                                                "#1746A2",
+                                                "#FDFF00",
+                                                "#329932",
+                                                "#FF1E1E",
+                                            ],
+                                            data: [
+                                                handleShowChartOrderCountByStatus(0),
+                                                handleShowChartOrderCountByStatus(1),
+                                                handleShowChartOrderCountByStatus(2),
+                                                handleShowChartOrderCountByStatus(3),
+                                                handleShowChartOrderCountByStatus(4)
+                                            ]
+                                        }
+                                    ]
+                                }}
+                                option={{
+                                    title: {
+                                        display: true,
+                                        text: ""
+                                    }
+                                }}
+                            />
                         </Box>
                     </Grid>
-                    <Grid item xs={8}>
-                        <Box
-                            style={{
-                                display: 'flex',
-                                backgroundColor: 'white',
-                                flexDirection: 'column',
-                            }}
-                        >
-                            <Typography variant='h6' style={{ paddingTop: 20, paddingLeft: 20 }}><b>Sản phẩm bán trong tháng</b></Typography>
-                            <Typography variant='body1' style={{ color: "darkgrey", paddingLeft: 20 }}>Tổng quản sản phẩm bán ra trong tháng</Typography>
-                            <TableContainer style={{ maxHeight: 320 }}>
-                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell colSpan={2} style={{ width: '40%' }} align="left">Sản phẩm</TableCell>
-                                            <TableCell style={{ width: '20%' }} align="left">Đơn giá</TableCell>
-                                            <TableCell style={{ width: '20%' }} align="left">Số lượng bán</TableCell>
-                                            <TableCell style={{ width: '20%' }} align="left">Tổng</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        <TableRow
-                                            key="một"
-                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        >
-                                            <TableCell component="th" scope="row">
-                                                "một"
-                                            </TableCell>
-                                            <TableCell component="th" scope="row">
-                                                "một"
-                                            </TableCell>
-                                            <TableCell align="right"></TableCell>
-                                            <TableCell align="right"></TableCell>
-                                            <TableCell align="right"></TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Box>
-                    </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={6}>
                         <Box
                             style={{
                                 display: 'flex',
@@ -480,7 +679,111 @@ export default function StatisticHome() {
                         >
                             <Typography variant='h6'><b>Sản phẩm tồn kho</b></Typography>
                             <Typography variant='body1' style={{ color: "darkgrey" }}>Cơ cấu sản phẩm tồn kho</Typography>
-                            <CanvasJSChart options={optionsProductStock} />
+                            {countStockByType.length !== 0 &&
+                                <Doughnut
+                                    data={{
+                                        labels: [
+                                            "Vi xử lý",
+                                            "Bo mạch chủ",
+                                            "Ram",
+                                            "Card đồ hoạ",
+                                            "Nguồn",
+                                            "Ổ cứng",
+                                            "Tản nhiệt",
+                                        ],
+                                        datasets: [
+                                            {
+                                                label: "",
+                                                backgroundColor: [
+                                                    "#3e95cd",
+                                                    "#8e5ea2",
+                                                    "#3cba9f",
+                                                    "#cd76fb",
+                                                    "#c45850",
+                                                    "#ffaa00",
+                                                    "#254661"
+                                                ],
+                                                data: [
+                                                    handleShowChartStockProductCount('cpu'),
+                                                    handleShowChartStockProductCount('mainboard'),
+                                                    handleShowChartStockProductCount('ram'),
+                                                    handleShowChartStockProductCount('gpu'),
+                                                    handleShowChartStockProductCount('psu'),
+                                                    handleShowChartStockProductCount('harddisk'),
+                                                    handleShowChartStockProductCount('cooling_system'),
+                                                ]
+                                            }
+                                        ]
+                                    }}
+                                    option={{
+
+                                    }}
+                                />
+                            }
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Box
+                            style={{
+                                display: 'flex',
+                                backgroundColor: 'white',
+                                flexDirection: 'column',
+                            }}
+                        >
+                            <Typography variant='h6' style={{ paddingTop: 20, paddingLeft: 20 }}><b>Danh Sách tồn hàng</b></Typography>
+                            <Typography variant='body1' style={{ color: "darkgrey", paddingLeft: 20 }}>Những sản phẩm chưa phát sinh giao dịch trong vòng 60 ngày</Typography>
+                            <TableContainer style={{ maxHeight: 600 }}>
+                                <Table sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader={true}>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell colSpan={2} style={{ width: '35%' }} align="left">Sản phẩm</TableCell>
+                                            <TableCell style={{ width: '15%' }} align="left">Số lượng tồn</TableCell>
+                                            <TableCell style={{ width: '25%' }} align="left">Lần nhập hàng cuối</TableCell>
+                                            <TableCell style={{ width: '25%' }} align="left">Lần bán hàng cuối</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {
+                                            showProduct(handleChooseOutdateProduct(countLastImportSellingProduct)).map(function (Product) {
+                                                return (
+                                                    <TableRow key={Product.id_product}>
+                                                        <TableCell align="left">
+                                                            {Product.picture_product !== null ?
+                                                                <img src={Product.picture_product} alt="product images" width={'100px'} />
+                                                                :
+                                                                <img src={"data:image/png;base64, " + Product.picture_link_product} alt="product images" width={'100px'} height={'100px'} />
+                                                            }
+                                                        </TableCell>
+                                                        <TableCell align="left">{Product.name_product}</TableCell>
+                                                        <TableCell align="left">{Product.quantity_product}</TableCell>
+                                                        <TableCell align="left">
+                                                            {handleChooseOutdateProduct(countLastImportSellingProduct).find(element => element.id_product === Product.id_product).import_date !== null ?
+                                                                getFormattedDate(new Date(handleChooseOutdateProduct(countLastImportSellingProduct).find(element => element.id_product === Product.id_product).import_date))
+                                                                + " - " +
+                                                                handleChooseOutdateProduct(countLastImportSellingProduct).find(element => element.id_product === Product.id_product).days_count_last_import
+                                                                + " Ngày"
+                                                                :
+                                                                "Chưa tồn tại nhập hàng"
+                                                            }
+
+                                                        </TableCell>
+                                                        <TableCell align="left">
+                                                            {handleChooseOutdateProduct(countLastImportSellingProduct).find(element => element.id_product === Product.id_product).order_date !== null ?
+                                                                getFormattedDate(new Date(handleChooseOutdateProduct(countLastImportSellingProduct).find(element => element.id_product === Product.id_product).order_date))
+                                                                + " - " +
+                                                                handleChooseOutdateProduct(countLastImportSellingProduct).find(element => element.id_product === Product.id_product).days_count_last_selling
+                                                                + " Ngày"
+                                                                :
+                                                                "Chưa phát sinh giao dịch"
+                                                            }
+                                                        </TableCell>
+                                                    </TableRow>
+                                                )
+                                            })
+                                        }
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
                         </Box>
                     </Grid>
                 </Grid>

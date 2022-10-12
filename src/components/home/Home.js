@@ -7,7 +7,6 @@ import ProductDetails from '../Customers/Products/ProductDetails';
 import Cart from '../Customers/Cart/Cart';
 import Footer from './Footer';
 import BuildPC from '../Customers/BuildPC/BuildPC';
-import SuggestBuildPC from '../Customers/BuildPC/SuggestBuildPC';
 import AccountInfo from '../Customers/Account/AccountInfo';
 import OrderInfo from '../Customers/Order/OrderInfo';
 import Checkout from '../Customers/Checkout/Checkout';
@@ -15,6 +14,7 @@ import Login from '../Customers/Account/Login';
 import Register from '../Customers/Account/Register'
 // import '../../CSS/ClientHome.css'
 import './home.scss'
+import AutoBuildPC from '../Customers/AutoBuildPC/AutoBuildPC';
 
 function Home() {
   
@@ -34,7 +34,7 @@ function Home() {
         <Route exact path='/order' element={<OrderInfo />} />
         <Route exact path='/checkout' element={<Checkout />} />
         <Route exact path='/buildpc' element={<BuildPC />} />
-        <Route exact path='/suggestbuildpc' element={<SuggestBuildPC />} />
+        <Route exact path='/suggestbuildpc' element={<AutoBuildPC />} />
       </Routes>
       <footer>
         <Footer />
