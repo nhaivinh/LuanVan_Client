@@ -20,7 +20,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { Doughnut, Line, Bar } from 'react-chartjs-2';
+import { Doughnut, Bar } from 'react-chartjs-2';
 import { ArcElement } from "chart.js";
 import Chart from "chart.js/auto";
 import "chartjs-plugin-datalabels";

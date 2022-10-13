@@ -8,7 +8,11 @@ import Grid from '@mui/material/Grid';
 import { CanvasJSChart, CanvasJS } from 'canvasjs-react-charts'
 import './Graph.scss'
 import { Link } from 'react-router-dom';
-
+import Select from '@mui/material/Select';
+import { Bar } from 'react-chartjs-2';
+import { ArcElement } from "chart.js";
+import Chart from "chart.js/auto";
+import "chartjs-plugin-datalabels";
 
 export default function AnalyzeBuildPc({ chosenPC, Products }) {
     const [cpu, setCpu] = React.useState({})
@@ -23,7 +27,7 @@ export default function AnalyzeBuildPc({ chosenPC, Products }) {
     const [cpus, setCpus] = React.useState([])
     const [gpus, setGpus] = React.useState([])
 
-    
+
 
     React.useEffect(() => {
         axios.get(`https://localhost:7253/api/cpu`)
@@ -653,9 +657,55 @@ export default function AnalyzeBuildPc({ chosenPC, Products }) {
                             display: 'flex',
                             background: 'white',
                             borderRadius: 10,
+                            height: 200
                         }}
                     >
-                        <CanvasJSChart options={options} />
+                        {/* <CanvasJSChart options={options} /> */}
+                        <Bar
+                            height="75%"
+                            data={{
+                                labels: [
+                                    "",
+                                ],
+                                datasets: [
+                                    {
+                                        label: "CPU",
+                                        backgroundColor: [
+                                            "#3e95cd",
+                                        ],
+                                        data: [
+                                            cpu.scope_cpu,
+                                        ]
+                                    },
+                                    {
+                                        label: "GPU",
+                                        backgroundColor: [
+                                            "#8e5ea2",
+                                        ],
+                                        data: [
+                                            gpu.scope_gpu,
+                                        ]
+                                    },
+                                ],
+                            }}
+                            options={{
+                                indexAxis: 'y',
+                                legend: {
+                                    display: false
+                                },
+                                title: {
+                                    display: true,
+                                    text: ""
+                                },
+                                tooltips: {
+                                    callbacks: {
+                                        label: function (tooltipItem) {
+                                            return tooltipItem.yLabel;
+                                        }
+                                    }
+                                }
+                            }}
+                        />
                     </Box>
                 </Grid>
                 <Grid item xs={12}>
