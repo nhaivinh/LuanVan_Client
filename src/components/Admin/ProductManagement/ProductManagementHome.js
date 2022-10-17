@@ -18,6 +18,7 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import TableHead from '@mui/material/TableHead';
 import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
 import ProductManagementFormView from './ProductManagementFormView';
 import ProductManagementFormAdd from './ProductManagementFormAdd';
 import ProductManagementFormEdit from './ProductManagementFormEdit';
@@ -26,6 +27,7 @@ import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { Stack } from '@mui/system';
 import Divider from '@mui/material/Divider';
+import ProductManagementFormUpdateImage from './ProductManagementFormUpdateImage';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -183,128 +185,131 @@ function ProductManagementHome() {
 
     return (
         <Box>
-            <Stack direction="row" spacing={2} justifyContent="space-between">
-                <Typography variant="p"
-                    sx={
-                        {
-                            fontSize: 30,
-                            color: "var(--color4)",
-                            fontWeight: "bold",
+            <Container  maxWidth="xl">
+                <Stack direction="row" spacing={2} justifyContent="space-between">
+                    <Typography variant="p"
+                        sx={
+                            {
+                                fontSize: 30,
+                                color: "var(--color4)",
+                                fontWeight: "bold",
+                            }
                         }
-                    }
-                >
-                    Quản lý sản phẩm
-                </Typography>               
-                <ProductManagementFormAdd />
-            </Stack>
-            <Divider sx={{ marginBottom: 3 }}></Divider>
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-                    <TableHead>
-                        <TableRow style={{ backgroundColor: '#474747', color: 'white' }}>
-                            <TableCell style={{ width: '5%', color: 'white' }} align="left">Mã </TableCell>
-                            <TableCell style={{ width: '7%', color: 'white' }} align="left">Ảnh </TableCell>
-                            <TableCell style={{ width: '15%', color: 'white' }} align="left">Tên</TableCell>
-                            <TableCell style={{ width: '8%', color: 'white' }} align="left">Thương hiệu</TableCell>
-                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Loại</TableCell>
-                            <TableCell style={{ width: '5%', color: 'white' }} align="left">Số lượng</TableCell>
-                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Đơn giá</TableCell>
-                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Giảm giá</TableCell>
-                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Bảo hành</TableCell>
-                            <TableCell style={{ width: '10%', color: 'white' }} align="center">Thao Tác</TableCell>
-                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Trạng thái</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {(rowsPerPage > 0
-                            ? products.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            : products
-                        ).map((row) => (
-                            <StyledTableRow key={row.id_product}>
-                                <StyledTableCell component="th" scope="row" align="left">
-                                    {row.id_product}
-                                </StyledTableCell>
-                                <StyledTableCell align="left">
-                                    {row.picture_product === null ?
-                                        <img src={"data:image/png;base64, " + row.picture_link_product} alt="product images" width={'100%'} height={'100%'} />
-                                        :
-                                        <img src={row.picture_product} alt="product images" width={'100%'} height={'100%'} />
-                                    }
-                                </StyledTableCell>
-                                <StyledTableCell align="left">
-                                    {row.name_product}
-                                </StyledTableCell>
-                                <StyledTableCell align="left">
-                                    {row.brand_product}
-                                </StyledTableCell>
-                                <StyledTableCell align="left">
-                                    {showTypeProduct(row.type_product)}
-                                </StyledTableCell>
-                                <StyledTableCell align="left">
-                                    {row.quantity_product}
-                                </StyledTableCell>
-                                <StyledTableCell align="left">
-                                    {row.unit_price_product.toLocaleString('vi-VI',
-                                        {
-                                            style: 'currency',
-                                            currency: 'VND'
-                                        })}
-                                </StyledTableCell>
-                                <StyledTableCell align="left">
-                                    {row.discount_product === 0 ?
-                                        "không có"
-                                        :
-                                        <Typography variant='body2'>{row.discount_product} %</Typography>
-                                    }
-                                </StyledTableCell>
-                                <StyledTableCell align="left">
-                                    {row.insurance_product} Tháng
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                    <Stack direction="row" spacing={2} justifyContent={'center'}>
-                                        <ProductManagementFormView IDProduct={row.id_product} />
-                                        <ProductManagementFormEdit IDProduct={row.id_product} />
-                                        <ProductManagementStatus product={row} handleResetPage={handleResetPage} />
-                                    </Stack>
-                                </StyledTableCell>
-                                <StyledTableCell align="left">
-                                    {row.status_product === 1 ?
-                                        <Typography variant='body2' sx={{ color: "var(--color3)" }}>kinh doanh</Typography>
-                                        :
-                                        <Typography variant='body2' sx={{ color: "var(--color9)" }}>Tạm dừng</Typography>
-                                    }
-                                </StyledTableCell>
-                            </StyledTableRow>
-                        ))}
+                    >
+                        Quản lý sản phẩm
+                    </Typography>
+                    <ProductManagementFormAdd />
+                </Stack>
+                <Divider sx={{ marginBottom: 3 }}></Divider>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                        <TableHead>
+                            <TableRow style={{ backgroundColor: '#474747', color: 'white' }}>
+                                <TableCell style={{ width: '5%', color: 'white' }} align="left">Mã </TableCell>
+                                <TableCell style={{ width: '7%', color: 'white' }} align="left">Ảnh </TableCell>
+                                <TableCell style={{ width: '15%', color: 'white' }} align="left">Tên</TableCell>
+                                <TableCell style={{ width: '8%', color: 'white' }} align="left">Thương hiệu</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Loại</TableCell>
+                                <TableCell style={{ width: '5%', color: 'white' }} align="left">Số lượng</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Đơn giá</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Giảm giá</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Bảo hành</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="center">Thao Tác</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Trạng thái</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {(rowsPerPage > 0
+                                ? products.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                : products
+                            ).map((row) => (
+                                <StyledTableRow key={row.id_product}>
+                                    <StyledTableCell component="th" scope="row" align="left">
+                                        {row.id_product}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                        {row.picture_product === null ?
+                                            <img src={"data:image/png;base64, " + row.picture_link_product} alt="product images" width={'100%'} height={'100%'} />
+                                            :
+                                            <img src={row.picture_product} alt="product images" width={'100%'} height={'100%'} />
+                                        }
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                        {row.name_product}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                        {row.brand_product}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                        {showTypeProduct(row.type_product)}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                        {row.quantity_product}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                        {row.unit_price_product.toLocaleString('vi-VI',
+                                            {
+                                                style: 'currency',
+                                                currency: 'VND'
+                                            })}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                        {row.discount_product === 0 ?
+                                            "không có"
+                                            :
+                                            <Typography variant='body2'>{row.discount_product} %</Typography>
+                                        }
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                        {row.insurance_product} Tháng
+                                    </StyledTableCell>
+                                    <StyledTableCell align="center">
+                                        <Stack direction="row" spacing={2} justifyContent={'center'}>
+                                            <ProductManagementFormView IDProduct={row.id_product} />
+                                            <ProductManagementFormEdit IDProduct={row.id_product} />
+                                            <ProductManagementFormUpdateImage IDProduct={row.id_product} handleResetPage={handleResetPage} resetPage={resetPage}/>
+                                            <ProductManagementStatus product={row} handleResetPage={handleResetPage} />
+                                        </Stack>
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                        {row.status_product === 1 ?
+                                            <Typography variant='body2' sx={{ color: "var(--color3)" }}>kinh doanh</Typography>
+                                            :
+                                            <Typography variant='body2' sx={{ color: "var(--color9)" }}>Tạm dừng</Typography>
+                                        }
+                                    </StyledTableCell>
+                                </StyledTableRow>
+                            ))}
 
-                        {emptyRows > 0 && (
-                            <StyledTableRow style={{ height: 53 * emptyRows }}>
-                                <StyledTableCell colSpan={10} />
+                            {emptyRows > 0 && (
+                                <StyledTableRow style={{ height: 53 * emptyRows }}>
+                                    <StyledTableCell colSpan={10} />
+                                </StyledTableRow>
+                            )}
+                        </TableBody>
+                        <TableFooter>
+                            <StyledTableRow>
+                                <TablePagination
+                                    rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
+                                    colSpan={11}
+                                    count={products.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    SelectProps={{
+                                        inputProps: {
+                                            'aria-label': 'rows per page',
+                                        },
+                                        native: true,
+                                    }}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                    ActionsComponent={TablePaginationActions}
+                                />
                             </StyledTableRow>
-                        )}
-                    </TableBody>
-                    <TableFooter>
-                        <StyledTableRow>
-                            <TablePagination
-                                rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
-                                colSpan={11}
-                                count={products.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                SelectProps={{
-                                    inputProps: {
-                                        'aria-label': 'rows per page',
-                                    },
-                                    native: true,
-                                }}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                                ActionsComponent={TablePaginationActions}
-                            />
-                        </StyledTableRow>
-                    </TableFooter>
-                </Table>
-            </TableContainer>
+                        </TableFooter>
+                    </Table>
+                </TableContainer>
+            </Container>
         </Box>
     )
 }

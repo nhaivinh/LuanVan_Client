@@ -17,6 +17,9 @@ import Avatar from '@mui/material/Avatar';
 import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
 import { useCookies } from "react-cookie";
+import Tab from '@material-ui/core/Tab';
+import TabContext from '@material-ui/lab/TabContext';
+import TabList from '@material-ui/lab/TabList';
 
 function getFormattedDate(date) {
     var year = date.getFullYear();
@@ -48,6 +51,12 @@ function AccountInfo() {
     const client = axios.create({
         baseURL: "https://localhost:7253/api/Customer"
     });
+
+    const [statusValue, setStatusValue] = React.useState('0');
+
+    const handleChange = (event, newValue) => {
+        setStatusValue(newValue);
+    };
 
 
     React.useEffect(() => {
@@ -82,12 +91,136 @@ function AccountInfo() {
                     "pictureChar": e.target.result
                 })
             })
-            .then(res => res.json())
-            .then((result) => {
-                handleResetPage()
-            })                                   
+                .then(res => res.json())
+                .then((result) => {
+                    handleResetPage()
+                })
         }
     }
+
+    function handleShowEditAccount() {
+        const DateOfBirthCustomer = new Date(account[0].date_of_birth_customer)
+        switch (statusValue) {
+            case '0':
+                return (
+                    <Box
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                            paddingBottom: 30,
+                            paddingTop: 10
+                        }}>
+                        <Box
+                            style={{
+                                display: 'flex',
+                                width: '50%',
+                                justifyContent: 'space-between',
+                                flexDirection: 'column',
+                                backgroundColor: 'white',
+                                padding: 20,
+                                borderRadius: 10,
+                                height: 450
+                            }}>
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Họ tên"
+                                size="small"
+                                defaultValue={account[0].name_customer}
+                                onChange={(e) => { setEditAccount({ ...editAccount, name_customer: e.target.value }) }}
+                            />
+                            <TextField
+                                id="outlined-basic"
+                                label="Email"
+                                variant="outlined" size="small"
+                                defaultValue={account[0].email_customer}
+                                onChange={(e) => { setEditAccount({ ...editAccount, email_customer: e.target.value }) }}
+                            />
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                size="small"
+                                label="Số điện thoại"
+                                defaultValue={account[0].phone_number_customer}
+                                onChange={(e) => { setEditAccount({ ...editAccount, phone_number_customer: e.target.value }) }}
+                            />
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                size="small"
+                                label="Căn cước công dân"
+                                defaultValue={account[0].identity_card_customer}
+                                onChange={(e) => { setEditAccount({ ...editAccount, identity_card_customer: e.target.value }) }}
+                            />
+                            <TextField
+                                required
+                                type="date"
+                                label="Sinh nhật" variant="outlined"
+                                defaultValue={getFormattedDate(DateOfBirthCustomer)}
+                                onChange={(e) => { setEditAccount({ ...editAccount, date_of_birth_customer: e.target.value }) }}
+                            >
+                            </TextField>
+                            <FormControl>
+                                <FormLabel id="demo-controlled-radio-buttons-group">Giới tính</FormLabel>
+                                <RadioGroup
+                                    row
+                                    aria-labelledby="demo-row-radio-buttons-group-label"
+                                    name="row-radio-buttons-group"
+                                    defaultValue={account[0].gender_customer}
+                                    onChange={(e) => { setEditAccount({ ...editAccount, gender_customer: e.target.value }) }}
+                                >
+                                    <FormControlLabel value="male" control={<Radio />} label="Nam" />
+                                    <FormControlLabel value="female" control={<Radio />} label="Nữ" />
+                                    <FormControlLabel value="other" control={<Radio />} label="Khác" />
+                                </RadioGroup>
+                            </FormControl>
+                        </Box>
+                        <Box
+                            style={{
+                                display: 'flex',
+                                width: '50%',
+                                justifyContent: 'space-between',
+                                flexDirection: 'column',
+                                padding: 20,
+                            }}>
+                            <Button variant='contained' onClick={handleClickUpadte}>Cập nhật</Button>
+                        </Box>
+                    </Box>
+                )
+            case '1':
+                return (
+                    <Box
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'row',
+                            paddingBottom: 30,
+                            paddingTop: 10
+                        }}>
+                        <div>
+                            <img alt="not found" width={"250px"} src={account[0].picture_char} />
+                        </div>
+                        <Box
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                width: 250,
+                                paddingLeft: 10
+                            }}
+                        >
+                            <input type="file" onChange={saveFile} />
+                            <Button variant='contained' onClick={saveImage}>Cập nhật ảnh đại diện</Button>
+                        </Box>
+                    </Box >
+                )
+            default:
+                break;
+        }
+    }
+
     function handleClickUpadte() {
         const current = new Date();
         const date = getFormattedDate(current);
@@ -164,8 +297,6 @@ function AccountInfo() {
     };
 
     if (account[0] !== undefined) {
-        const DateOfBirthCustomer = new Date(account[0].date_of_birth_customer)
-        console.log(getFormattedDate(DateOfBirthCustomer))
         return (
             <Box style={{}}>
                 <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', borderRadius: '10px', marginTop: 50 }}>
@@ -184,108 +315,19 @@ function AccountInfo() {
                             </Typography>
                         </Breadcrumbs>
                     </Box>
-                    <Grid container spacing={2}>
-                        <Grid item xs={5} >
-                            <Box
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'flex-end',
-                                    flexDirection: 'column',
-                                    paddingBottom: 30
-                                }}>
-                                <div>
-                                    <img alt="not found" width={"250px"} src={account[0].picture_char} />
-                                </div>
-                                <input type="file" onChange={saveFile} />
-                                <Button variant='contained' onClick={saveImage}>Cập nhật ảnh đại diện</Button>
+                    <Box sx={{ width: '100%', typography: 'body1' }}>
+                        <TabContext value={statusValue}>
+                            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                                <TabList onChange={handleChange} aria-label="lab API tabs example">
+                                    <Tab label="Thông tin cá nhân" value="0" />
+                                    <Tab label="Ảnh đại diện" value="1" />
+                                </TabList>
                             </Box>
-                        </Grid>
-                        <Grid item xs={7} >
-                            <Box
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'flex-start',
-                                    flexDirection: 'column',
-                                    paddingBottom: 30
-                                }}>
-                                <Box
-                                    style={{
-                                        display: 'flex',
-                                        width: '50%',
-                                        justifyContent: 'space-between',
-                                        flexDirection: 'column',
-                                        backgroundColor: 'white',
-                                        padding: 20,
-                                        borderRadius: 10,
-                                        height: 450
-                                    }}>
-                                    <TextField
-                                        id="outlined-basic"
-                                        variant="outlined"
-                                        label="Họ tên"
-                                        size="small"
-                                        defaultValue={account[0].name_customer}
-                                        onChange={(e) => { setEditAccount({ ...editAccount, name_customer: e.target.value }) }}
-                                    />
-                                    <TextField
-                                        id="outlined-basic"
-                                        label="Email"
-                                        variant="outlined" size="small"
-                                        defaultValue={account[0].email_customer}
-                                        onChange={(e) => { setEditAccount({ ...editAccount, email_customer: e.target.value }) }}
-                                    />
-                                    <TextField
-                                        id="outlined-basic"
-                                        variant="outlined"
-                                        size="small"
-                                        label="Số điện thoại"
-                                        defaultValue={account[0].phone_number_customer}
-                                        onChange={(e) => { setEditAccount({ ...editAccount, phone_number_customer: e.target.value }) }}
-                                    />
-                                    <TextField
-                                        id="outlined-basic"
-                                        variant="outlined"
-                                        size="small"
-                                        label="Căn cước công dân"
-                                        defaultValue={account[0].identity_card_customer}
-                                        onChange={(e) => { setEditAccount({ ...editAccount, identity_card_customer: e.target.value }) }}
-                                    />
-                                    <TextField
-                                        required
-                                        type="date"
-                                        label="Sinh nhật" variant="outlined"
-                                        defaultValue={getFormattedDate(DateOfBirthCustomer)}
-                                        onChange={(e) => { setEditAccount({ ...editAccount, date_of_birth_customer: e.target.value }) }}
-                                    >
-                                    </TextField>
-                                    <FormControl>
-                                        <FormLabel id="demo-controlled-radio-buttons-group">Giới tính</FormLabel>
-                                        <RadioGroup
-                                            row
-                                            aria-labelledby="demo-row-radio-buttons-group-label"
-                                            name="row-radio-buttons-group"
-                                            defaultValue={account[0].gender_customer}
-                                            onChange={(e) => { setEditAccount({ ...editAccount, gender_customer: e.target.value }) }}
-                                        >
-                                            <FormControlLabel value="male" control={<Radio />} label="Nam" />
-                                            <FormControlLabel value="female" control={<Radio />} label="Nữ" />
-                                            <FormControlLabel value="other" control={<Radio />} label="Khác" />
-                                        </RadioGroup>
-                                    </FormControl>
-                                </Box>
-                                <Box
-                                    style={{
-                                        display: 'flex',
-                                        width: '50%',
-                                        justifyContent: 'space-between',
-                                        flexDirection: 'column',
-                                        padding: 20,
-                                    }}>
-                                    <Button variant='contained' onClick={handleClickUpadte}>Cập nhật</Button>
-                                </Box>
-                            </Box>
+                        </TabContext>
+                    </Box>
+                    <Grid container spacing={2} minHeight={600}>
+                        <Grid item xs={12}>
+                            {handleShowEditAccount()}
                         </Grid>
                     </Grid>
                 </Container>

@@ -25,7 +25,11 @@ const ProductImagesSlider = props => {
                 props.images.map((item, index) => (
                     <SwiperSlide key={index}>
                         <ImageViewer>
-                            <img src={"data:image/png;base64, " + item.picture_link_product} alt="product images" />
+                            {item.picture_product !== null ?
+                                <img src={item.picture_product} alt="product" />
+                                :
+                                <img src={"data:image/png;base64, " + item.picture_link_product} alt="product" />
+                            }
                         </ImageViewer>
                     </SwiperSlide>
                 ))
@@ -42,7 +46,11 @@ const ProductImagesSlider = props => {
                 props.images.map((item, index) => (
                     <SwiperSlide key={index}>
                         <div className="product-images-slider-thumbs-wrapper">
-                            <img src={"data:image/png;base64, " + item.picture_link_product} alt="product images" />
+                            {item.picture_product !== null ?
+                                <img src={item.picture_product} alt="product" />
+                                :
+                                <img src={"data:image/png;base64, " + item.picture_link_product} alt="product" />
+                            }
                         </div>
                     </SwiperSlide>
                 ))
