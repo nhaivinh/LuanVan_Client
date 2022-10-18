@@ -16,6 +16,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import List from '@mui/material/List';
+import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import ListSubheader from '@mui/material/ListSubheader';
 import MemoryIcon from '@mui/icons-material/Memory';
@@ -24,25 +25,13 @@ import CatergoryList from './CategoryList';
 import {
   Grid,
   Box,
-  Container,
 } from '@material-ui/core'
 import Slider from '../Customers/SliderImage/Slider';
-import { width } from '@mui/system';
-const useStyles = makeStyles((theme) => ({
-  card: {
-    maxWidth: '100%',
-    margin: theme.spacing(5),
-  },
-  media: {
-    height: 300,
-  },
-}));
-
 
 const Body = () => {
   return (
-    <Box style={{}}>
-      <Container maxWidth="lg">
+    <Box>
+      <Container maxWidth="xl">
         <Box style={{ position: 'absolute', width: '100%', left: 0, zIndex: '-1' }}>
           <Slider />
         </Box>
@@ -52,9 +41,9 @@ const Body = () => {
           </Grid>
         </Grid>
       </Container>
-      <Container>
+      <Container maxWidth="xl">
         <Box style={{ display: 'flex', flexWrap: 'wrap', marginTop: 50 }}>
-          <Box style={{ display: 'flex', flexBasis: '25%', flexDirection: 'column', alignItems: 'center' }}>
+          <Box style={{ display: 'flex', flexBasis: '25%', justifyContent:'center' , alignItems: 'center' }}>
             <Link to="/productByType/cpu" >
               <img
                 src="https://lh3.googleusercontent.com/ALoolTUg2Y5oRNEJNJjbUC3e6joNFwiY9zX9rB0EI1riSVZvlLq7jJ579KG_55RSCS0ObvlHKnaRoF5kmJmNamMEqavd4vRi=rw-w308"
@@ -62,7 +51,7 @@ const Body = () => {
               />
             </Link>
           </Box>
-          <Box style={{ display: 'flex', flexBasis: '25%', flexDirection: 'column', alignItems: 'center' }}>
+          <Box style={{ display: 'flex', flexBasis: '25%', justifyContent:'center' , alignItems: 'center' }}>
             <Link to="/productByType/gpu" >
               <img
                 src="https://lh3.googleusercontent.com/ALoolTUg2Y5oRNEJNJjbUC3e6joNFwiY9zX9rB0EI1riSVZvlLq7jJ579KG_55RSCS0ObvlHKnaRoF5kmJmNamMEqavd4vRi=rw-w308"
@@ -70,7 +59,7 @@ const Body = () => {
               />
             </Link>
           </Box>
-          <Box style={{ display: 'flex', flexBasis: '25%', flexDirection: 'column', alignItems: 'center' }}>
+          <Box style={{ display: 'flex', flexBasis: '25%', justifyContent:'center' , alignItems: 'center' }}>
             <Link to="/productByType/ram" >
               <img
                 src="https://lh3.googleusercontent.com/ALoolTUg2Y5oRNEJNJjbUC3e6joNFwiY9zX9rB0EI1riSVZvlLq7jJ579KG_55RSCS0ObvlHKnaRoF5kmJmNamMEqavd4vRi=rw-w308"
@@ -78,7 +67,7 @@ const Body = () => {
               />
             </Link>
           </Box>
-          <Box style={{ display: 'flex', flexBasis: '25%', flexDirection: 'column', alignItems: 'center' }}>
+          <Box style={{ display: 'flex', flexBasis: '25%', justifyContent:'center' , alignItems: 'center' }}>
             <Link to="/productByType/main" >
               <img
                 src="https://lh3.googleusercontent.com/ALoolTUg2Y5oRNEJNJjbUC3e6joNFwiY9zX9rB0EI1riSVZvlLq7jJ579KG_55RSCS0ObvlHKnaRoF5kmJmNamMEqavd4vRi=rw-w308"

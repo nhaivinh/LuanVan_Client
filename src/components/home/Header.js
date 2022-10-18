@@ -13,6 +13,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useCookies, removeCookie } from "react-cookie";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import Container from '@mui/material/Container';
 import {
     AppBar,
     Toolbar,
@@ -20,10 +21,10 @@ import {
     Popover,
     Avatar,
     Typography,
-    Container,
     IconButton,
 } from '@material-ui/core';
 import AccountInfo from "../Customers/Account/AccountInfo";
+import { Grid } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -35,10 +36,8 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         color: 'orange',
-        flexGrow: 1,
     },
     searchBar: {
-        flexGrow: 2,
         alignItems: 'left'
     }
     ,
@@ -198,7 +197,7 @@ const Header = () => {
     return (
         <Box style={{ marginBottom: 10 }}>
             <AppBar position="fixed" elevation={0} style={{ backgroundColor: '#2d2d2d' }}>
-                <Container maxWidth="lg" >
+                <Container maxWidth="xl" >
                     <Toolbar variant="dense">
                         <Box style={{
                             display: 'flex',
@@ -223,7 +222,7 @@ const Header = () => {
                             onRequestSearch={() => navigate('/search/?page=1&name=' + searchItem)}
                             style={{
                                 margin: "0 auto",
-                                maxWidth: 800
+                                minWidth: 500
                             }}
                         />
                         <Link to="/cart" className={classes.toolbarTitle}>
@@ -296,7 +295,7 @@ const Header = () => {
                         <Box
                             sx={style}
                         >
-                            <Link to="/" className={classes.toolbarTitle}>
+                            <Link to="/search" className={classes.toolbarTitle}>
                                 <Typography>Sản Phẩm</Typography>
                             </Link>
                         </Box>

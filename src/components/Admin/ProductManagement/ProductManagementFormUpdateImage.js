@@ -165,6 +165,7 @@ export default function ProductManagementFormUpdateImage({ IDProduct, handleRese
                 setPictures(Pictures);
             })
     }, [resetPage])
+    
     return (
         <div>
             <IconButton onClick={handleOpen} variant="text" color="success">

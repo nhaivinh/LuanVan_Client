@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { Container, TextField } from "@material-ui/core"
+import Container from '@mui/material/Container';
 import { Box, Button, Grid, makeStyles, Typography, IconButton } from "@mui/material"
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { Link } from 'react-router-dom';
@@ -298,7 +298,7 @@ function BuildPC() {
     };
 
     return (
-        <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', marginTop: 50 , borderRadius: '10px' }}>
+        <Container maxWidth="xl" style={{ backgroundColor: 'rgb(248, 248, 252)', marginTop: 50 , borderRadius: '10px' }}>
             <Box
                 style={{
                     display: 'flex',

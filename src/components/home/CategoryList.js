@@ -10,7 +10,8 @@ import {
     ListItemButton,
     ListItemText,
     ListItemIcon,
-    ListSubheader
+    ListSubheader,
+    Container
 } from "@mui/material"
 import MemoryIcon from '@mui/icons-material/Memory';
 
@@ -31,20 +32,6 @@ function CatergoryList() {
             }}
         >
             <List
-                // style={{ width: '100%' }}
-                // component="nav"
-                // aria-labelledby="nested-list-subheader"
-                // subheader={
-                //     <ListSubheader position='static' component="div" id="nested-list-subheader" color="inherit">
-                //         <Box
-                //             style={{ display: 'flex', bgcolor: "#a50a06", width: '100%', height: 60, alignItems: 'flex-end', justifyContent: 'flex-start', borderRadius: 10 }}
-                //         >
-                //             <Typography variant='h6'>
-                //                 Danh Mục Sản Phẩm
-                //             </Typography>
-                //         </Box>
-                //     </ListSubheader>
-                // }
             >
                 <Link to={"/search/?type=cpu&page=1"}>
                     <ListItemButton>
