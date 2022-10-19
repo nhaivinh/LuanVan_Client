@@ -62,7 +62,7 @@ const style = {
     marginRight: 3,
 };
 
-const Header = () => {
+const Header = ({resetPage, handleResetPage}) => {
 
     const classes = useStyles();
 
@@ -84,8 +84,6 @@ const Header = () => {
 
     const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
-    const [resetPage, setResetPage] = React.useState(false)
-
     const open = Boolean(anchorEl);
 
     const id = open ? 'simple-popover' : undefined;
@@ -104,8 +102,9 @@ const Header = () => {
                     const AccountInfo = res.data;
                     setAccountInfo(AccountInfo[0]);
                 })
+                console.log("log again")
         }
-    }, [])
+    }, [resetPage])
 
     function handleShowAvatar() {
         if (cookies.Account === undefined) {
@@ -185,9 +184,6 @@ const Header = () => {
                 </Box >
             )
         }
-    }
-    function handleResetPage() {
-        setResetPage(!resetPage)
     }
     function handleClickLogOut() {
         removeCookie('Account', { path: '/' })
@@ -271,9 +267,7 @@ const Header = () => {
                                 <MenuItem
                                     onClick={handleClose}
                                 >
-                                    <Link to="/admin/dashboard">
-                                        Trang quản lý
-                                    </Link>
+                                    <a href="/admin/dashboard">Trang quản lý</a>
                                 </MenuItem>
                             }
 

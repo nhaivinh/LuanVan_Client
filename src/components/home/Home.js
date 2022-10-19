@@ -17,19 +17,30 @@ import './home.scss'
 import AutoBuildPC from '../Customers/AutoBuildPC/AutoBuildPC';
 
 function Home() {
-  
+
+  const [resetPage, setResetPage] = React.useState(false);
+
+  function handleResetPage() {
+    console.log("run")
+    setResetPage(!resetPage);
+  }
+
+  React.useEffect(() => {
+    document.body.className = 'clientCustomer';
+  }, []);
+
   return (
     <div>
       <header>
-        <Header />
+        <Header resetPage={resetPage} handleResetPage={handleResetPage} />
       </header>
       <Routes>
         <Route exact path='/' element={<Body />} />
-        <Route exact path='/login' element={<Login />} />
+        <Route exact path='/login' element={<Login resetPage={resetPage} handleResetPage={handleResetPage} />} />
         <Route exact path='/register' element={<Register />} />
-        <Route exact path='/product/:productId' element={<ProductDetails />} />
+        <Route exact path='/product/:productId' element={<ProductDetails resetPage={resetPage} handleResetPage={handleResetPage} />} />
         <Route exact path='/search' element={<ProductSearch />} />
-        <Route exact path='/cart' element={<Cart />} />
+        <Route exact path='/cart' element={<Cart resetPage={resetPage} handleResetPage={handleResetPage}/>} />
         <Route exact path='/account' element={<AccountInfo />} />
         <Route exact path='/order' element={<OrderInfo />} />
         <Route exact path='/checkout' element={<Checkout />} />

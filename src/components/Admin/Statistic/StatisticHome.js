@@ -235,7 +235,7 @@ export default function StatisticHome() {
 
     return (
         <Box>
-            <Container>
+            <Container >
                 <Stack direction="row" spacing={2} justifyContent="space-between">
                     <Typography variant="p"
                         sx={

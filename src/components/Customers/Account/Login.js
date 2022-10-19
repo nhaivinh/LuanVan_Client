@@ -34,7 +34,7 @@ const useStyles = makeStyles({
     }
 })
 
-const Login = () => {
+const Login = ({resetPage, handleResetPage}) => {
     const navigate = useNavigate();
     const classes = useStyles();
     const [cookies, setCookie] = useCookies(["user"]);
@@ -70,12 +70,12 @@ const Login = () => {
                     }
                     else {
                         setStateLogin(res)
-                        handleCookie(res)
-                        navigate('/')
+                        handleCookie(res)     
+                        navigate('/')  
+                        window.location.reload()                
                         dispatch(setOpenSnackBar());
                         dispatch(setMessage("Đăng nhập thành công"));
-                        dispatch(setSeverity("success"));
-                        window.location.reload()
+                        dispatch(setSeverity("success"));                       
                     }
                 })
         } else {

@@ -29,6 +29,7 @@ import {
 import Slider from '../Customers/SliderImage/Slider';
 
 const Body = () => {
+
   return (
     <Box>
       <Container maxWidth="xl">
@@ -43,7 +44,7 @@ const Body = () => {
       </Container>
       <Container maxWidth="xl">
         <Box style={{ display: 'flex', flexWrap: 'wrap', marginTop: 50 }}>
-          <Box style={{ display: 'flex', flexBasis: '25%', justifyContent:'center' , alignItems: 'center' }}>
+          <Box style={{ display: 'flex', flexBasis: '25%', justifyContent: 'center', alignItems: 'center' }}>
             <Link to="/productByType/cpu" >
               <img
                 src="https://lh3.googleusercontent.com/ALoolTUg2Y5oRNEJNJjbUC3e6joNFwiY9zX9rB0EI1riSVZvlLq7jJ579KG_55RSCS0ObvlHKnaRoF5kmJmNamMEqavd4vRi=rw-w308"
@@ -51,7 +52,7 @@ const Body = () => {
               />
             </Link>
           </Box>
-          <Box style={{ display: 'flex', flexBasis: '25%', justifyContent:'center' , alignItems: 'center' }}>
+          <Box style={{ display: 'flex', flexBasis: '25%', justifyContent: 'center', alignItems: 'center' }}>
             <Link to="/productByType/gpu" >
               <img
                 src="https://lh3.googleusercontent.com/ALoolTUg2Y5oRNEJNJjbUC3e6joNFwiY9zX9rB0EI1riSVZvlLq7jJ579KG_55RSCS0ObvlHKnaRoF5kmJmNamMEqavd4vRi=rw-w308"
@@ -59,7 +60,7 @@ const Body = () => {
               />
             </Link>
           </Box>
-          <Box style={{ display: 'flex', flexBasis: '25%', justifyContent:'center' , alignItems: 'center' }}>
+          <Box style={{ display: 'flex', flexBasis: '25%', justifyContent: 'center', alignItems: 'center' }}>
             <Link to="/productByType/ram" >
               <img
                 src="https://lh3.googleusercontent.com/ALoolTUg2Y5oRNEJNJjbUC3e6joNFwiY9zX9rB0EI1riSVZvlLq7jJ579KG_55RSCS0ObvlHKnaRoF5kmJmNamMEqavd4vRi=rw-w308"
@@ -67,7 +68,7 @@ const Body = () => {
               />
             </Link>
           </Box>
-          <Box style={{ display: 'flex', flexBasis: '25%', justifyContent:'center' , alignItems: 'center' }}>
+          <Box style={{ display: 'flex', flexBasis: '25%', justifyContent: 'center', alignItems: 'center' }}>
             <Link to="/productByType/main" >
               <img
                 src="https://lh3.googleusercontent.com/ALoolTUg2Y5oRNEJNJjbUC3e6joNFwiY9zX9rB0EI1riSVZvlLq7jJ579KG_55RSCS0ObvlHKnaRoF5kmJmNamMEqavd4vRi=rw-w308"

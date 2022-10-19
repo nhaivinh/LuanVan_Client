@@ -37,7 +37,7 @@ const useStyles = makeStyles({
     }
 })
 
-function ProductDetails() {
+function ProductDetails({resetPage, handleResetPage}) {
 
     const classes = useStyles();
 
@@ -85,6 +85,7 @@ function ProductDetails() {
                 dispatch(setOpenSnackBar());
                 dispatch(setMessage(response.data.message));
                 dispatch(setSeverity(response.data.severity));
+                handleResetPage()
             })
             .catch((err) => {
                 if (err.response) {

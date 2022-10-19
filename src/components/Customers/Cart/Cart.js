@@ -22,12 +22,10 @@ import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
 import DecreaseCart from './DecreaseCart'
 import IncreaseCart from './IncreaseCart'
-function Cart() {
+function Cart({resetPage, handleResetPage}) {
 
     const [cart, setCart] = React.useState([])
     const [cookies, setCookie] = useCookies(["user"]);
-
-    const [resetPage, setResetPage] = React.useState(false);
 
     const navigate = useNavigate();
 
@@ -35,9 +33,6 @@ function Cart() {
 
     const [totalDiscount, setTotalDiscount] = React.useState(0)
 
-    function handleResetPage() {
-        setResetPage(!resetPage);
-    }
 
     React.useEffect(() => {
         axios.get(`https://localhost:7253/api/Cart/getcartbyid/` + cookies.Account)

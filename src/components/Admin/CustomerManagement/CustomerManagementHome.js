@@ -22,7 +22,7 @@ import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { Stack } from '@mui/system';
 import Divider from '@mui/material/Divider';
-
+import { Container } from '@mui/material';
 import CustomerFormEdit from './CustomerFormEdit';
 import CustomerFormView from './CustomerFormView';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -172,109 +172,111 @@ function CustomerManagementHome() {
 
     return (
         <Box>
-            <Typography variant="p"
-                sx={
-                    {
-                        fontSize: 30,
-                        color: "var(--color4)",
-                        fontWeight: "bold",
+            <Container maxWidth="xl">
+                <Typography variant="p"
+                    sx={
+                        {
+                            fontSize: 30,
+                            color: "var(--color4)",
+                            fontWeight: "bold",
 
+                        }
                     }
-                }
-            >
-                Quản lý thông tin khách hàng
-            </Typography>
-            <Divider sx={{ marginBottom: 3 }}></Divider>
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-                    <TableHead>
-                        <TableRow style={{ backgroundColor: '#474747', color: 'white' }}>
-                            <TableCell style={{ width: '5%', color: 'white' }} align="left">Mã</TableCell>
-                            <TableCell style={{ width: '15%', color: 'white' }} align="left">Tên khách hàng</TableCell>
-                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Số điện thoại</TableCell>
-                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Căn cước công dân</TableCell>
-                            <TableCell style={{ width: '15%', color: 'white' }} align="left">Email</TableCell>
-                            <TableCell style={{ width: '15%', color: 'white' }} align="left">Ngày sinh</TableCell>
-                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Giới tính</TableCell>
-                            <TableCell style={{ width: '10%', color: 'white' }} align="left">Ngày đăng ký</TableCell>
-                            <TableCell style={{ width: '10%', color: 'white' }} align="center">Thao tác</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {(rowsPerPage > 0
-                            ? customers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            : customers
-                        ).map((row) => (
-                            <StyledTableRow key={row.id_customer}>
-                                <StyledTableCell component="th" scope="row" align="left">
-                                    {row.id_customer}
-                                </StyledTableCell>
-                                <StyledTableCell component="th" scope="row" align="left">
-                                    {row.name_customer}
-                                </StyledTableCell>
-                                <StyledTableCell component="th" scope="row" align="left">
-                                    {row.phone_number_customer}
-                                </StyledTableCell>
-                                <StyledTableCell component="th" scope="row" align="left">
-                                    {row.identity_card_customer}
-                                </StyledTableCell>
-                                <StyledTableCell component="th" scope="row" align="left">
-                                    {row.email_customer}
-                                </StyledTableCell>
-                                <StyledTableCell component="th" scope="row" align="left">
-                                    {row.date_of_birth_customer !== null ?
-                                        getFormattedDate(new Date(row.date_of_birth_customer))
-                                        :
-                                        "Chưa có thông tin"
-                                    }
-                                </StyledTableCell>
-                                <StyledTableCell component="th" scope="row" align="left">
-                                    {showGender(row.gender_customer)}
-                                </StyledTableCell>
-                                <StyledTableCell component="th" scope="row" align="left">
-                                    {row.register_date !== null ?
-                                        getFormattedDate(new Date(row.register_date))
-                                        :
-                                        "Chưa có thông tin"
-                                    }
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                    <Stack direction="row" spacing={2} justifyContent={'center'}>
-                                        <CustomerFormView Customer={row}/>
-                                        <CustomerFormEdit Customer={row} handleResetPage={handleResetPage}/>
-                                    </Stack>
-                                </StyledTableCell>
-                            </StyledTableRow>
-                        ))}
+                >
+                    Quản lý thông tin khách hàng
+                </Typography>
+                <Divider sx={{ marginBottom: 3 }}></Divider>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                        <TableHead>
+                            <TableRow style={{ backgroundColor: '#474747', color: 'white' }}>
+                                <TableCell style={{ width: '5%', color: 'white' }} align="left">Mã</TableCell>
+                                <TableCell style={{ width: '15%', color: 'white' }} align="left">Tên khách hàng</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Số điện thoại</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Căn cước</TableCell>
+                                <TableCell style={{ width: '15%', color: 'white' }} align="left">Email</TableCell>
+                                <TableCell style={{ width: '15%', color: 'white' }} align="left">Ngày sinh</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Giới tính</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Ngày đăng ký</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="center">Thao tác</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {(rowsPerPage > 0
+                                ? customers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                : customers
+                            ).map((row) => (
+                                <StyledTableRow key={row.id_customer}>
+                                    <StyledTableCell component="th" scope="row" align="left">
+                                        {row.id_customer}
+                                    </StyledTableCell>
+                                    <StyledTableCell component="th" scope="row" align="left">
+                                        {row.name_customer}
+                                    </StyledTableCell>
+                                    <StyledTableCell component="th" scope="row" align="left">
+                                        {row.phone_number_customer}
+                                    </StyledTableCell>
+                                    <StyledTableCell component="th" scope="row" align="left">
+                                        {row.identity_card_customer}
+                                    </StyledTableCell>
+                                    <StyledTableCell component="th" scope="row" align="left">
+                                        {row.email_customer}
+                                    </StyledTableCell>
+                                    <StyledTableCell component="th" scope="row" align="left">
+                                        {row.date_of_birth_customer !== null ?
+                                            getFormattedDate(new Date(row.date_of_birth_customer))
+                                            :
+                                            "Chưa có thông tin"
+                                        }
+                                    </StyledTableCell>
+                                    <StyledTableCell component="th" scope="row" align="left">
+                                        {showGender(row.gender_customer)}
+                                    </StyledTableCell>
+                                    <StyledTableCell component="th" scope="row" align="left">
+                                        {row.register_date !== null ?
+                                            getFormattedDate(new Date(row.register_date))
+                                            :
+                                            "Chưa có thông tin"
+                                        }
+                                    </StyledTableCell>
+                                    <StyledTableCell align="center">
+                                        <Stack direction="row" spacing={2} justifyContent={'center'}>
+                                            <CustomerFormView Customer={row} />
+                                            <CustomerFormEdit Customer={row} handleResetPage={handleResetPage} />
+                                        </Stack>
+                                    </StyledTableCell>
+                                </StyledTableRow>
+                            ))}
 
-                        {emptyRows > 0 && (
-                            <StyledTableRow style={{ height: 53 * emptyRows }}>
-                                <StyledTableCell colSpan={10} />
+                            {emptyRows > 0 && (
+                                <StyledTableRow style={{ height: 53 * emptyRows }}>
+                                    <StyledTableCell colSpan={10} />
+                                </StyledTableRow>
+                            )}
+                        </TableBody>
+                        <TableFooter>
+                            <StyledTableRow>
+                                <TablePagination
+                                    rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
+                                    colSpan={10}
+                                    count={customers.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    SelectProps={{
+                                        inputProps: {
+                                            'aria-label': 'rows per page',
+                                        },
+                                        native: true,
+                                    }}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                    ActionsComponent={TablePaginationActions}
+                                />
                             </StyledTableRow>
-                        )}
-                    </TableBody>
-                    <TableFooter>
-                        <StyledTableRow>
-                            <TablePagination
-                                rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
-                                colSpan={10}
-                                count={customers.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                SelectProps={{
-                                    inputProps: {
-                                        'aria-label': 'rows per page',
-                                    },
-                                    native: true,
-                                }}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                                ActionsComponent={TablePaginationActions}
-                            />
-                        </StyledTableRow>
-                    </TableFooter>
-                </Table>
-            </TableContainer>
+                        </TableFooter>
+                    </Table>
+                </TableContainer>
+            </Container>
         </Box>
     )
 }
