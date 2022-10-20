@@ -344,6 +344,13 @@ function ProductSearch() {
                 }
             })
         }
+
+        if (params.sort === 'bydiscount') {
+            exportProduct.sort(function (a, b) {
+                return b.discount_product - a.discount_product
+            })
+        }
+
         handleResetPage()
         setChosenProducts(exportProduct)
     }
@@ -1372,19 +1379,67 @@ function ProductSearch() {
                                         key={Product.id_product}
                                         style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
                                     >
-                                        <img src={"data:image/png;base64, " + Product.picture_link_product} alt="product images" width={'80%'} height={'80%'} />
+                                        <Box
+                                            style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                        >
+                                            {Product.picture_product !== null ?
+                                                <img
+                                                    draggable={false}
+                                                    style={{ width: "80%", height: "80%" }}
+                                                    src={Product.picture_product} alt="product" />
+                                                :
+                                                <img
+                                                    draggable={false}
+                                                    style={{ width: "80%", height: "80%" }}
+                                                    src={"data:image/png;base64, " + Product.picture_link_product} alt="product" />
+                                            }
+                                            {Product.discount_product !== 0 &&
+                                                <Box
+                                                    style={{
+                                                        position: 'absolute',
+                                                        bottom: '0px',
+                                                        left: '0px',
+                                                    }}
+                                                >
+                                                    <Box
+                                                        style={{
+                                                            display: 'flex',
+                                                            width: '100px',
+                                                            height: '45px',
+                                                            borderRadius: 5,
+                                                            backgroundColor: 'red',
+                                                            flexDirection: 'column',
+                                                            paddingLeft: 10
+                                                        }}
+                                                    >
+                                                        <Typography variant='body2' style={{ color: 'yellow' }}><b>Tiết kiệm</b></Typography>
+                                                        <Typography variant='body1' style={{ color: 'white' }}>
+                                                            <b>
+                                                                {(Product.unit_price_product * (Product.discount_product * 0.01)).toLocaleString('vi-VI',
+                                                                    {
+                                                                        style: 'currency',
+                                                                        currency: 'VND'
+                                                                    })}
+                                                            </b>
+                                                        </Typography>
+                                                    </Box>
+                                                </Box>
+                                            }
+                                        </Box>
                                         <Box
                                             key={Product.id_product}
                                             style={{
                                                 display: 'flex',
-                                                width: '100%',
+                                                width: '95%',
                                                 flexDirection: 'column',
-                                                alignItems: 'center',
+                                                alignItems: 'flex-start',
                                                 paddingTop: 10,
+                                                paddingLeft: 20,
+                                                paddingRight: 20
                                             }}
                                         >
-                                            <Typography variant='body2'>{Product.name_product}</Typography>
-                                            <Typography variant="h6">{
+                                            <Typography variant='body2' style={{ color: 'black' }}>{Product.name_product}</Typography>
+                                            <Typography variant="h6" style={{ color: 'blue' }}>{
                                                 (Product.unit_price_product * (1 - Product.discount_product * 0.01)).toLocaleString('vi-VI',
                                                     {
                                                         style: 'currency',
@@ -1392,7 +1447,7 @@ function ProductSearch() {
                                                     })}
                                             </Typography>
                                             {Product.discount_product !== 0 &&
-                                                <Typography variant='body2'>
+                                                <Typography variant='body2' style={{ color: 'black' }}>
                                                     <del>
                                                         {Product.unit_price_product.toLocaleString('vi-VI',
                                                             {
@@ -1400,6 +1455,8 @@ function ProductSearch() {
                                                                 currency: 'VND'
                                                             })}
                                                     </del>
+                                                    &nbsp;
+                                                    -{Product.discount_product}%
                                                 </Typography>
                                             }
                                         </Box>
