@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './sidebar.scss';
-
+import { Box } from '@mui/material';
 const sidebarNavItems = []
 
 const Sidebar = () => {
@@ -21,13 +21,19 @@ const Sidebar = () => {
 
     // change active index
     useEffect(() => {
-         const curPath = window.location.pathname;
-        const activeItem = sidebarNavItems.findIndex(item => item.to === curPath) ;
+        const curPath = window.location.pathname;
+        const activeItem = sidebarNavItems.findIndex(item => item.to === curPath);
         setActiveIndex(curPath.length === 0 ? 0 : activeItem);
     }, [location]);
 
     return <div className='sidebar'>
         <div className="sidebar__logo">
+            <Box
+                style={{
+                    paddingTop: 20
+                }}>
+                <img src={require('../../../images/Logo/logoPC.png')} width='100%' />
+            </Box>
             Linh kiện máy tính
         </div>
         <div ref={sidebarRef} className="sidebar__menu">

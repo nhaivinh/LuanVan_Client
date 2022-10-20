@@ -143,9 +143,13 @@ function OrderManagementFormExport({ idOrder, Order }) {
                             }}
                         >
                             <Grid item xs={2}>
-                                <Typography variant="body1" style={{ textAlign: "left", }}>
-                                    LoGO
-                                </Typography>
+                                <Box
+                                    style={{
+                                        paddingTop: 30,
+                                        paddingLeft: 20
+                                    }}>
+                                    <img src={require('../../../images/Logo/logoPC.png')} width='100%' />
+                                </Box>
                             </Grid>
                             <Grid item xs={10}
                             >
@@ -156,7 +160,7 @@ function OrderManagementFormExport({ idOrder, Order }) {
                                     }}
                                 >
                                     <Typography variant="h6" style={{ textAlign: "left", marginTop: 20 }}>
-                                        <b>CÔNG TY TNHH LINH KIỆN MÁY TÍNH NHAIVINH</b>
+                                        <b>CÔNG TY TNHH LINH KIỆN MÁY TÍNH TENNO</b>
                                     </Typography>
                                     <Typography variant="body1" style={{ textAlign: "left", }}>
                                         Địa chỉ: Số 08, đường số 6, phường Hưng Phú, quận Cái Răng, thành phố Cần Thơ
@@ -224,7 +228,7 @@ function OrderManagementFormExport({ idOrder, Order }) {
                                     {detailsOrder.map(function (row, index) {
                                         return (
                                             <TableRow
-                                                key={row.index}
+                                                key={row.id_product}
                                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                             >
                                                 <TableCell component="th" scope="row" align="left">
@@ -271,7 +275,7 @@ function OrderManagementFormExport({ idOrder, Order }) {
                                         )
                                     })}
                                     <TableRow
-                                        key={100}
+                                        key={-1}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
                                         <TableCell colSpan={5} component="th" scope="row" align="right">

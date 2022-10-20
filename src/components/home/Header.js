@@ -62,7 +62,7 @@ const style = {
     marginRight: 3,
 };
 
-const Header = ({resetPage, handleResetPage}) => {
+const Header = ({ resetPage, handleResetPage }) => {
 
     const classes = useStyles();
 
@@ -102,7 +102,7 @@ const Header = ({resetPage, handleResetPage}) => {
                     const AccountInfo = res.data;
                     setAccountInfo(AccountInfo[0]);
                 })
-                console.log("log again")
+            console.log("log again")
         }
     }, [resetPage])
 
@@ -206,9 +206,15 @@ const Header = ({resetPage, handleResetPage}) => {
                         </Box>
                     </Toolbar>
                     <Toolbar>
-                        <Typography variant="h6" className={classes.title}>
-                            Website Linh Kiện
-                        </Typography>
+                        <Box
+                            style={{
+                                display: 'flex',
+                                paddingTop: 2,
+                                width: 100,
+                                paddingLeft: 25
+                            }}>
+                            <img src={require('../../images/Logo/logoPCOrange.png')} width='160px' />
+                        </Box>                     
                         <SearchBar
                             className={classes.searchBar}
                             value={searchItem}

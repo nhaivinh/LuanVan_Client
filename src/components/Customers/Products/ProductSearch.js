@@ -121,7 +121,7 @@ function ProductSearch() {
 
     const [resetPage, setResetPage] = React.useState(false)
 
-    const [searchParams, setSearchParams] = useSearchParams({page: 1});
+    const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
 
     const params = Object.fromEntries([...searchParams]);
 
@@ -1407,7 +1407,6 @@ function ProductSearch() {
                                 </Link>
                             </Box>
                         )
-                        // }
                     })
             );
         } else {

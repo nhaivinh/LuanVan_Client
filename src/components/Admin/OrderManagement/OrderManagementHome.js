@@ -18,6 +18,13 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import TableHead from '@mui/material/TableHead';
 import Typography from '@mui/material/Typography';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { Stack } from '@mui/system';
@@ -135,6 +142,15 @@ function OrderManagementHome() {
             })
     }, [resetPage])
 
+
+    React.useEffect(() => {
+        axios.get(`https://localhost:7253/api/OrderCustomer`)
+            .then(res => {
+                const Orders = res.data;
+                setChosenOrders(Orders);
+            })
+    }, [])
+
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -205,41 +221,107 @@ function OrderManagementHome() {
         }
     }
 
-    return (
-        <Box>
-            <Container maxWidth="xl">
-                <Typography variant="p"
-                    sx={
-                        {
-                            fontSize: 30,
-                            color: "var(--color4)",
-                            fontWeight: "bold",
-                        }
-                    }
-                >
-                    Quản lý đơn hàng
-                </Typography>
-                <Divider sx={{ marginBottom: 3 }}></Divider>
-                <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-                        <TableHead>
-                            <TableRow style={{ backgroundColor: '#474747', color: 'white' }}>
-                                <TableCell style={{ width: '5%', color: 'white' }} align="left">Mã đơn hàng</TableCell>
-                                <TableCell style={{ width: '5%', color: 'white' }} align="left">Mã khách hàng</TableCell>
-                                <TableCell style={{ width: '8%', color: 'white' }} align="left">Mã nhân viên</TableCell>
-                                <TableCell style={{ width: '15%', color: 'white' }} align="left">Tên người nhận</TableCell>
-                                <TableCell style={{ width: '12%', color: 'white' }} align="left">Phương thức</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Tổng tiền</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Ngày đặt hàng</TableCell>
-                                <TableCell style={{ width: '25%', color: 'white', paddingLeft: 100 }} align="left">Thao Tác</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="center">Trạng thái đơn hàng</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {(rowsPerPage > 0
-                                ? orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                : orders
-                            ).map((row) => (
+    const [chosenOrders, setChosenOrders] = React.useState([])
+
+    const [chosenStatusOrder, setChosenStatusOrder] = React.useState(-1);
+
+    const [searchField, setSearchField] = React.useState(1);
+
+    const [searchInput, setSearchInput] = React.useState('');
+
+    React.useEffect(() => {
+        handleChosenOrder(orders)
+    }, [searchField, searchInput, chosenStatusOrder])
+
+    const handleChangeSearchInput = (event) => {
+        setSearchInput(event.target.value)
+        setPage(0)
+    }
+
+    const handleChangeSearchField = (event) => {
+        setSearchField(event.target.value);
+    };
+
+    const handleChangeChosenStatusOrder = (event) => {
+        setChosenStatusOrder(event.target.value);
+    };
+
+    function removeAccents(str) {
+        var AccentsMap = [
+            "aàảãáạăằẳẵắặâầẩẫấậ",
+            "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
+            "dđ", "DĐ",
+            "eèẻẽéẹêềểễếệ",
+            "EÈẺẼÉẸÊỀỂỄẾỆ",
+            "iìỉĩíị",
+            "IÌỈĨÍỊ",
+            "oòỏõóọôồổỗốộơờởỡớợ",
+            "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
+            "uùủũúụưừửữứự",
+            "UÙỦŨÚỤƯỪỬỮỨỰ",
+            "yỳỷỹýỵ",
+            "YỲỶỸÝỴ"
+        ];
+        for (var i = 0; i < AccentsMap.length; i++) {
+            var re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');
+            var char = AccentsMap[i][0];
+            str = str.replace(re, char);
+        }
+        return str;
+    }
+
+    const handleChosenOrder = function (Orders) {
+        var SearchInput = removeAccents(searchInput.toLowerCase())
+        var exportOrders = Orders
+
+        if (chosenStatusOrder !== -1) {
+            exportOrders = exportOrders.filter(function (Order) {
+                return (Order.delivery_status === chosenStatusOrder)
+            })
+        }
+
+        if (SearchInput !== "") {
+            switch (searchField) {
+                case 1:
+                    exportOrders = exportOrders.filter(function (Order) {
+                        return (('' + Order.id_order).includes(SearchInput))
+                    })
+                    break;
+                case 2:
+                    exportOrders = exportOrders.filter(function (Order) {
+                        return (('' + Order.id_customer).includes(SearchInput))
+                    })
+                    break;
+                case 3:
+                    exportOrders = exportOrders.filter(function (Order) {
+                        return (removeAccents(Order.delivery_name.toLowerCase()).includes(SearchInput))
+                    })
+                    break;
+                case 4:
+                    exportOrders = exportOrders.filter(function (Order) {
+                        return (removeAccents(Order.delivery_address.toLowerCase()).includes(SearchInput))
+                    })
+                    break;
+                case 5:
+                    exportOrders = exportOrders.filter(function (Order) {
+                        return (removeAccents(Order.delivery_phone.toLowerCase()).includes(SearchInput))
+                    })
+                    break;
+                default:
+                    break;
+            }
+        }
+        handleResetPage()
+        setChosenOrders(exportOrders)
+    }
+
+    const showOrders = function (items) {
+        if (items.length > 0) {
+            if (rowsPerPage > 0) {
+                return (
+                    items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        .map(function (row) {
+                            return (
                                 <StyledTableRow key={row.id_order}>
                                     <StyledTableCell component="th" scope="row" align="left">
                                         {row.id_order}
@@ -281,8 +363,109 @@ function OrderManagementHome() {
                                         {showStatusOrder(row.delivery_status)}
                                     </StyledTableCell>
                                 </StyledTableRow>
-                            ))}
+                            )
+                        }
+                        )
+                )
+            }
+        } else {
+            return (
+                <StyledTableRow>
+                    <StyledTableCell key={-1} colSpan={11} component="th" scope="row" align="left">
+                        Không tìm thấy kết quả tương ứng
+                    </StyledTableCell>
+                </StyledTableRow>
+            )
+        }
+    }
 
+    return (
+        <Box>
+            <Container maxWidth="xl">
+                <Box>
+                    <FormControl sx={{ m: 1, minWidth: 170 }}>
+                        <InputLabel htmlFor="outlined-adornment-search">Trạng Thái Đơn Hàng</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-filled-label"
+                            id="demo-simple-select-filled"
+                            value={chosenStatusOrder}
+                            label="Trạng Thái Đơn Hàng"
+                            onChange={handleChangeChosenStatusOrder}
+                        >
+                            <MenuItem value={-1}>Tất cả</MenuItem>
+                            <MenuItem value={0}>Đang chờ duyệt</MenuItem>
+                            <MenuItem value={1}>Đã duyệt</MenuItem>
+                            <MenuItem value={2}>Đang vận chuyển</MenuItem>
+                            <MenuItem value={3}>Đã giao</MenuItem>
+                            <MenuItem value={4}>Đã huỷ</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl sx={{ m: 1, minWidth: 170 }}>
+                        <InputLabel htmlFor="outlined-adornment-search">Danh Mục</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-filled-label"
+                            id="demo-simple-select-filled"
+                            value={searchField}
+                            label="Danh Mục"
+                            onChange={handleChangeSearchField}
+                        >
+                            <MenuItem value={1}>Mã đơn hàng</MenuItem>
+                            <MenuItem value={2}>Mã khách hàng</MenuItem>
+                            <MenuItem value={3}>Tên khách hàng</MenuItem>
+                            <MenuItem value={4}>Địa chỉ giao hàng</MenuItem>
+                            <MenuItem value={5}>Số điện thoại</MenuItem>
+                        </Select>
+                    </FormControl>
+                    {/* TextField tim kiem */}
+                    <FormControl sx={{ m: 1, width: '60ch' }}>
+                        <InputLabel htmlFor="outlined-adornment-search">Tìm Kiếm</InputLabel>
+                        <OutlinedInput
+                            id="outlined-adornment-search"
+                            type="text"
+                            label="Tìm Kiếm"
+                            onChange={handleChangeSearchInput}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="button search"
+                                        edge="end"
+                                    >
+                                        <SearchIcon />
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                        />
+                    </FormControl>
+                </Box>
+                <Typography variant="p"
+                    sx={
+                        {
+                            fontSize: 30,
+                            color: "var(--color4)",
+                            fontWeight: "bold",
+                        }
+                    }
+                >
+                    Quản lý đơn hàng
+                </Typography>
+                <Divider sx={{ marginBottom: 3 }}></Divider>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                        <TableHead>
+                            <TableRow style={{ backgroundColor: '#474747', color: 'white' }}>
+                                <TableCell style={{ width: '5%', color: 'white' }} align="left">Mã đơn hàng</TableCell>
+                                <TableCell style={{ width: '5%', color: 'white' }} align="left">Mã khách hàng</TableCell>
+                                <TableCell style={{ width: '8%', color: 'white' }} align="left">Mã nhân viên</TableCell>
+                                <TableCell style={{ width: '15%', color: 'white' }} align="left">Tên người nhận</TableCell>
+                                <TableCell style={{ width: '12%', color: 'white' }} align="left">Phương thức</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Tổng tiền</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Ngày đặt hàng</TableCell>
+                                <TableCell style={{ width: '25%', color: 'white', paddingLeft: 100 }} align="left">Thao Tác</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="center">Trạng thái đơn hàng</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {showOrders(chosenOrders)}
                             {emptyRows > 0 && (
                                 <StyledTableRow style={{ height: 53 * emptyRows }}>
                                     <StyledTableCell colSpan={10} />

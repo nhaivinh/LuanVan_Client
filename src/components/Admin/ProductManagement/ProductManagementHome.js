@@ -27,6 +27,13 @@ import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { Stack } from '@mui/system';
 import Divider from '@mui/material/Divider';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import ProductManagementFormUpdateImage from './ProductManagementFormUpdateImage';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -114,6 +121,8 @@ function ProductManagementHome() {
 
     const [products, setProducts] = React.useState([])
 
+    const [chosenProducts, setChosenProducts] = React.useState([])
+
     const [resetPage, setResetPage] = React.useState(false);
 
     function handleResetPage() {
@@ -124,9 +133,105 @@ function ProductManagementHome() {
         axios.get(`https://localhost:7253/api/Product`)
             .then(res => {
                 const Products = res.data;
-                setProducts(Products);
+                setChosenProducts(Products)
+            })
+    }, [])
+
+    React.useEffect(() => {
+        axios.get(`https://localhost:7253/api/Product`)
+            .then(res => {
+                const Products = res.data;
+                setProducts(Products)
             })
     }, [resetPage])
+
+    const [searchField, setSearchField] = React.useState(1);
+
+    const [searchInput, setSearchInput] = React.useState('');
+
+    const [chosenTypeProduct, setChosenTypeProduct] = React.useState('all');
+
+    const [chosenStatusProduct, setChosenStatusProduct] = React.useState(-1);
+
+    React.useEffect(() => {
+        handleChosenProduct(products)
+    }, [searchField, searchInput, chosenTypeProduct, resetPage])
+
+    const handleChangeSearchInput = (event) => {
+        setSearchInput(event.target.value)
+        setPage(0)
+    }
+
+    const handleChangeSearchField = (event) => {
+        setSearchField(event.target.value);
+    };
+
+    const handleChangeChosenTypeProduct = (event) => {
+        setChosenTypeProduct(event.target.value);
+    };
+
+    const handleChangeChosenStatusProduct = (event) => {
+        setChosenStatusProduct(event.target.value);
+    };
+
+    function removeAccents(str) {
+        var AccentsMap = [
+            "aàảãáạăằẳẵắặâầẩẫấậ",
+            "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
+            "dđ", "DĐ",
+            "eèẻẽéẹêềểễếệ",
+            "EÈẺẼÉẸÊỀỂỄẾỆ",
+            "iìỉĩíị",
+            "IÌỈĨÍỊ",
+            "oòỏõóọôồổỗốộơờởỡớợ",
+            "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
+            "uùủũúụưừửữứự",
+            "UÙỦŨÚỤƯỪỬỮỨỰ",
+            "yỳỷỹýỵ",
+            "YỲỶỸÝỴ"
+        ];
+        for (var i = 0; i < AccentsMap.length; i++) {
+            var re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');
+            var char = AccentsMap[i][0];
+            str = str.replace(re, char);
+        }
+        return str;
+    }
+
+    const handleChosenProduct = function (Products) {
+        var SearchInput = removeAccents(searchInput.toLowerCase())
+        var exportProducts = Products
+
+        if (chosenTypeProduct !== 'all') {
+            exportProducts = exportProducts.filter(function (product) {
+                return (product.type_product === chosenTypeProduct)
+            })
+        }
+
+        if (SearchInput !== "") {
+            switch (searchField) {
+                case 1:
+                    exportProducts = exportProducts.filter(function (product) {
+                        return (('' + product.id_product).includes(SearchInput))
+                    })
+                    break;
+                case 2:
+                    exportProducts = exportProducts.filter(function (product) {
+                        return (removeAccents(product.name_product.toLowerCase()).includes(SearchInput))
+                    })
+                    break;
+                case 3:
+                    exportProducts = exportProducts.filter(function (product) {
+                        return (removeAccents(product.brand_product.toLowerCase()).includes(SearchInput))
+                    })
+                    break;
+                default:
+                    break;
+            }
+        }
+        handleResetPage()
+        setChosenProducts(exportProducts)
+    }
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -183,46 +288,13 @@ function ProductManagementHome() {
         }
     }
 
-    return (
-        <Box>
-            <Container  maxWidth="xl">
-                <Stack direction="row" spacing={2} justifyContent="space-between">
-                    <Typography variant="p"
-                        sx={
-                            {
-                                fontSize: 30,
-                                color: "var(--color4)",
-                                fontWeight: "bold",
-                            }
-                        }
-                    >
-                        Quản lý sản phẩm
-                    </Typography>
-                    <ProductManagementFormAdd />
-                </Stack>
-                <Divider sx={{ marginBottom: 3 }}></Divider>
-                <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-                        <TableHead>
-                            <TableRow style={{ backgroundColor: '#474747', color: 'white' }}>
-                                <TableCell style={{ width: '5%', color: 'white' }} align="left">Mã </TableCell>
-                                <TableCell style={{ width: '7%', color: 'white' }} align="left">Ảnh </TableCell>
-                                <TableCell style={{ width: '15%', color: 'white' }} align="left">Tên</TableCell>
-                                <TableCell style={{ width: '8%', color: 'white' }} align="left">Thương hiệu</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Loại</TableCell>
-                                <TableCell style={{ width: '5%', color: 'white' }} align="left">Số lượng</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Đơn giá</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Giảm giá</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Bảo hành</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="center">Thao Tác</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Trạng thái</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {(rowsPerPage > 0
-                                ? products.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                : products
-                            ).map((row) => (
+    const showCustomer = function (items) {
+        if (items.length > 0) {
+            if (rowsPerPage > 0) {
+                return (
+                    items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        .map(function (row) {
+                            return (
                                 <StyledTableRow key={row.id_product}>
                                     <StyledTableCell component="th" scope="row" align="left">
                                         {row.id_product}
@@ -267,7 +339,7 @@ function ProductManagementHome() {
                                         <Stack direction="row" spacing={2} justifyContent={'center'}>
                                             <ProductManagementFormView IDProduct={row.id_product} />
                                             <ProductManagementFormEdit IDProduct={row.id_product} />
-                                            <ProductManagementFormUpdateImage IDProduct={row.id_product} handleResetPage={handleResetPage} resetPage={resetPage}/>
+                                            <ProductManagementFormUpdateImage IDProduct={row.id_product} handleResetPage={handleResetPage} resetPage={resetPage} />
                                             <ProductManagementStatus product={row} handleResetPage={handleResetPage} />
                                         </Stack>
                                     </StyledTableCell>
@@ -279,8 +351,131 @@ function ProductManagementHome() {
                                         }
                                     </StyledTableCell>
                                 </StyledTableRow>
-                            ))}
+                            )
+                        }
+                        )
+                )
+            }
+        } else {
+            return (
+                <StyledTableRow>
+                    <StyledTableCell colSpan={11} component="th" scope="row" align="left">
+                        Không tìm thấy kết quả tương ứng
+                    </StyledTableCell>
+                </StyledTableRow>
+            )
+        }
+    }
 
+    return (
+        <Box>
+            <Container maxWidth="xl">
+                <Box>
+                    <FormControl sx={{ m: 1, minWidth: 170 }}>
+                        <InputLabel htmlFor="outlined-adornment-search">Loại sản phẩm</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-filled-label"
+                            id="demo-simple-select-filled"
+                            value={chosenTypeProduct}
+                            label="Loại sản phẩm"
+                            onChange={handleChangeChosenTypeProduct}
+                        >
+                            <MenuItem value={'all'}>Tất cả</MenuItem>
+                            <MenuItem value={'cpu'}>Vi xử lý</MenuItem>
+                            <MenuItem value={'mainboard'}>Bo mạch chủ</MenuItem>
+                            <MenuItem value={'gpu'}>Card đồ hoạ</MenuItem>
+                            <MenuItem value={'ram'}>Ram</MenuItem>
+                            <MenuItem value={'psu'}>Nguồn</MenuItem>
+                            <MenuItem value={'harddisk'}>Ổ cứng</MenuItem>
+                            <MenuItem value={'cooling_system'}>Tản nhiệt</MenuItem>
+                            <MenuItem value={'casepc'}>Vỏ máy tính</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl sx={{ m: 1, minWidth: 170 }}>
+                        <InputLabel htmlFor="outlined-adornment-search">Danh Mục</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-filled-label"
+                            id="demo-simple-select-filled"
+                            value={searchField}
+                            label="Danh Mục"
+                            onChange={handleChangeSearchField}
+                        >
+                            <MenuItem value={1}>Mã sản phẩm</MenuItem>
+                            <MenuItem value={2}>Tên sản phẩm</MenuItem>
+                            <MenuItem value={3}>Thương hiệu</MenuItem>
+                        </Select>
+                    </FormControl>
+                    {/* TextField tim kiem */}
+                    <FormControl sx={{ m: 1, width: '60ch' }}>
+                        <InputLabel htmlFor="outlined-adornment-search">Tìm Kiếm</InputLabel>
+                        <OutlinedInput
+                            id="outlined-adornment-search"
+                            type="text"
+                            label="Tìm Kiếm"
+                            onChange={handleChangeSearchInput}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="button search"
+                                        edge="end"
+                                    >
+                                        <SearchIcon />
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                        />
+                    </FormControl>
+                    <FormControl sx={{ m: 1, minWidth: 170 }}>
+                        <InputLabel htmlFor="outlined-adornment-search">Trạng thái sản phẩm</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-filled-label"
+                            id="demo-simple-select-filled"
+                            value={chosenStatusProduct}
+                            label="Trạng thái sản phẩm"
+                            onChange={handleChangeChosenStatusProduct}
+                        >
+                            <MenuItem value={-1}>Tất cả</MenuItem>
+                            <MenuItem value={1}>Còn kinh doanh</MenuItem>
+                            <MenuItem value={0}>Tạm dừng kinh doanh</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Box>
+                <Stack direction="row" spacing={2} justifyContent="space-between">
+                    <Typography variant="p"
+                        sx={
+                            {
+                                fontSize: 30,
+                                color: "var(--color4)",
+                                fontWeight: "bold",
+                            }
+                        }
+                    >
+                        Quản lý sản phẩm
+                    </Typography>
+                    <ProductManagementFormAdd />
+                </Stack>
+                <Divider sx={{ marginBottom: 3 }}></Divider>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                        <TableHead>
+                            <TableRow style={{ backgroundColor: '#474747', color: 'white' }}>
+                                <TableCell style={{ width: '5%', color: 'white' }} align="left">Mã </TableCell>
+                                <TableCell style={{ width: '7%', color: 'white' }} align="left">Ảnh </TableCell>
+                                <TableCell style={{ width: '15%', color: 'white' }} align="left">Tên</TableCell>
+                                <TableCell style={{ width: '8%', color: 'white' }} align="left">Thương hiệu</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Loại</TableCell>
+                                <TableCell style={{ width: '5%', color: 'white' }} align="left">Số lượng</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Đơn giá</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Giảm giá</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Bảo hành</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="center">Thao Tác</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Trạng thái</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {
+                                showCustomer(chosenProducts)
+                            }
                             {emptyRows > 0 && (
                                 <StyledTableRow style={{ height: 53 * emptyRows }}>
                                     <StyledTableCell colSpan={10} />
@@ -292,7 +487,7 @@ function ProductManagementHome() {
                                 <TablePagination
                                     rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
                                     colSpan={11}
-                                    count={products.length}
+                                    count={chosenProducts.length}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     SelectProps={{

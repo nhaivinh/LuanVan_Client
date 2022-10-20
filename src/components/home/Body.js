@@ -48,7 +48,7 @@ const Body = () => {
             <Link to="/productByType/cpu" >
               <img
                 src="https://lh3.googleusercontent.com/ALoolTUg2Y5oRNEJNJjbUC3e6joNFwiY9zX9rB0EI1riSVZvlLq7jJ579KG_55RSCS0ObvlHKnaRoF5kmJmNamMEqavd4vRi=rw-w308"
-                width={'80%'}
+                width={'100%'}
               />
             </Link>
           </Box>
@@ -56,7 +56,7 @@ const Body = () => {
             <Link to="/productByType/gpu" >
               <img
                 src="https://lh3.googleusercontent.com/ALoolTUg2Y5oRNEJNJjbUC3e6joNFwiY9zX9rB0EI1riSVZvlLq7jJ579KG_55RSCS0ObvlHKnaRoF5kmJmNamMEqavd4vRi=rw-w308"
-                width={'80%'}
+                width={'100%'}
               />
             </Link>
           </Box>
@@ -64,7 +64,7 @@ const Body = () => {
             <Link to="/productByType/ram" >
               <img
                 src="https://lh3.googleusercontent.com/ALoolTUg2Y5oRNEJNJjbUC3e6joNFwiY9zX9rB0EI1riSVZvlLq7jJ579KG_55RSCS0ObvlHKnaRoF5kmJmNamMEqavd4vRi=rw-w308"
-                width={'80%'}
+                width={'100%'}
               />
             </Link>
           </Box>
@@ -72,15 +72,15 @@ const Body = () => {
             <Link to="/productByType/main" >
               <img
                 src="https://lh3.googleusercontent.com/ALoolTUg2Y5oRNEJNJjbUC3e6joNFwiY9zX9rB0EI1riSVZvlLq7jJ579KG_55RSCS0ObvlHKnaRoF5kmJmNamMEqavd4vRi=rw-w308"
-                width={'80%'}
+                width={'100%'}
               />
             </Link>
           </Box>
         </Box>
       </Container>
-      <Container>
-        <Box style={{ height: 500 }}>
-          here
+      <Container maxWidth="xl">
+        <Box style={{ height: 300 , backgroundColor: 'white', borderRadius: 10}}>
+          Sản phẩm nỗi bật
         </Box>
       </Container>
     </Box>

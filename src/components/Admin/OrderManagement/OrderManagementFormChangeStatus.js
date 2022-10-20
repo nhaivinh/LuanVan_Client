@@ -55,7 +55,7 @@ function OrderManagementFormChangeStatus({ idOrder, Order, idStaff, handleResetP
                 )
             case 2:
                 return (
-                    <Button variant='contained' size='small' color='success' onClick={() => handleSubmit(3)}>Hoàn thành vận chuyển</Button>
+                    <Button variant='contained' size='small' color='success' onClick={() => handleSubmit(3)}>Hoàn thành</Button>
                 )
             default:
                 break;

@@ -126,7 +126,7 @@ export default function StatisticHome() {
         }
         return (ExportPeriod)
     }
-
+    console.log(period)
     function handleInfoArrayFromPeriod(items) {
         return (items.filter(element => element.month === period.month && element.year === period.year))
     }
@@ -236,7 +236,7 @@ export default function StatisticHome() {
     return (
         <Box>
             <Container >
-                <Stack direction="row" spacing={2} justifyContent="space-between">
+                <Stack direction="row" spacing={2} justifyContent="space-between" style={{backgroundColor: 'white', padding: 20, borderRadius: 10, marginBottom: 10}}>
                     <Typography variant="p"
                         sx={
                             {
@@ -272,7 +272,6 @@ export default function StatisticHome() {
                     }
 
                 </Stack>
-                <Divider sx={{ marginBottom: 3 }}></Divider>
                 <Grid container spacing={2}>
                     <Grid item xs={3}>
                         <Box
@@ -442,46 +441,7 @@ export default function StatisticHome() {
                                         </Select>
                                     </FormControl>
                                 </Box>
-                            </Box>
-                            {/* <Doughnut
-                                data={{
-                                    labels: [
-                                        "Vi xử lý",
-                                        "Bo mạch chủ",
-                                        "Ram",
-                                        "Card đồ hoạ",
-                                        "Nguồn",
-                                        "Ổ cứng",
-                                        "Tản nhiệt",
-                                    ],
-                                    datasets: [
-                                        {
-                                            label: "Population (millions)",
-                                            backgroundColor: [
-                                                "#3e95cd",
-                                                "#8e5ea2",
-                                                "#3cba9f",
-                                                "#cd76fb",
-                                                "#c45850",
-                                                "#ffaa00",
-                                                "#254661"
-                                            ],
-                                            data: [
-                                                handleShowChartSellingProduct('cpu'),
-                                                handleShowChartSellingProduct('mainboard'),
-                                                handleShowChartSellingProduct('ram'),
-                                                handleShowChartSellingProduct('gpu'),
-                                                handleShowChartSellingProduct('psu'),
-                                                handleShowChartSellingProduct('harddisk'),
-                                                handleShowChartSellingProduct('cooling_system'),
-                                            ]
-                                        }
-                                    ]
-                                }}
-                                option={{
-
-                                }}
-                            /> */}
+                            </Box>                           
                             <Bar
                                 data={{
                                     labels: [

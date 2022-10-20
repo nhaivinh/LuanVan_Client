@@ -179,9 +179,17 @@ function AdminHomePage() {
                             >
                                 <MenuIcon />
                             </IconButton>
-                            <Typography variant="h6" noWrap component="div">
-                                Website Linh Kiện Máy Tính
-                            </Typography>
+                            <a href="/">
+                                <Box
+                                    style={{
+                                        display: 'flex',
+                                        paddingTop: 10,
+                                        paddingBottom: 15,
+                                        width: 100,
+                                    }}>
+                                    <img src={require('../../images/Logo/logoPCWhite.png')} width='160px' />
+                                </Box>
+                            </a>
                         </Box>
                         <Box
                             style={{
@@ -264,7 +272,7 @@ function AdminHomePage() {
                         }}
                         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                    >                       
+                    >
                         <MenuItem>
                             <ListItemIcon>
                                 <PersonAdd fontSize="small" />

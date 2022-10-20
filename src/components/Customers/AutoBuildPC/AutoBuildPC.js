@@ -624,7 +624,7 @@ function AutoBuildPC() {
     };
 
     return (
-        <Container maxWidth="xl" style={{ backgroundColor: 'rgb(248, 248, 252)', marginTop: 50, borderRadius: '10px' }}>
+        <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', marginTop: 50, borderRadius: '10px' }}>
             <Box
                 style={{
                     display: 'flex',

@@ -23,7 +23,13 @@ import { tableCellClasses } from '@mui/material/TableCell';
 import { Stack } from '@mui/system';
 import Divider from '@mui/material/Divider';
 import { Container } from '@mui/material';
-
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import StaffFormView from './StaffFormView';
 import StaffFormEdit from './StaffFormEdit';
 import StaffFormAdd from './StaffFormAdd';
@@ -115,6 +121,8 @@ function StaffManagementHome() {
 
     const [resetPage, setResetPage] = React.useState(false);
 
+    const [chosenStaffs, setChosenStaffs] = React.useState([])
+
     function handleResetPage() {
         setResetPage(!resetPage);
     }
@@ -123,7 +131,16 @@ function StaffManagementHome() {
         axios.get(`https://localhost:7253/api/Staff`)
             .then(res => {
                 const Staffs = res.data;
-                setStaffs(Staffs);
+                setChosenStaffs(Staffs)
+            })
+    }, [])
+
+
+    React.useEffect(() => {
+        axios.get(`https://localhost:7253/api/Staff`)
+            .then(res => {
+                const Staffs = res.data;
+                setStaffs(Staffs);             
             })
     }, [resetPage])
 
@@ -137,14 +154,190 @@ function StaffManagementHome() {
         setPage(newPage);
     };
 
+    const [searchField, setSearchField] = React.useState(1);
+
+    const [searchInput, setSearchInput] = React.useState('');
+
+    React.useEffect(() => {
+        handleChosenStaffs(staffs)
+    }, [searchField, searchInput])
+
+    const handleChangeSearchInput = (event) => {
+        setSearchInput(event.target.value)
+        setPage(0)
+    }
+
+    const handleChangeSearchField = (event) => {
+        setSearchField(event.target.value);
+    };
+
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
 
+    function removeAccents(str) {
+        var AccentsMap = [
+            "aàảãáạăằẳẵắặâầẩẫấậ",
+            "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
+            "dđ", "DĐ",
+            "eèẻẽéẹêềểễếệ",
+            "EÈẺẼÉẸÊỀỂỄẾỆ",
+            "iìỉĩíị",
+            "IÌỈĨÍỊ",
+            "oòỏõóọôồổỗốộơờởỡớợ",
+            "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
+            "uùủũúụưừửữứự",
+            "UÙỦŨÚỤƯỪỬỮỨỰ",
+            "yỳỷỹýỵ",
+            "YỲỶỸÝỴ"
+        ];
+        for (var i = 0; i < AccentsMap.length; i++) {
+            var re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');
+            var char = AccentsMap[i][0];
+            str = str.replace(re, char);
+        }
+        return str;
+    }
+
+    const handleChosenStaffs = function (Staffs) {
+        var SearchInput = removeAccents(searchInput.toLowerCase())
+        var exportStaffs = Staffs
+        if (SearchInput !== "") {
+            switch (searchField) {
+                case 1:
+                    exportStaffs = exportStaffs.filter(function (staff) {
+                        return (removeAccents(staff.name_staff.toLowerCase()).includes(SearchInput))
+                    })
+                    break;
+                case 2:
+                    exportStaffs = exportStaffs.filter(function (staff) {
+                        return (removeAccents(staff.email_staff.toLowerCase()).includes(SearchInput))
+                    })
+                    break;
+                case 3:
+                    exportStaffs = exportStaffs.filter(function (staff) {
+                        return (staff.identity_card_staff.includes(SearchInput))
+                    })
+                    break;
+                case 4:
+                    exportStaffs = exportStaffs.filter(function (staff) {
+                        return (removeAccents(staff.position.toLowerCase()).includes(SearchInput))
+                    })
+                    break;
+                case 5:
+                    exportStaffs = exportStaffs.filter(function (staff) {
+                        return (removeAccents(staff.address_staff.toLowerCase()).includes(SearchInput))
+                    })
+                    break;
+                case 6:
+                    exportStaffs = exportStaffs.filter(function (staff) {
+                        return (staff.phone_number_staff.includes(SearchInput))
+                    })
+                    break;
+                default:
+                    break;
+            }
+        }
+        handleResetPage()
+        setChosenStaffs(exportStaffs)
+    }
+
+    const showStaff = function (items) {
+        if (items.length > 0) {
+            if (rowsPerPage > 0) {
+                return (
+                    items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        .map(function (row) {
+                            return (
+                                <StyledTableRow key={row.id_staff}>
+                                    <StyledTableCell component="th" scope="row" align="left">
+                                        {row.id_staff}
+                                    </StyledTableCell>
+                                    <StyledTableCell component="th" scope="row" align="left">
+                                        {row.name_staff}
+                                    </StyledTableCell>
+                                    <StyledTableCell component="th" scope="row" align="left">
+                                        {row.email_staff}
+                                    </StyledTableCell>
+                                    <StyledTableCell component="th" scope="row" align="left">
+                                        {row.position}
+                                    </StyledTableCell>
+                                    <StyledTableCell component="th" scope="row" align="left">
+                                        {row.identity_card_staff}
+                                    </StyledTableCell>
+                                    <StyledTableCell component="th" scope="row" align="left">
+                                        {row.phone_number_staff}
+                                    </StyledTableCell>
+                                    <StyledTableCell component="th" scope="row" align="left">
+                                        {row.address_staff}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="center">
+                                        <Stack direction="row" spacing={2} justifyContent={'center'}>
+                                            <StaffFormView Staff={row} />
+                                            <StaffFormEdit Staff={row} handleResetPage={handleResetPage} />
+                                        </Stack>
+                                    </StyledTableCell>
+                                </StyledTableRow>
+                            )
+                        }
+                        )
+                )
+            }
+        } else {
+            return (
+                <StyledTableRow>
+                    <StyledTableCell colSpan={8} component="th" scope="row" align="left">
+                        Không tìm thấy kết quả tương ứng
+                    </StyledTableCell>
+                </StyledTableRow>
+            )
+        }
+    }
+
     return (
         <Box>
             <Container maxWidth="xl">
+                <Box>
+                    <FormControl sx={{ m: 1, minWidth: 170 }}>
+                        <InputLabel htmlFor="outlined-adornment-search">Danh Mục</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-filled-label"
+                            id="demo-simple-select-filled"
+                            value={searchField}
+                            label="Danh Mục"
+                            onChange={handleChangeSearchField}
+                        >
+                            <MenuItem value={1}>Họ Tên</MenuItem>
+                            <MenuItem value={2}>Email</MenuItem>
+                            <MenuItem value={3}>CCCD</MenuItem>
+                            <MenuItem value={4}>Chức vụ</MenuItem>
+                            <MenuItem value={5}>Địa chỉ</MenuItem>
+                            <MenuItem value={6}>Số điện thoại</MenuItem>
+
+                        </Select>
+                    </FormControl>
+                    {/* TextField tim kiem */}
+                    <FormControl sx={{ m: 1, width: '60ch' }}>
+                        <InputLabel htmlFor="outlined-adornment-search">Tìm Kiếm</InputLabel>
+                        <OutlinedInput
+                            id="outlined-adornment-search"
+                            type="text"
+                            label="Tìm Kiếm"
+                            onChange={handleChangeSearchInput}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="button search"
+                                        edge="end"
+                                    >
+                                        <SearchIcon />
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                        />
+                    </FormControl>
+                </Box>
                 <Stack direction="row" spacing={2} justifyContent="space-between">
                     <Typography variant="p"
                         sx={
@@ -175,45 +368,7 @@ function StaffManagementHome() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {(rowsPerPage > 0
-                                ? staffs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                : staffs
-                            ).map((row) => (
-                                <StyledTableRow key={row.id_staff}>
-                                    <StyledTableCell component="th" scope="row" align="left">
-                                        {row.id_staff}
-                                    </StyledTableCell>
-                                    <StyledTableCell component="th" scope="row" align="left">
-                                        {row.name_staff}
-                                    </StyledTableCell>
-                                    <StyledTableCell component="th" scope="row" align="left">
-                                        {row.email_staff}
-                                    </StyledTableCell>
-                                    <StyledTableCell component="th" scope="row" align="left">
-                                        {row.position}
-                                    </StyledTableCell>
-                                    <StyledTableCell component="th" scope="row" align="left">
-                                        {row.identity_card_staff}
-                                    </StyledTableCell>
-                                    <StyledTableCell component="th" scope="row" align="left">
-                                        {row.phone_number_staff}
-                                    </StyledTableCell>
-                                    <StyledTableCell component="th" scope="row" align="left">
-                                        {row.address_staff}
-                                    </StyledTableCell>
-                                    <StyledTableCell align="center">
-                                        <Stack direction="row" spacing={2} justifyContent={'center'}>
-                                            <StaffFormView Staff={row} />
-                                            <StaffFormEdit Staff={row} handleResetPage={handleResetPage} />
-                                        </Stack>
-                                    </StyledTableCell>
-                                </StyledTableRow>
-                            ))}
-                            {emptyRows > 0 && (
-                                <StyledTableRow style={{ height: 53 * emptyRows }}>
-                                    <StyledTableCell colSpan={10} />
-                                </StyledTableRow>
-                            )}
+                            {showStaff(chosenStaffs)}
                         </TableBody>
                         <TableFooter>
                             <StyledTableRow>

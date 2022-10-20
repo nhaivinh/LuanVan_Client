@@ -23,6 +23,14 @@ import { tableCellClasses } from '@mui/material/TableCell';
 import { Stack } from '@mui/system';
 import Divider from '@mui/material/Divider';
 import { Container } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+
 import ImportProductFormView from './ImportProductFormView';
 import ImportProductFormAdd from './ImportProductFormAdd';
 import ImportProductFormEdit from './ImportProductFormEdit';
@@ -113,6 +121,8 @@ function ImportProductHome() {
 
     const [importNotes, setImportNotes] = React.useState([])
 
+    const [chosenImportNotes, setChosenImportNotes] = React.useState([])
+
     const [detailImportNotes, setDetailImportNotes] = React.useState([])
 
     const [resetPage, setResetPage] = React.useState(false);
@@ -145,6 +155,14 @@ function ImportProductHome() {
                 setDetailImportNotes(DetailImportNotes);
             })
     }, [resetPage])
+
+    React.useEffect(() => {
+        axios.get(`https://localhost:7253/api/ImportNote`)
+            .then(res => {
+                const ImportNotes = res.data;
+                setChosenImportNotes(ImportNotes);
+            })
+    }, [])
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -181,9 +199,187 @@ function ImportProductHome() {
 
     }
 
+    function showFullNameProducts(IDImportNote) {
+        var filteredImportNotes = detailImportNotes
+        filteredImportNotes = detailImportNotes.filter(function (ImportNote) {
+            return (ImportNote.id_import_note === IDImportNote)
+        })
+        var result = filteredImportNotes.reduce((total, currentValue) =>
+            total + currentValue.name_product + " |\n", ""
+        );
+        return (
+            result
+        )
+    }
+
+    const [searchField, setSearchField] = React.useState(1);
+
+    const [searchInput, setSearchInput] = React.useState('');
+
+
+    React.useEffect(() => {
+        handleChosenImportNote(importNotes)
+    }, [searchField, searchInput, resetPage])
+
+    const handleChangeSearchInput = (event) => {
+        setSearchInput(event.target.value)
+        setPage(0)
+    }
+
+    const handleChangeSearchField = (event) => {
+        setSearchField(event.target.value);
+    };
+
+    function removeAccents(str) {
+        var AccentsMap = [
+            "aàảãáạăằẳẵắặâầẩẫấậ",
+            "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
+            "dđ", "DĐ",
+            "eèẻẽéẹêềểễếệ",
+            "EÈẺẼÉẸÊỀỂỄẾỆ",
+            "iìỉĩíị",
+            "IÌỈĨÍỊ",
+            "oòỏõóọôồổỗốộơờởỡớợ",
+            "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
+            "uùủũúụưừửữứự",
+            "UÙỦŨÚỤƯỪỬỮỨỰ",
+            "yỳỷỹýỵ",
+            "YỲỶỸÝỴ"
+        ];
+        for (var i = 0; i < AccentsMap.length; i++) {
+            var re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');
+            var char = AccentsMap[i][0];
+            str = str.replace(re, char);
+        }
+        return str;
+    }
+
+    const handleChosenImportNote = function (ImportNotes) {
+        var SearchInput = removeAccents(searchInput.toLowerCase())
+        var exportImportNotes = ImportNotes
+
+        if (SearchInput !== "") {
+            switch (searchField) {
+                case 1:
+                    exportImportNotes = exportImportNotes.filter(function (importnote) {
+                        return (('' + importnote.id_import_note).includes(SearchInput))
+                    })
+                    break;
+                case 2:
+                    exportImportNotes = exportImportNotes.filter(function (importnote) {
+                        return (removeAccents(importnote.name_supplier.toLowerCase()).includes(SearchInput))
+                    })
+                    break;
+                case 3:
+                    exportImportNotes = exportImportNotes.filter(function (importnote) {
+                        return (removeAccents(importnote.name_staff.toLowerCase()).includes(SearchInput))
+                    })
+                    break;
+                case 4:
+                    exportImportNotes = exportImportNotes.filter(function (importnote) {
+                        return (removeAccents(showFullNameProducts(importnote.id_import_note).toLowerCase()).includes(SearchInput))
+                    })
+                    break;
+                default:
+                    break;
+            }
+        }
+        handleResetPage()
+        setChosenImportNotes(exportImportNotes)
+    }
+
+    const showImportNote = function (items) {
+        if (items.length > 0) {
+            if (rowsPerPage > 0) {
+                return (
+                    items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        .map((row) => (
+                            <StyledTableRow key={row.id_import_note}>
+                                <StyledTableCell component="th" scope="row" align="left">
+                                    {row.id_import_note}
+                                </StyledTableCell>
+                                <StyledTableCell component="th" scope="row" align="left">
+                                    {row.name_supplier}
+                                </StyledTableCell>
+                                <StyledTableCell component="th" scope="row" align="left">
+                                    {row.name_staff}
+                                </StyledTableCell>
+                                <StyledTableCell component="th" scope="row" align="left">
+                                    {showNameProducts(row.id_import_note)}
+                                </StyledTableCell>
+                                <StyledTableCell component="th" scope="row" align="left">
+                                    {row.total_price_import.toLocaleString('vi-VI',
+                                        {
+                                            style: 'currency',
+                                            currency: 'VND'
+                                        })}
+                                </StyledTableCell>
+                                <StyledTableCell component="th" scope="row" align="left">
+                                    {getFormattedDate(new Date(row.import_date))}
+                                </StyledTableCell>
+                                <StyledTableCell align="center">
+                                    <Stack direction="row" spacing={2} justifyContent={'center'}>
+                                        <ImportProductFormView ImportNotes={row} />
+                                        <ImportProductFormEdit ImportNote={row} handleResetPage={handleResetPage} />
+                                        <ImportProductFormDelete idImportNote={row.id_import_note} handleResetPage={handleResetPage} />
+                                    </Stack>
+                                </StyledTableCell>
+                            </StyledTableRow>
+                        )
+                        )
+                )
+            }
+        } else {
+            return (
+                <StyledTableRow>
+                    <StyledTableCell colSpan={11} component="th" scope="row" align="left">
+                        Không tìm thấy kết quả tương ứng
+                    </StyledTableCell>
+                </StyledTableRow>
+            )
+        }
+    }
+
     return (
         <Box>
             <Container maxWidth="xl">
+                <Box>
+                    <FormControl sx={{ m: 1, minWidth: 170 }}>
+                        <InputLabel htmlFor="outlined-adornment-search">Danh Mục</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-filled-label"
+                            id="demo-simple-select-filled"
+                            value={searchField}
+                            label="Danh Mục"
+                            onChange={handleChangeSearchField}
+                        >
+                            <MenuItem value={1}>Mã nhập hàng</MenuItem>
+                            <MenuItem value={2}>Tên nhà cung cấp</MenuItem>
+                            <MenuItem value={3}>Tên nhân viên</MenuItem>
+                            <MenuItem value={4}>Tên sản phẩm</MenuItem>
+                        </Select>
+                    </FormControl>
+                    {/* TextField tim kiem */}
+                    <FormControl sx={{ m: 1, width: '60ch' }}>
+                        <InputLabel htmlFor="outlined-adornment-search">Tìm Kiếm</InputLabel>
+                        <OutlinedInput
+                            id="outlined-adornment-search"
+                            type="text"
+                            label="Tìm Kiếm"
+                            onChange={handleChangeSearchInput}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="button search"
+                                        edge="end"
+                                    >
+                                        <SearchIcon />
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                        />
+                    </FormControl>
+                </Box>
                 <Stack direction="row" spacing={2} justifyContent="space-between">
                     <Typography variant="p"
                         sx={
@@ -213,43 +409,7 @@ function ImportProductHome() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {(rowsPerPage > 0
-                                ? importNotes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                : importNotes
-                            ).map((row) => (
-                                <StyledTableRow key={row.id_import_note}>
-                                    <StyledTableCell component="th" scope="row" align="left">
-                                        {row.id_import_note}
-                                    </StyledTableCell>
-                                    <StyledTableCell component="th" scope="row" align="left">
-                                        {row.name_supplier}
-                                    </StyledTableCell>
-                                    <StyledTableCell component="th" scope="row" align="left">
-                                        {row.name_staff}
-                                    </StyledTableCell>
-                                    <StyledTableCell component="th" scope="row" align="left">
-                                        {showNameProducts(row.id_import_note)}
-                                    </StyledTableCell>
-                                    <StyledTableCell component="th" scope="row" align="left">
-                                        {row.total_price_import.toLocaleString('vi-VI',
-                                            {
-                                                style: 'currency',
-                                                currency: 'VND'
-                                            })}
-                                    </StyledTableCell>
-                                    <StyledTableCell component="th" scope="row" align="left">
-                                        {getFormattedDate(new Date(row.import_date))}
-                                    </StyledTableCell>
-                                    <StyledTableCell align="center">
-                                        <Stack direction="row" spacing={2} justifyContent={'center'}>
-                                            <ImportProductFormView ImportNotes={row} />
-                                            <ImportProductFormEdit ImportNote={row} handleResetPage={handleResetPage} />
-                                            <ImportProductFormDelete idImportNote={row.id_import_note} handleResetPage={handleResetPage} />
-                                        </Stack>
-                                    </StyledTableCell>
-                                </StyledTableRow>
-                            ))}
-
+                            {showImportNote(chosenImportNotes)}
                             {emptyRows > 0 && (
                                 <StyledTableRow style={{ height: 53 * emptyRows }}>
                                     <StyledTableCell colSpan={10} />

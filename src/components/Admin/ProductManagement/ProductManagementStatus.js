@@ -60,6 +60,7 @@ export default function ProductManagementStatus({ product, handleResetPage }) {
                         dispatch(setOpenSnackBar());
                         dispatch(setMessage(response.data.message));
                         dispatch(setSeverity(response.data.severity));
+                        handleResetPage();
                     })
                     .catch((err) => {
                         if (err.response) {

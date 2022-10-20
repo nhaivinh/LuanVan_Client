@@ -23,6 +23,14 @@ import { tableCellClasses } from '@mui/material/TableCell';
 import { Stack } from '@mui/system';
 import Divider from '@mui/material/Divider';
 import { Container } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+
 import CustomerFormEdit from './CustomerFormEdit';
 import CustomerFormView from './CustomerFormView';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -136,6 +144,14 @@ function CustomerManagementHome() {
             })
     }, [resetPage])
 
+    React.useEffect(() => {
+        axios.get(`https://localhost:7253/api/Customer`)
+            .then(res => {
+                const Customers = res.data;
+                setChosenCustomer(Customers);
+            })
+    }, [])
+
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -170,42 +186,95 @@ function CustomerManagementHome() {
         }
     }
 
-    return (
-        <Box>
-            <Container maxWidth="xl">
-                <Typography variant="p"
-                    sx={
-                        {
-                            fontSize: 30,
-                            color: "var(--color4)",
-                            fontWeight: "bold",
+    const [chosenCustomer, setChosenCustomer] = React.useState([])
 
-                        }
-                    }
-                >
-                    Quản lý thông tin khách hàng
-                </Typography>
-                <Divider sx={{ marginBottom: 3 }}></Divider>
-                <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-                        <TableHead>
-                            <TableRow style={{ backgroundColor: '#474747', color: 'white' }}>
-                                <TableCell style={{ width: '5%', color: 'white' }} align="left">Mã</TableCell>
-                                <TableCell style={{ width: '15%', color: 'white' }} align="left">Tên khách hàng</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Số điện thoại</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Căn cước</TableCell>
-                                <TableCell style={{ width: '15%', color: 'white' }} align="left">Email</TableCell>
-                                <TableCell style={{ width: '15%', color: 'white' }} align="left">Ngày sinh</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Giới tính</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Ngày đăng ký</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="center">Thao tác</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {(rowsPerPage > 0
-                                ? customers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                : customers
-                            ).map((row) => (
+    const [searchField, setSearchField] = React.useState(1);
+
+    const [searchInput, setSearchInput] = React.useState('');
+
+    React.useEffect(() => {
+        handleChosenCustomer(customers)
+    }, [searchField, searchInput])
+
+    const handleChangeSearchInput = (event) => {
+        setSearchInput(event.target.value)
+        setPage(0)
+    }
+
+    const handleChangeSearchField = (event) => {
+        setSearchField(event.target.value);
+    };
+
+    function removeAccents(str) {
+        var AccentsMap = [
+            "aàảãáạăằẳẵắặâầẩẫấậ",
+            "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
+            "dđ", "DĐ",
+            "eèẻẽéẹêềểễếệ",
+            "EÈẺẼÉẸÊỀỂỄẾỆ",
+            "iìỉĩíị",
+            "IÌỈĨÍỊ",
+            "oòỏõóọôồổỗốộơờởỡớợ",
+            "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
+            "uùủũúụưừửữứự",
+            "UÙỦŨÚỤƯỪỬỮỨỰ",
+            "yỳỷỹýỵ",
+            "YỲỶỸÝỴ"
+        ];
+        for (var i = 0; i < AccentsMap.length; i++) {
+            var re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');
+            var char = AccentsMap[i][0];
+            str = str.replace(re, char);
+        }
+        return str;
+    }
+
+    const handleChosenCustomer = function (Customer) {
+        var SearchInput = removeAccents(searchInput.toLowerCase())
+        var exportCustomers = Customer
+
+        if (SearchInput !== "") {
+            switch (searchField) {
+                case 1:
+                    exportCustomers = exportCustomers.filter(function (customer) {
+                        return (('' + customer.id_customer).includes(SearchInput))
+                    })
+                    break;
+                case 2:
+                    exportCustomers = exportCustomers.filter(function (customer) {
+                        return (removeAccents(customer.name_customer.toLowerCase()).includes(SearchInput))
+                    })
+                    break;
+                case 3:
+                    exportCustomers = exportCustomers.filter(function (customer) {
+                        return ((customer.phone_number_customer).includes(SearchInput))
+                    })
+                    break;
+                case 4:
+                    exportCustomers = exportCustomers.filter(function (customer) {
+                        return (removeAccents(customer.email_customer.toLowerCase()).includes(SearchInput))
+                    })
+                    break;
+                case 5:
+                    exportCustomers = exportCustomers.filter(function (customer) {
+                        return (('' + customer.identity_card_customer).includes(SearchInput))
+                    })
+                    break;
+                default:
+                    break;
+            }
+        }
+        handleResetPage()
+        setChosenCustomer(exportCustomers)
+    }
+
+    const showCustomers = function (items) {
+        if (items.length > 0) {
+            if (rowsPerPage > 0) {
+                return (
+                    items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        .map(function (row) {
+                            return (
                                 <StyledTableRow key={row.id_customer}>
                                     <StyledTableCell component="th" scope="row" align="left">
                                         {row.id_customer}
@@ -246,8 +315,93 @@ function CustomerManagementHome() {
                                         </Stack>
                                     </StyledTableCell>
                                 </StyledTableRow>
-                            ))}
+                            )
+                        }
+                        )
+                )
+            }
+        } else {
+            return (
+                <StyledTableRow>
+                    <StyledTableCell key={-1} colSpan={11} component="th" scope="row" align="left">
+                        Không tìm thấy kết quả tương ứng
+                    </StyledTableCell>
+                </StyledTableRow>
+            )
+        }
+    }
 
+    return (
+        <Box>
+            <Container maxWidth="xl">
+                <Box>
+                    <FormControl sx={{ m: 1, minWidth: 170 }}>
+                        <InputLabel htmlFor="outlined-adornment-search">Danh Mục</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-filled-label"
+                            id="demo-simple-select-filled"
+                            value={searchField}
+                            label="Danh Mục"
+                            onChange={handleChangeSearchField}
+                        >
+                            <MenuItem value={1}>Mã Khách Hàng</MenuItem>
+                            <MenuItem value={2}>Tên khách hàng</MenuItem>
+                            <MenuItem value={3}>Số điện thoại</MenuItem>
+                            <MenuItem value={4}>Email</MenuItem>
+                            <MenuItem value={5}>Căn cước công dân</MenuItem>
+                        </Select>
+                    </FormControl>
+                    {/* TextField tim kiem */}
+                    <FormControl sx={{ m: 1, width: '60ch' }}>
+                        <InputLabel htmlFor="outlined-adornment-search">Tìm Kiếm</InputLabel>
+                        <OutlinedInput
+                            id="outlined-adornment-search"
+                            type="text"
+                            label="Tìm Kiếm"
+                            onChange={handleChangeSearchInput}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="button search"
+                                        edge="end"
+                                    >
+                                        <SearchIcon />
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                        />
+                    </FormControl>
+                </Box>
+                <Typography variant="p"
+                    sx={
+                        {
+                            fontSize: 30,
+                            color: "var(--color4)",
+                            fontWeight: "bold",
+
+                        }
+                    }
+                >
+                    Quản lý thông tin khách hàng
+                </Typography>
+                <Divider sx={{ marginBottom: 3 }}></Divider>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                        <TableHead>
+                            <TableRow style={{ backgroundColor: '#474747', color: 'white' }}>
+                                <TableCell style={{ width: '5%', color: 'white' }} align="left">Mã</TableCell>
+                                <TableCell style={{ width: '15%', color: 'white' }} align="left">Tên khách hàng</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Số điện thoại</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Căn cước</TableCell>
+                                <TableCell style={{ width: '15%', color: 'white' }} align="left">Email</TableCell>
+                                <TableCell style={{ width: '15%', color: 'white' }} align="left">Ngày sinh</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Giới tính</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Ngày đăng ký</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="center">Thao tác</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {showCustomers(chosenCustomer)}
                             {emptyRows > 0 && (
                                 <StyledTableRow style={{ height: 53 * emptyRows }}>
                                     <StyledTableCell colSpan={10} />

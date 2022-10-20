@@ -1,8 +1,9 @@
 .clientCustomer {
-    background: linear-gradient(to bottom, #B721FF, #2AF598, #fec051, #FEE140, #FA709A);
+    // background: linear-gradient(to bottom, #B721FF, #2AF598, #fec051, #FEE140, #FA709A);
     background-size: 100%;
-    background-repeat: no-repeat;
+    // background-repeat: no-repeat;
     overflow: overlay;
+    background-image: url("https://img.freepik.com/free-photo/low-angle-shot-mesmerizing-starry-sky_181624-27925.jpg?w=1380&t=st=1666258139~exp=1666258739~hmac=b72c76165a7faf4a469076d17d8a549d1b935c30f8531641318bc41a527610a3");
 }
 
 .clientCustomer:before {
@@ -12,11 +13,11 @@
   bottom: 0;
   width: 100%;
   z-index: -1;
-  background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.2), #21D4FD 75%);
+  background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.2), #c7985e 70%);
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 7px;
 }
 
 /* Track */
