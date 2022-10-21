@@ -128,15 +128,7 @@ function ProductManagementHome() {
     function handleResetPage() {
         setResetPage(!resetPage);
     }
-
-    React.useEffect(() => {
-        axios.get(`https://localhost:7253/api/Product`)
-            .then(res => {
-                const Products = res.data;
-                setChosenProducts(Products)
-            })
-    }, [])
-
+    
     React.useEffect(() => {
         axios.get(`https://localhost:7253/api/Product`)
             .then(res => {
@@ -144,6 +136,11 @@ function ProductManagementHome() {
                 setProducts(Products)
             })
     }, [resetPage])
+
+    React.useEffect(() => {
+        setChosenProducts(products)
+    }, [products])
+    
 
     const [searchField, setSearchField] = React.useState(1);
 
