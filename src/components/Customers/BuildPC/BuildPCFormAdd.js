@@ -13,6 +13,27 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
+import { styled } from '@mui/material/styles';
+import { orange } from '@mui/material/colors';
+
+const ColorButtonContained = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[500]),
+    fontWeight: 900,
+    backgroundColor: orange[500],
+    '&:hover': {
+        backgroundColor: orange[700],
+    },
+}));
+
+const ColorButtonOutline = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[600]),
+    fontWeight: 900,
+    backgroundColor: 'white',
+    border: '1px solid ' + orange[500],
+    '&:hover': {
+        border: '1px solid ' + orange[700],
+    },
+}));
 
 const style = {
     position: 'absolute',
@@ -998,9 +1019,9 @@ function BuildPCFormAdd({ Type, handleSetChosenProduct, Products, chosenProducts
 
     return (
         <div>
-            <Button onClick={handleOpen} variant="contained" color="primary">
+            <ColorButtonContained onClick={handleOpen} variant="contained" color="primary">
                 Chọn
-            </Button>
+            </ColorButtonContained>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -1052,49 +1073,49 @@ function BuildPCFormAdd({ Type, handleSetChosenProduct, Products, chosenProducts
                             >
                                 <Typography>Sắp xếp Theo: </Typography>
                                 {sortOption === "price-asc" ?
-                                    <Button
+                                    <ColorButtonContained
                                         variant="contained"
                                         onClick={() => { setSortOption("") }}
                                         style={{ marginLeft: 10 }}>
                                         Giá giảm dần
-                                    </Button>
+                                    </ColorButtonContained>
                                     :
-                                    <Button
+                                    <ColorButtonOutline
                                         variant="outlined"
                                         onClick={() => { setSortOption("price-asc") }}
                                         style={{ marginLeft: 10 }}>
                                         Giá giảm dần
-                                    </Button>
+                                    </ColorButtonOutline>
                                 }
                                 {sortOption === "price-desc" ?
-                                    <Button
+                                    <ColorButtonContained
                                         variant="contained"
                                         onClick={() => { setSortOption("") }}
                                         style={{ marginLeft: 10 }}>
                                         Giá Tăng dần
-                                    </Button>
+                                    </ColorButtonContained>
                                     :
-                                    <Button
+                                    <ColorButtonOutline
                                         variant="outlined"
                                         onClick={() => { setSortOption("price-desc") }}
                                         style={{ marginLeft: 10 }}>
                                         Giá Tăng dần
-                                    </Button>
+                                    </ColorButtonOutline>
                                 }
                                 {sortOption === "discount" ?
-                                    <Button
+                                    <ColorButtonContained
                                         variant="contained"
                                         onClick={() => { setSortOption("") }}
                                         style={{ marginLeft: 10 }}>
                                         Khuyến mãi
-                                    </Button>
+                                    </ColorButtonContained>
                                     :
-                                    <Button
+                                    <ColorButtonOutline
                                         variant="outlined"
                                         onClick={() => { setSortOption("discount") }}
                                         style={{ marginLeft: 10 }}>
                                         Khuyến mãi
-                                    </Button>
+                                    </ColorButtonOutline>
                                 }
                             </Box>
                             <Box
@@ -1210,9 +1231,9 @@ function BuildPCFormAdd({ Type, handleSetChosenProduct, Products, chosenProducts
                                                     </Typography>
                                                 }
                                             </Box>
-                                            <Button variant='contained' onClick={() => { handleClick(Product.id_product) }}>
+                                            <ColorButtonContained variant='contained' onClick={() => { handleClick(Product.id_product) }}>
                                                 Chọn
-                                            </Button>
+                                            </ColorButtonContained>
                                         </Box>
                                     </Box>
                                 )

@@ -23,20 +23,17 @@ import FormLabel from '@mui/material/FormLabel'
 import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
 // import { cookie, CreateCookie, GetCookie } from '../../Cookie/CookieFunc';
-const useStyles = makeStyles({
-    button: {
-        color: '#ffa500',
-        '&:hover': {
-            color: '#fff',
-        },
+import { styled } from '@mui/material/styles';
+import { orange } from '@mui/material/colors';
+
+const ColorButtonContained = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[500]),
+    fontWeight: 900,
+    backgroundColor: orange[500],
+    '&:hover': {
+        backgroundColor: orange[700],
     },
-    orangeButton: {
-        color: '#ffa500',
-        '&:hover': {
-            color: '#fff',
-        },
-    }
-})
+}));
 
 function getFormattedDate(date) {
     var year = date.getFullYear();
@@ -50,8 +47,6 @@ function getFormattedDate(date) {
 }
 
 const Register = () => {
-
-    const classes = useStyles();
 
     const navigate = useNavigate();
 
@@ -193,7 +188,7 @@ const Register = () => {
     };
 
     return (
-        <div>
+        <div style={{ minHeight: 600 }}>
             <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', borderRadius: '10px', marginTop: 50 }}>
                 <Box style={{
                     display: 'flex',
@@ -312,8 +307,8 @@ const Register = () => {
                         </Box>
                     </Stack>
                     <Stack direction="row" spacing={2} justifyContent="center" marginBottom={5}>
-                        <Button variant="contained" onClick={CheckRegister}>Đăng ký</Button>
-                        <Button variant="contained">Quay về</Button>
+                        <ColorButtonContained variant="contained" onClick={CheckRegister}>Đăng ký</ColorButtonContained>
+                        <ColorButtonContained variant="contained">Quay về</ColorButtonContained>
                     </Stack>
                 </Box>
             </Container >

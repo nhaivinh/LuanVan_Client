@@ -18,6 +18,17 @@ import Register from "./Register";
 import Container from '@mui/material/Container';
 import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
+import { styled } from '@mui/material/styles';
+import { orange } from '@mui/material/colors';
+
+const ColorButtonContained = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[500]),
+    fontWeight: 900,
+    backgroundColor: orange[500],
+    '&:hover': {
+        backgroundColor: orange[700],
+    },
+}));
 
 const useStyles = makeStyles({
     button: {
@@ -57,9 +68,6 @@ const Login = ({resetPage, handleResetPage}) => {
 
 
     }
-
-    const handleClose = () => setOpen(false);
-
     const Checklogin = () => {
         if (login.Username.length !== 0 && login.Password.length !== 0) {
             axios.post('https://localhost:7253/api/Login', login)
@@ -84,8 +92,8 @@ const Login = ({resetPage, handleResetPage}) => {
     }
 
     return (
-        <div>
-            <Container maxWidth="lg" style={{ backgroundColor: 'white', borderRadius: '10px', marginTop: 50 , height: 400}}>
+        <div style={{ minHeight: 600 }}>
+            <Container maxWidth="lg" style={{ backgroundColor: 'white', borderRadius: '5px', marginTop: 50 , height: 400 }}>
                 <Box style={{
                     display: 'flex',
                     borderRadius: 10,
@@ -120,8 +128,8 @@ const Login = ({resetPage, handleResetPage}) => {
                         </Box>
                     </Stack>
                     <Stack direction="row" spacing={2} justifyContent="center" marginBottom={5}>
-                        <Button variant="contained" onClick={Checklogin}>Đăng Nhập</Button>
-                        <Link to="/register"><Button variant="contained">Đăng ký</Button></Link>
+                        <ColorButtonContained variant="contained" onClick={Checklogin}>Đăng Nhập</ColorButtonContained>
+                        <Link to="/register"><ColorButtonContained variant="contained">Đăng ký</ColorButtonContained></Link>
                     </Stack>
                 </Box>
             </Container>

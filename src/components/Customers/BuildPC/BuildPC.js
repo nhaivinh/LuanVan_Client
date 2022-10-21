@@ -13,6 +13,27 @@ import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import { styled } from '@mui/material/styles';
+import { orange } from '@mui/material/colors';
+
+const ColorButtonContained = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[500]),
+    fontWeight: 900,
+    backgroundColor: orange[500],
+    '&:hover': {
+        backgroundColor: orange[700],
+    },
+}));
+
+const ColorButtonOutline = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[600]),
+    fontWeight: 900,
+    backgroundColor: 'white',
+    border: '1px solid ' + orange[500],
+    '&:hover': {
+        border: '1px solid ' + orange[700],
+    },
+}));
 
 function BuildPC() {
     const [chosenPC, setChosenPC] = React.useState({
@@ -1731,7 +1752,7 @@ function BuildPC() {
                                 flexDirection: 'column',
                                 justifyContent: 'space-between'
                             }}>
-                                <Button
+                                <ColorButtonContained
                                     variant="outlined"
                                     style={{
                                         width: "200px",
@@ -1739,8 +1760,8 @@ function BuildPC() {
                                     onClick={handleShowAnalyze}
                                 >
                                     Phân tích cấu hình
-                                </Button>
-                                <Button variant="outlined"
+                                </ColorButtonContained>
+                                <ColorButtonOutline variant="outlined"
                                     style={{
                                         width: "200px",
 
@@ -1748,13 +1769,13 @@ function BuildPC() {
                                     onClick={handleClickAdd}
                                 >
                                     Thêm vào giỏ hàng
-                                </Button>
-                                <Button variant="contained" style={{
+                                </ColorButtonOutline>
+                                <ColorButtonContained variant="contained" style={{
                                     width: "200px",
                                 }}
                                     onClick={handleClickBuyNow}>
                                     Mua ngay
-                                </Button>
+                                </ColorButtonContained>
                             </Box>
                         </Box>
                     </Box>

@@ -21,8 +21,9 @@ function CatergoryList() {
     return (
         <Box
             style={{
-                borderRadius: '0.5rem',
-                backgroundColor: 'rgb(255, 255, 255)',
+                borderRadius: '0.5rem',   
+                backgroundImage: 'url("https://img.freepik.com/free-photo/low-angle-shot-mesmerizing-starry-sky_181624-27925.jpg?w=1380&t=st=1666258139~exp=1666258739~hmac=b72c76165a7faf4a469076d17d8a549d1b935c30f8531641318bc41a527610a3")',
+                opacity: 0.8,
                 position: 'relative',
                 overflow: 'hidden',
                 width: '14.375rem',
@@ -38,7 +39,7 @@ function CatergoryList() {
                         <ListItemIcon>
                             <img src={require('../../images/Icon/cpu.svg').default} width={40}/>
                         </ListItemIcon>
-                        <Typography style={{color:'#2E2EFF'}}>Bộ Vi Xử Lý</Typography>
+                        <Typography style={{color:'#FFA500'}}>Bộ Vi Xử Lý</Typography>
                     </ListItemButton>
                 </Link>
                 <Link to="/search/?type=gpu&page=1" >
@@ -46,7 +47,7 @@ function CatergoryList() {
                         <ListItemIcon>
                             <img src={require('../../images/Icon/vga.svg').default} width={40} />
                         </ListItemIcon>
-                        <Typography style={{color:'#2E2EFF'}}>Card Đồ Hoạ</Typography>
+                        <Typography style={{color:'#FFA500'}}>Card Đồ Hoạ</Typography>
                     </ListItemButton>
                 </Link>
                 <Link to="/search/?type=mainboard&page=1" >
@@ -54,7 +55,7 @@ function CatergoryList() {
                         <ListItemIcon>
                             <img src={require('../../images/Icon/main.svg').default} width={40} />
                         </ListItemIcon>
-                        <Typography style={{color:'#2E2EFF'}}>Mainboard</Typography>
+                        <Typography style={{color:'#FFA500'}}>Mainboard</Typography>
                     </ListItemButton>
                 </Link>
                 <Link to="/search/?type=ram&page=1" >
@@ -62,7 +63,7 @@ function CatergoryList() {
                         <ListItemIcon>
                             <img src={require('../../images/Icon/ram.svg').default} width={40} />
                         </ListItemIcon>
-                        <Typography style={{color:'#2E2EFF'}}>Ram</Typography>
+                        <Typography style={{color:'#FFA500'}}>Ram</Typography>
                     </ListItemButton>
                 </Link>
                 <Link to="/search/?type=harddisk&page=1" >
@@ -70,7 +71,7 @@ function CatergoryList() {
                         <ListItemIcon>
                             <img src={require('../../images/Icon/ssd.svg').default} width={40} />
                         </ListItemIcon>
-                        <Typography style={{color:'#2E2EFF'}}>Ổ Cứng</Typography>
+                        <Typography style={{color:'#FFA500'}}>Ổ Cứng</Typography>
                     </ListItemButton>
                 </Link>
                 <Link to="/search/?type=psu&page=1" >
@@ -78,7 +79,7 @@ function CatergoryList() {
                         <ListItemIcon>
                             <img src={require('../../images/Icon/psu.svg').default} width={40} />
                         </ListItemIcon>
-                        <Typography style={{color:'#2E2EFF'}}>Nguồn</Typography>
+                        <Typography style={{color:'#FFA500'}}>Nguồn</Typography>
                     </ListItemButton>
                 </Link>
                 <Link to="/search/?type=casepc&page=1" >
@@ -86,7 +87,7 @@ function CatergoryList() {
                         <ListItemIcon>
                             <img src={require('../../images/Icon/case.svg').default} width={40} />
                         </ListItemIcon>
-                        <Typography style={{color:'#2E2EFF'}}>Vỏ Case</Typography>
+                        <Typography style={{color:'#FFA500'}}>Vỏ Case</Typography>
                     </ListItemButton>
                 </Link>
                 <Link to="/search/?type=cooling_system&page=1" >
@@ -94,7 +95,7 @@ function CatergoryList() {
                         <ListItemIcon>
                             <img src={require('../../images/Icon/fan.svg').default} width={40} />
                         </ListItemIcon>
-                        <Typography style={{color:'#2E2EFF'}}>Quạt Tản Nhiệt</Typography>
+                        <Typography style={{color:'#FFA500'}}>Quạt Tản Nhiệt</Typography>
                     </ListItemButton>
                 </Link>
             </List>

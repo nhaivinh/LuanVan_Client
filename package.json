@@ -20,6 +20,7 @@
     "canvasjs-react-charts": "^1.0.5",
     "chart.js": "^3.9.1",
     "chartjs-plugin-datalabels": "^2.1.0",
+    "material-ui": "^1.0.0-beta.47",
     "material-ui-search-bar": "^1.0.0",
     "node-sass": "^7.0.3",
     "react": "^18.2.0",

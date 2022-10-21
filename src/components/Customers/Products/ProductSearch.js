@@ -16,9 +16,59 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Slider from '@mui/material/Slider';
 import { TextField } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { orange } from '@mui/material/colors';
+
+const ColorSlider = styled(Slider)(({ theme }) => ({
+    color: orange[400],
+    height: 3,
+    padding: '13px 0',
+    '& .MuiSlider-thumb': {
+        height: 20,
+        width: 20,
+        backgroundColor: '#fff',
+        border: '1px solid currentColor',
+        '&:hover': {
+            boxShadow: '0 0 0 8px rgba(58, 133, 137, 0.16)',
+        },
+        '& .airbnb-bar': {
+            height: 9,
+            width: 1,
+            backgroundColor: 'currentColor',
+            marginLeft: 1,
+            marginRight: 1,
+        },
+    },
+    '& .MuiSlider-track': {
+        height: 3,
+    },
+    '& .MuiSlider-rail': {
+        color: theme.palette.mode === 'dark' ? '#bfbfbf' : '#d8d8d8',
+        opacity: theme.palette.mode === 'dark' ? undefined : 1,
+        height: 3,
+    },
+}));
+
+const ColorButtonContained = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[500]),
+    fontWeight: 900,
+    backgroundColor: orange[500],
+    '&:hover': {
+        backgroundColor: orange[700],
+    },
+}));
+
+const ColorButtonOutline = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[600]),
+    fontWeight: 900,
+    backgroundColor: 'white',
+    border: '1px solid ' + orange[500],
+    '&:hover': {
+        border: '1px solid ' + orange[700],
+    },
+}));
 
 function ProductSearch() {
-
     const [products, setProducts] = React.useState([])
 
     const [cpus, setCpus] = React.useState([])
@@ -1439,7 +1489,7 @@ function ProductSearch() {
                                             }}
                                         >
                                             <Typography variant='body2' style={{ color: 'black' }}>{Product.name_product}</Typography>
-                                            <Typography variant="h6" style={{ color: 'blue' }}>{
+                                            <Typography variant="h6" style={{ color: orange[900] }}>{
                                                 (Product.unit_price_product * (1 - Product.discount_product * 0.01)).toLocaleString('vi-VI',
                                                     {
                                                         style: 'currency',
@@ -1472,12 +1522,13 @@ function ProductSearch() {
             )
         }
     }
+
     return (
         <Box>
             <Container maxWidth="xl" style={{ minHeight: 600 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={3}>
-                        <Container maxWidth="xl" style={{ backgroundColor: 'rgb(248, 248, 252)', borderRadius: '10px', marginTop: 10, padding: 0 }}>
+                        <Container maxWidth="xl" style={{ backgroundColor: 'rgb(255, 255, 255)', borderRadius: '10px', marginTop: 10, padding: 0 }}>
                             <Box
                                 style={{
                                     display: 'flex',
@@ -1633,7 +1684,11 @@ function ProductSearch() {
                         </Container>
                     </Grid>
                     <Grid item xs={9}>
-                        <Container maxWidth="xl" style={{ backgroundColor: 'rgb(248, 248, 252)', borderRadius: '10px', marginTop: 10 }}>
+                        <Container maxWidth="xl" style={{ 
+                            backgroundColor: 'rgb(248, 248, 252)', 
+                            borderRadius: '10px', 
+                            marginTop: 10 ,              
+                            }}>
                             <Box style={{
                                 width: '100%',
                                 borderBottom: '1px solid rgb(234, 234, 234)',
@@ -1647,49 +1702,49 @@ function ProductSearch() {
                             }}>
                                 <Typography>Sắp xếp Theo: </Typography>
                                 {params.sort === "byprice" && params.order === "asc" ?
-                                    <Button
+                                    <ColorButtonContained
                                         variant="contained"
                                         onClick={() => { searchParams.delete('order'); searchParams.delete('sort'); setSearchParams(searchParams); }}
                                         style={{ marginLeft: 10 }}>
                                         Giá giảm dần
-                                    </Button>
+                                    </ColorButtonContained>
                                     :
-                                    <Button
+                                    <ColorButtonOutline
                                         variant="outlined"
                                         onClick={() => { setSearchParams({ ...params, order: 'asc', sort: 'byprice' }); }}
                                         style={{ marginLeft: 10 }}>
                                         Giá giảm dần
-                                    </Button>
+                                    </ColorButtonOutline>
                                 }
                                 {params.sort === "byprice" && params.order === "desc" ?
-                                    <Button
+                                    <ColorButtonContained
                                         variant="contained"
                                         onClick={() => { searchParams.delete('order'); searchParams.delete('sort'); setSearchParams(searchParams); }}
                                         style={{ marginLeft: 10 }}>
                                         Giá Tăng dần
-                                    </Button>
+                                    </ColorButtonContained>
                                     :
-                                    <Button
+                                    <ColorButtonOutline
                                         variant="outlined"
                                         onClick={() => { setSearchParams({ ...params, order: 'desc', sort: 'byprice' }); }}
                                         style={{ marginLeft: 10 }}>
                                         Giá Tăng dần
-                                    </Button>
+                                    </ColorButtonOutline>
                                 }
                                 {params.sort === "bydiscount" ?
-                                    <Button
+                                    <ColorButtonContained
                                         variant="contained"
                                         onClick={() => { searchParams.delete('sort'); setSearchParams(searchParams); }}
                                         style={{ marginLeft: 10 }}>
                                         Khuyến mãi tốt nhất
-                                    </Button>
+                                    </ColorButtonContained>
                                     :
-                                    <Button
+                                    <ColorButtonOutline
                                         variant="outlined"
                                         onClick={() => { setSearchParams({ ...params, sort: 'bydiscount' }); }}
                                         style={{ marginLeft: 10 }}>
                                         Khuyến mãi tốt nhất
-                                    </Button>
+                                    </ColorButtonOutline>
                                 }
                                 <Box
                                     style={{
@@ -1701,6 +1756,10 @@ function ProductSearch() {
                                     <Grid container spacing={2} alignItems="center">
                                         <Grid item xs={4}>
                                             <TextField
+                                                style={{
+                                                    backgroundColor: 'white',
+                                                    borderRadius: 10
+                                                }}
                                                 value={rangePrice[0].toLocaleString('vi-VI',
                                                     {
                                                         style: 'currency',
@@ -1713,7 +1772,7 @@ function ProductSearch() {
                                             />
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Slider
+                                            <ColorSlider
                                                 value={rangePrice}
                                                 onChange={handleChange}
                                                 aria-labelledby="input-slider"
@@ -1723,6 +1782,10 @@ function ProductSearch() {
                                         </Grid>
                                         <Grid item xs={4}>
                                             <TextField
+                                                style={{
+                                                    backgroundColor: 'white',
+                                                    borderRadius: 10
+                                                }}
                                                 value={rangePrice[1].toLocaleString('vi-VI',
                                                     {
                                                         style: 'currency',

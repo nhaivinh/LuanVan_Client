@@ -21,7 +21,6 @@ function Home() {
   const [resetPage, setResetPage] = React.useState(false);
 
   function handleResetPage() {
-    console.log("run")
     setResetPage(!resetPage);
   }
 

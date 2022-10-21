@@ -299,7 +299,7 @@ function AccountInfo() {
     if (account[0] !== undefined) {
         return (
             <Box style={{}}>
-                <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', borderRadius: '10px', marginTop: 50 }}>
+                <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', borderRadius: '10px', marginTop: 50,  }}>
                     <Box
                         style={{
                             display: 'flex',

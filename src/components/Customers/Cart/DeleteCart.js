@@ -1,22 +1,20 @@
 import React from 'react';
 import axios from 'axios';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import TableHead from '@mui/material/TableHead';
-import { useCookies } from "react-cookie";
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import { Link } from 'react-router-dom';
 import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
+import { styled } from '@mui/material/styles';
+import { orange } from '@mui/material/colors';
+
+const ColorButtonOutline = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[600]),
+    fontWeight: 900,
+    backgroundColor: 'white',
+    border: '1px solid ' + orange[500],
+    '&:hover': {
+        border: '1px solid ' + orange[700],
+    },
+}));
 
 function DeleteCart({ idAccount, idProduct, handleResetPage }) {
 
@@ -45,7 +43,7 @@ function DeleteCart({ idAccount, idProduct, handleResetPage }) {
     };
 
     return (
-        <Button variant='outlined'  onClick={handleClick}> Xóa </Button>
+        <ColorButtonOutline variant='outlined'  onClick={handleClick}> Xóa </ColorButtonOutline>
     )
 }
 

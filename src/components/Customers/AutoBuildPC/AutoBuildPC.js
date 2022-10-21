@@ -13,6 +13,28 @@ import AnalyzeBuildPc from "../BuildPC/AnalyzeBuildPc";
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import { styled } from '@mui/material/styles';
+import { orange } from '@mui/material/colors';
+
+const ColorButtonContained = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[500]),
+    fontWeight: 900,
+    backgroundColor: orange[500],
+    '&:hover': {
+        backgroundColor: orange[700],
+    },
+}));
+
+const ColorButtonOutline = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[600]),
+    fontWeight: 900,
+    backgroundColor: 'white',
+    border: '1px solid ' + orange[500],
+    '&:hover': {
+        border: '1px solid ' + orange[700],
+    },
+}));
+
 
 function AutoBuildPC() {
 
@@ -667,7 +689,7 @@ function AutoBuildPC() {
                                 marginTop: 10
                             }}
                         >
-                            <Button onClick={HandleClickBuild} variant={'contained'}> Phân tích </Button>
+                            <ColorButtonContained onClick={HandleClickBuild} variant={'contained'}> Phân tích </ColorButtonContained>
                         </Box>
                     </Box>
 
@@ -793,7 +815,7 @@ function AutoBuildPC() {
                                         currency: 'VND'
                                     })}
                             </Typography>
-                            <Button variant="outlined"
+                            <ColorButtonOutline variant="outlined"
                                 style={{
                                     width: "200px",
 
@@ -801,13 +823,13 @@ function AutoBuildPC() {
                                 onClick={() => handleClickAdd(handleAnalyzeSelectedProduct(selectedProducts))}
                             >
                                 Thêm vào giỏ hàng
-                            </Button>
-                            <Button variant="contained" style={{
+                            </ColorButtonOutline>
+                            <ColorButtonContained variant="contained" style={{
                                 width: "200px",
                             }}
                                 onClick={() => handleClickBuyNow(handleAnalyzeSelectedProduct(selectedProducts))}>
                                 Mua ngay
-                            </Button>
+                            </ColorButtonContained>
                         </Box>
                     }
                 </Grid>

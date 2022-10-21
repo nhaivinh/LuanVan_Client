@@ -26,6 +26,9 @@ import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
 import { useCookies } from "react-cookie";
 import { makeStyles } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
+import { orange } from '@mui/material/colors';
+
 const useStyles = makeStyles({
     addToCartButton: {
         color: 'black',
@@ -36,6 +39,15 @@ const useStyles = makeStyles({
         },
     }
 })
+
+const ColorButton = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[500]),
+    fontWeight: 900,
+    backgroundColor: orange[500],
+    '&:hover': {
+      backgroundColor: orange[700],
+    },
+  }));
 
 function ProductDetails({resetPage, handleResetPage}) {
 
@@ -193,13 +205,13 @@ function ProductDetails({resetPage, handleResetPage}) {
                                     >
                                         {cookies.Account === undefined ?
                                             <>
-                                                <Button variant="contained" className={classes.addToCartButton} onClick={() => navigate('/login')}>Mua Ngay</Button>
-                                                <Button variant="contained" className={classes.addToCartButton} onClick={() => navigate('/login')}>Thêm Vào Giỏ Hàng</Button>
+                                                <ColorButton variant="contained" className={classes.addToCartButton} onClick={() => navigate('/login')}>Mua Ngay</ColorButton>
+                                                <ColorButton variant="contained" className={classes.addToCartButton} onClick={() => navigate('/login')}>Thêm Vào Giỏ Hàng</ColorButton>
                                             </>
                                             :
                                             <>
-                                                <Button variant="contained" className={classes.addToCartButton} onClick={handleClickBuyNow}>Mua Ngay</Button>
-                                                <Button variant="contained" className={classes.addToCartButton} onClick={handleClickAdd}>Thêm Vào Giỏ Hàng</Button>
+                                                <ColorButton variant="contained" className={classes.addToCartButton} onClick={handleClickBuyNow}>Mua Ngay</ColorButton>
+                                                <ColorButton variant="contained" className={classes.addToCartButton} onClick={handleClickAdd}>Thêm Vào Giỏ Hàng</ColorButton>
                                             </>
                                         }
 

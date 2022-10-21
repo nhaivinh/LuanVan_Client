@@ -22,8 +22,19 @@ import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
 import DecreaseCart from './DecreaseCart'
 import IncreaseCart from './IncreaseCart'
-function Cart({resetPage, handleResetPage}) {
+import { styled } from '@mui/material/styles';
+import { orange } from '@mui/material/colors';
 
+const ColorButtonContained = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[500]),
+    fontWeight: 900,
+    backgroundColor: orange[500],
+    '&:hover': {
+        backgroundColor: orange[700],
+    },
+}));
+
+function Cart({ resetPage, handleResetPage }) {
     const [cart, setCart] = React.useState([])
     const [cookies, setCookie] = useCookies(["user"]);
 
@@ -33,32 +44,35 @@ function Cart({resetPage, handleResetPage}) {
 
     const [totalDiscount, setTotalDiscount] = React.useState(0)
 
-
     React.useEffect(() => {
-        axios.get(`https://localhost:7253/api/Cart/getcartbyid/` + cookies.Account)
-            .then(res => {
-                const Cart = res.data;
-                setCart(Cart);
+        if (cookies.Account !== undefined) {
+            axios.get(`https://localhost:7253/api/Cart/getcartbyid/` + cookies.Account)
+                .then(res => {
+                    const Cart = res.data;
+                    setCart(Cart);
 
-                if (Cart.length === 1) {
-                    setTotalPrice((Cart[0].unit_price_product * Cart[0].quantity_product_cart))
-                    setTotalDiscount((Cart[0].unit_price_product * Cart[0].quantity_product_cart) * (Cart[0].discount_product * 0.01));
-                }
-                else {
-                    var result = Cart.reduce((total, currentValue) =>
-                        total + ((currentValue.unit_price_product * currentValue.quantity_product_cart) * (1 - currentValue.discount_product * 0.01)), 0
-                    );
-                    var resultDiscount = Cart.reduce((total, currentValue) =>
-                        total + ((currentValue.unit_price_product * currentValue.quantity_product_cart) * (currentValue.discount_product * 0.01)), 0
-                    );
-                    setTotalPrice(result);
-                    setTotalDiscount(resultDiscount);
-                }
-            })
+                    if (Cart.length === 1) {
+                        setTotalPrice((Cart[0].unit_price_product * Cart[0].quantity_product_cart))
+                        setTotalDiscount((Cart[0].unit_price_product * Cart[0].quantity_product_cart) * (Cart[0].discount_product * 0.01));
+                    }
+                    else {
+                        var result = Cart.reduce((total, currentValue) =>
+                            total + ((currentValue.unit_price_product * currentValue.quantity_product_cart) * (1 - currentValue.discount_product * 0.01)), 0
+                        );
+                        var resultDiscount = Cart.reduce((total, currentValue) =>
+                            total + ((currentValue.unit_price_product * currentValue.quantity_product_cart) * (currentValue.discount_product * 0.01)), 0
+                        );
+                        setTotalPrice(result);
+                        setTotalDiscount(resultDiscount);
+                    }
+                })
+        } else {
+            navigate("/login")
+        }
     }, [resetPage])
-    
+
     return (
-        <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', borderRadius: '10px', marginTop: 50 , minHeight: 600}}>
+        <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', borderRadius: '10px', marginTop: 50, minHeight: 600 }}>
             <Box
                 style={{
                     display: 'flex',
@@ -125,7 +139,7 @@ function Cart({resetPage, handleResetPage}) {
                                                                         })}
                                                                 </del>
                                                             </Typography>
-                                                        }                                             
+                                                        }
                                                     </Box>
                                                 </TableCell>
                                                 <TableCell align="left">
@@ -198,7 +212,7 @@ function Cart({resetPage, handleResetPage}) {
                                     currency: 'VND'
                                 })}
                         </Typography>
-                        <Button variant='contained' onClick={() => navigate('/checkout')}>Đặt mua</Button>
+                        <ColorButtonContained variant='contained' onClick={() => navigate('/checkout')}>Đặt mua</ColorButtonContained>
                     </Box>
                 </Grid>
             </Grid>

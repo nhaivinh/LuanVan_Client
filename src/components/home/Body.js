@@ -12,9 +12,14 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { Typography } from '@mui/material';
 import { borderBottomColor } from '@mui/system';
-
+import { orange } from '@mui/material/colors';
 
 const responsive = {
+  thumb: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 1,
+    paritialVisibilityGutter: 60
+  },
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
     items: 4,
@@ -45,7 +50,7 @@ const Body = () => {
   }, [])
   return (
     <Box>
-      <Container maxWidth="xl" style={{ minHeight: 1000}}>
+      <Container maxWidth="xl" style={{ minHeight: 1000 }}>
         <Box style={{ position: 'absolute', width: '100%', left: 0, zIndex: '-1' }}>
           <Slider />
         </Box>
@@ -55,7 +60,7 @@ const Body = () => {
           </Grid>
         </Grid>
         <Box style={{
-          marginTop: 105,
+          marginTop: 40,
           borderRadius: 10,
           paddingTop: 20,
           padding: 20,
@@ -163,7 +168,7 @@ const Body = () => {
                         }}
                       >
                         <Typography variant='body2' style={{ color: 'black' }}>{Product.name_product}</Typography>
-                        <Typography variant="h6" style={{ color: 'blue' }}>{
+                        <Typography variant="h6" style={{ color: orange[900] }}>{
                           (Product.unit_price_product * (1 - Product.discount_product * 0.01)).toLocaleString('vi-VI',
                             {
                               style: 'currency',
