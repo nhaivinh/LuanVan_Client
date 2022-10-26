@@ -15,6 +15,7 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { styled } from '@mui/material/styles';
 import { orange } from '@mui/material/colors';
+import { useStore } from "../../Store";
 
 const ColorButtonContained = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(orange[500]),
@@ -37,7 +38,7 @@ const ColorButtonOutline = styled(Button)(({ theme }) => ({
 
 
 function AutoBuildPC() {
-
+    const [state, ] = useStore();
     const [, dispatch] = React.useContext(SnackBarContext);
 
     //get form api
@@ -646,7 +647,7 @@ function AutoBuildPC() {
     };
 
     return (
-        <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', marginTop: 50, borderRadius: '10px' }}>
+        <Container maxWidth="lg" style={{ backgroundColor: 'var(--background1)', marginTop: 50, borderRadius: '10px' }}>
             <Box
                 style={{
                     display: 'flex',

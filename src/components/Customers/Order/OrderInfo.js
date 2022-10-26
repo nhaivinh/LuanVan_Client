@@ -16,11 +16,44 @@ import { useCookies } from "react-cookie";
 import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
 import Grid from '@mui/material/Grid';
-import Tab from '@material-ui/core/Tab';
-import TabContext from '@material-ui/lab/TabContext';
-import TabList from '@material-ui/lab/TabList';
-import TabPanel from '@material-ui/lab/TabPanel';
+
 import ShowDetailsOrder from './ShowDetailsOrder'
+import Tab from '@mui/material/Tab';
+import { Tabs } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { orange } from '@mui/material/colors';
+
+const AntTabs = styled(Tabs)({
+    '& .MuiTabs-indicator': {
+        backgroundColor: orange[500],
+        left: 0,
+        paddingLeft: 10,
+        borderRadius: 10
+    },
+});
+
+const AntTab = styled((props) => <Tab disableRipple {...props} />)(({ theme }) => ({
+    textTransform: 'none',
+    minWidth: 0,
+    fontSize: 16,
+    [theme.breakpoints.up('sm')]: {
+        minWidth: 0,
+    },
+    fontWeight: theme.typography.fontWeightRegular,
+    marginRight: theme.spacing(1),
+    color: orange[400],
+    '&:hover': {
+        color: orange[900],
+        opacity: 1,
+    },
+    '&.Mui-selected': {
+        color: orange[400],
+        fontWeight: theme.typography.fontWeightMedium,
+    },
+    '&.Mui-focusVisible': {
+        backgroundColor: '#d1eaff',
+    },
+}));
 
 function getFormattedDate(date) {
     var year = date.getFullYear();
@@ -109,89 +142,93 @@ function OrderInfo() {
 
     return (
         <Box style={{}}>
-            <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', borderRadius: '10px', marginTop: 50 }}>
-                <Box
-                    style={{
-                        display: 'flex',
-                        height: 50,
-                        alignItems: 'center'
-                    }}>
-                    <Breadcrumbs aria-label="breadcrumb">
-                        <Link underline="hover" color="inherit" to="/">
-                            <Typography color="text.primary">Trang Chủ</Typography>
-                        </Link>
-                        <Typography color="text.primary">
-                            Quản lý đơn hàng
-                        </Typography>
-                    </Breadcrumbs>
-                </Box>
+            <Container maxWidth="lg" style={{ backgroundColor: 'var(--background1)', borderRadius: '10px', marginTop: 70, paddingLeft: 0 }}>
                 <Box sx={{ width: '100%', typography: 'body1' }}>
-                    <TabContext value={statusValue}>
-                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                            <TabList onChange={handleChange} aria-label="lab API tabs example">
-                                <Tab label="Tất cả" value="-1" />
-                                <Tab label="Chưa duyệt" value="0" />
-                                <Tab label="Đã duyệt" value="1" />
-                                <Tab label="Đang vận chuyển" value="2" />
-                                <Tab label="Đã giao" value="3" />
-                                <Tab label="Đã hủy" value="4" />
-                            </TabList>
-                        </Box>
-                    </TabContext>
-                </Box>
-                <Box style={{ height: 450 }}>
-                    <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
-                        <Table stickyHeader={true} sx={{ minWidth: 650 }} size="small" aria-label="simple table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell style={{ width: '10%' }} ><Typography variant='body2'>Mã số</Typography></TableCell>
-                                    <TableCell style={{ width: '15%' }} align="left">Tên người nhận</TableCell>
-                                    <TableCell style={{ width: '20%' }} align="left">Hình thức thanh toán</TableCell>
-                                    <TableCell style={{ width: '15%' }} align="left">Ngày đặt hàng</TableCell>
-                                    <TableCell style={{ width: '15%' }} align="left">Tổng tiền</TableCell>
-                                    <TableCell style={{ width: '15%' }} align="left">Trạng thái</TableCell>
-                                    <TableCell style={{ width: '10%' }} align="left">Thao tác</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {handleFilterOrders(orders)
-                                    .map(function (row) {
-                                        return (
-                                            <TableRow
-                                                key={row.id_order}
-                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                            >
-                                                <TableCell component="th" scope="row" align="left">
-                                                    {row.id_order}
-                                                </TableCell>
-                                                <TableCell align="left">
-                                                    {row.delivery_name}
-                                                </TableCell>
-                                                <TableCell align="left">
-                                                    {showStatusPaymentOrder(row.payment_type)}
-                                                </TableCell>
-                                                <TableCell align="left">
-                                                    {getFormattedDate(new Date(row.order_date))}
-                                                </TableCell>
-                                                <TableCell align="left">
-                                                    {row.total_payment.toLocaleString('vi-VI',
-                                                        {
-                                                            style: 'currency',
-                                                            currency: 'VND'
-                                                        })}
-                                                </TableCell>
-                                                <TableCell align="left">
-                                                    {showStatusOrder(row.delivery_status)}
-                                                </TableCell>
-                                                <TableCell align="left">
-                                                    <ShowDetailsOrder Order={row} idOrder={row.id_order} />
-                                                </TableCell>
+                    <Grid container spacing={2} minHeight={600}>
+                        <Grid item xs={2} style={{ paddingTop: 0 }}>
+                            <Box sx={{ width: '100%', typography: 'body1', backgroundColor: 'rgb(45, 45, 45)', height: '100%', borderStartStartRadius: 10, borderBottomLeftRadius: 10 }}>
+                                <AntTabs
+                                    orientation="vertical"
+                                    value={statusValue}
+                                    onChange={handleChange}
+                                >
+                                    <AntTab label="Tất cả" value="-1" />
+                                    <AntTab label="Chưa duyệt" value="0" />
+                                    <AntTab label="Đã duyệt" value="1" />
+                                    <AntTab label="Đang vận chuyển" value="2" />
+                                    <AntTab label="Đã giao" value="3" />
+                                    <AntTab label="Đã hủy" value="4" />
+                                </AntTabs>
+                            </Box>
+                        </Grid>
+                        <Grid item xs={10} style={{ paddingTop: 0 }}>
+                            <Box
+                                style={{
+                                    display: 'flex',
+                                    height: 50,
+                                    alignItems: 'center'
+                                }}>
+                                <Breadcrumbs aria-label="breadcrumb">
+                                    <Link underline="hover" color="inherit" to="/">
+                                        <Typography color="text.primary">Trang Chủ</Typography>
+                                    </Link>
+                                    <Typography color="text.primary">
+                                        Quản lý đơn hàng
+                                    </Typography>
+                                </Breadcrumbs>
+                            </Box>
+                            <Box style={{ height: 450 }}>
+                                <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
+                                    <Table stickyHeader={true} sx={{ minWidth: 650 }} size="small" aria-label="simple table">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell style={{ width: '10%' }} ><Typography variant='body2'>Mã số</Typography></TableCell>
+                                                <TableCell style={{ width: '20%' }} align="left">Hình thức thanh toán</TableCell>
+                                                <TableCell style={{ width: '15%' }} align="left">Ngày đặt hàng</TableCell>
+                                                <TableCell style={{ width: '15%' }} align="left">Tổng tiền</TableCell>
+                                                <TableCell style={{ width: '25%' }} align="center">Thao tác</TableCell>
+                                                <TableCell style={{ width: '15%' }} align="left">Trạng thái</TableCell>
                                             </TableRow>
-                                        )
-                                    })}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                                        </TableHead>
+                                        <TableBody>
+                                            {handleFilterOrders(orders)
+                                                .map(function (row) {
+                                                    return (
+                                                        <TableRow
+                                                            key={row.id_order}
+                                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                        >
+                                                            <TableCell component="th" scope="row" align="left">
+                                                                {row.id_order}
+                                                            </TableCell>
+                                                            <TableCell align="left">
+                                                                {showStatusPaymentOrder(row.payment_type)}
+                                                            </TableCell>
+                                                            <TableCell align="left">
+                                                                {getFormattedDate(new Date(row.order_date))}
+                                                            </TableCell>
+                                                            <TableCell align="left">
+                                                                {row.total_payment.toLocaleString('vi-VI',
+                                                                    {
+                                                                        style: 'currency',
+                                                                        currency: 'VND'
+                                                                    })}
+                                                            </TableCell>
+                                                            <TableCell align="center">
+                                                                <ShowDetailsOrder Order={row} idOrder={row.id_order} />
+                                                            </TableCell>
+                                                            <TableCell align="left">
+                                                                {showStatusOrder(row.delivery_status)}
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    )
+                                                })}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </Box>
+                        </Grid>
+                    </Grid>
                 </Box>
             </Container >
         </Box >

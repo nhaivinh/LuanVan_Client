@@ -5,10 +5,9 @@ import './CSS/App.css'
 import PageNotFound from './components/PageNotFound';
 import AdminHome from './components/Admin/AdminHome';
 import ScrollButton from './components/Customers/ScrollToTopButton/ScrollButton';
-
+import { StoreProvider } from './components/Store';
 class App extends React.Component {
 
-  
   componentDidMount() {
     // Include the Crisp code here, without the <script></script> tags
     window.$crisp = [];
@@ -28,11 +27,13 @@ class App extends React.Component {
     return (
       <div className="App">
         <React.Fragment>
-          <Routes>
-            <Route exact path='/*' element={<Home />} />
-            <Route exact path='/admin/*' element={<AdminHome />} />
-            <Route exact path='*' element={<PageNotFound />} />
-          </Routes>
+          <StoreProvider>
+            <Routes>
+              <Route exact path='/*' element={<Home />} />
+              <Route exact path='/admin/*' element={<AdminHome />} />
+              <Route exact path='*' element={<PageNotFound />} />
+            </Routes>
+          </StoreProvider>
         </React.Fragment>
         <ScrollButton />
       </div>

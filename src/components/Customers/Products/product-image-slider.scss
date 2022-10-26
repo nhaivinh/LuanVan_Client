@@ -3,7 +3,7 @@
         padding-top: 70%;
         overflow: hidden;
         position: relative;
-
+        margin-bottom: 10px;
         img {
             position: absolute;
             top: 0;
@@ -14,13 +14,15 @@
     }
 
     .swiper-button-prev {
+        display: none;
         left: 0;
-        color: #000;
+        color: orange;
     }
 
     .swiper-button-next {
+        display: none;
         right: 0;
-        color: #000;
+        color: orange;
     }
 }
 
@@ -30,7 +32,7 @@
         border: 1px solid #dddbdb;
 
         &-thumb-active {
-            border-color: #ff0000;
+            border: 3px solid orange;
         }
     }
 

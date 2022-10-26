@@ -115,7 +115,7 @@ function ProductDetails({resetPage, handleResetPage}) {
 
     return (
         <Box style={{}}>
-            <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', borderRadius: '10px', marginTop: 50 }}>
+            <Container maxWidth="lg" style={{ backgroundColor: 'var(--background1)', borderRadius: '10px', marginTop: 50 }}>
                 <Box
                     style={{
                         display: 'flex',
@@ -142,10 +142,7 @@ function ProductDetails({resetPage, handleResetPage}) {
                 <Box style={{ height: 450 }}>
                     <Grid container >
                         <Grid item xs={5}>
-                            <Box
-                                style={{
-                                }}
-                            >
+                            <Box>
                                 <ProductImagesSlider images={images} />
                             </Box>
                         </Grid>

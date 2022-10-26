@@ -4,8 +4,6 @@ import Slide from '@mui/material/Slide';
 import MuiAlert from '@mui/material/Alert';
 import SnackBarContext from '../SnackBar/SnackBarContext';
 import { setCloseSnackBar } from '../SnackBar/SnackBarAction';
-// import IconButton from '@mui/material/IconButton';
-// import CloseIcon from '@mui/icons-material/Close';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;

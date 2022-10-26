@@ -126,7 +126,7 @@ export default function StatisticHome() {
         }
         return (ExportPeriod)
     }
-    console.log(period)
+
     function handleInfoArrayFromPeriod(items) {
         return (items.filter(element => element.month === period.month && element.year === period.year))
     }
@@ -134,6 +134,14 @@ export default function StatisticHome() {
 
     function handleInfoObjectFromPeriod(items) {
         return (items.find(element => element.month === period.month && element.year === period.year))
+    }
+
+    function handleInfoObjectFromPeriodCountOrders(items) {
+        const x = (items.filter(element => element.month === period.month && element.year === period.year))
+        var result = x.reduce((total, currentValue) =>
+            total + currentValue.number_of_order, 0
+        );
+        return (result)
     }
 
     function handleChooseOutdateProduct(items) {
@@ -164,13 +172,13 @@ export default function StatisticHome() {
         switch (typeShowSellingProduct) {
             case 0:
                 if (handleInfoArrayFromPeriod(countSellingByType).find(element => element.type_product === type) !== undefined) {
-                    return (handleInfoArrayFromPeriod(countSellingByType).find(element => element.type_product === type).number_of_products)
+                    return (handleInfoArrayFromPeriod(countSellingByType).find(element => element.type_product === type).imcome)
                 } else {
                     return 0
                 }
             case 1:
                 if (handleInfoArrayFromPeriod(countSellingByType).find(element => element.type_product === type) !== undefined) {
-                    return (handleInfoArrayFromPeriod(countSellingByType).find(element => element.type_product === type).imcome)
+                    return (handleInfoArrayFromPeriod(countSellingByType).find(element => element.type_product === type).number_of_products)
                 } else {
                     return 0
                 }
@@ -222,11 +230,11 @@ export default function StatisticHome() {
         switch (typeShowSellingProduct) {
             case 0:
                 return (
-                    'Số Lượng'
+                    'Doanh Thu'
                 )
             case 1:
                 return (
-                    'Doanh Thu'
+                    'Số Lượng'
                 )
             default:
                 break;
@@ -236,7 +244,7 @@ export default function StatisticHome() {
     return (
         <Box>
             <Container >
-                <Stack direction="row" spacing={2} justifyContent="space-between" style={{backgroundColor: 'white', padding: 20, borderRadius: 10, marginBottom: 10}}>
+                <Stack direction="row" spacing={2} justifyContent="space-between" style={{ backgroundColor: 'white', padding: 20, borderRadius: 10, marginBottom: 10 }}>
                     <Typography variant="p"
                         sx={
                             {
@@ -339,8 +347,8 @@ export default function StatisticHome() {
                                         >
                                             <Typography variant='body1' style={{ color: "darkgrey" }}>Số đơn hàng</Typography>
                                             <Typography variant='h5'>
-                                                {handleInfoObjectFromPeriod(countOrder) !== undefined &&
-                                                    handleInfoObjectFromPeriod(countOrder).number_of_order
+                                                {handleInfoObjectFromPeriodCountOrders(countOrder) !== 0 &&
+                                                    handleInfoObjectFromPeriodCountOrders(countOrder)
                                                 }
                                             </Typography>
                                         </Box>
@@ -436,45 +444,91 @@ export default function StatisticHome() {
                                             label="Lọc"
                                             onChange={(e) => { setTypeShowSellingProduct(e.target.value) }}
                                         >
-                                            <MenuItem key={0} value={0}>Theo số lượng</MenuItem>
-                                            <MenuItem key={1} value={1}>Theo doanh thu</MenuItem>
+                                            <MenuItem key={0} value={0}>Theo doanh thu</MenuItem>
+                                            <MenuItem key={1} value={1}>Theo số lượng</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Box>
-                            </Box>                           
+                            </Box>
                             <Bar
                                 data={{
                                     labels: [
-                                        "Vi xử lý",
-                                        "Bo mạch chủ",
-                                        "Ram",
-                                        "Card đồ hoạ",
-                                        "Nguồn",
-                                        "Ổ cứng",
-                                        "Tản nhiệt",
+                                        "",
                                     ],
                                     datasets: [
                                         {
-                                            label: showTypeSort(),
+                                            label: "Vi xử lý",
                                             backgroundColor: [
                                                 "#3e95cd",
+                                            ],
+                                            data: [
+                                                handleShowChartSellingProduct('cpu')
+                                            ]
+                                        },
+                                        {
+                                            label: "Bo mạch chủ",
+                                            backgroundColor: [
                                                 "#8e5ea2",
+                                            ],
+                                            data: [
+                                                handleShowChartSellingProduct('mainboard')
+                                            ]
+                                        },
+                                        {
+                                            label: "Ram",
+                                            backgroundColor: [
                                                 "#3cba9f",
+                                            ],
+                                            data: [
+                                                handleShowChartSellingProduct('ram')
+                                            ]
+                                        },
+                                        {
+                                            label: "Card đồ hoạ",
+                                            backgroundColor: [
                                                 "#cd76fb",
+                                            ],
+                                            data: [
+                                                handleShowChartSellingProduct('gpu')
+                                            ]
+                                        },
+                                        {
+                                            label: "Nguồn",
+                                            backgroundColor: [
                                                 "#c45850",
+                                            ],
+                                            data: [
+                                                handleShowChartSellingProduct('psu')
+                                            ]
+                                        },
+                                        {
+                                            label: "Ổ cứng",
+                                            backgroundColor: [
                                                 "#ffaa00",
+                                            ],
+                                            data: [
+                                                handleShowChartSellingProduct('harddisk')
+                                            ]
+                                        },
+                                        {
+                                            label: "Tản nhiệt",
+                                            backgroundColor: [
                                                 "#254661"
                                             ],
                                             data: [
-                                                handleShowChartSellingProduct('cpu'),
-                                                handleShowChartSellingProduct('mainboard'),
-                                                handleShowChartSellingProduct('ram'),
-                                                handleShowChartSellingProduct('gpu'),
-                                                handleShowChartSellingProduct('psu'),
-                                                handleShowChartSellingProduct('harddisk'),
-                                                handleShowChartSellingProduct('cooling_system'),
+                                                handleShowChartSellingProduct('cooling_system')
                                             ]
-                                        }
+                                        },
+                                        {
+                                            label: "Vỏ máy tính",
+                                            backgroundColor: [
+                                                "#664652"
+                                            ],
+                                            data: [
+                                                handleShowChartSellingProduct('casepc')
+                                            ]
+                                        },
+
                                     ],
                                 }}
                                 options={{

@@ -24,6 +24,8 @@ import FormLabel from '@mui/material/FormLabel';
 import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
 import { useSearchParams } from 'react-router-dom';
+import { useStore } from "../../Store";
+
 function Checkout() {
 
     const [searchParams, setSearchParams] = useSearchParams();
@@ -32,9 +34,13 @@ function Checkout() {
 
     const [cart, setCart] = React.useState([])
 
+    const [state, dispatchStore] = useStore();
+
+    console.log(state.account)
+
     const [infoPayment, setInfoPayment] = React.useState({
-        NameDelivery: '',
-        PhoneDelivery: '',
+        NameDelivery: state.account.name_customer,
+        PhoneDelivery: state.account.phone_number_customer,
         AddressDelivery: '',
         TypePayment: 'cod'
     })

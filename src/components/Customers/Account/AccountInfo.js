@@ -17,9 +17,54 @@ import Avatar from '@mui/material/Avatar';
 import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
 import { useCookies } from "react-cookie";
-import Tab from '@material-ui/core/Tab';
-import TabContext from '@material-ui/lab/TabContext';
-import TabList from '@material-ui/lab/TabList';
+import Tab from '@mui/material/Tab';
+import { Tabs } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
+import ImageIcon from '@mui/icons-material/Image';
+import LockIcon from '@mui/icons-material/Lock';
+import { styled } from '@mui/material/styles';
+import { orange } from '@mui/material/colors';
+
+const AntTabs = styled(Tabs)({
+    '& .MuiTabs-indicator': {
+        backgroundColor: orange[500],
+        left: 0,
+        paddingLeft: 10,
+        borderRadius: 10
+    },
+});
+
+const ColorButtonContained = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[500]),
+    fontWeight: 900,
+    backgroundColor: orange[500],
+    '&:hover': {
+        backgroundColor: orange[700],
+    },
+}));
+
+const AntTab = styled((props) => <Tab disableRipple {...props} />)(({ theme }) => ({
+    textTransform: 'none',
+    minWidth: 0,
+    fontSize: 16,
+    [theme.breakpoints.up('sm')]: {
+        minWidth: 0,
+    },
+    fontWeight: theme.typography.fontWeightRegular,
+    marginRight: theme.spacing(1),
+    color: orange[400],
+    '&:hover': {
+        color: orange[900],
+        opacity: 1,
+    },
+    '&.Mui-selected': {
+        color: orange[400],
+        fontWeight: theme.typography.fontWeightMedium,
+    },
+    '&.Mui-focusVisible': {
+        backgroundColor: '#d1eaff',
+    },
+}));
 
 function getFormattedDate(date) {
     var year = date.getFullYear();
@@ -185,7 +230,7 @@ function AccountInfo() {
                                 flexDirection: 'column',
                                 padding: 20,
                             }}>
-                            <Button variant='contained' onClick={handleClickUpadte}>Cập nhật</Button>
+                            <ColorButtonContained variant='contained' onClick={handleClickUpadte}>Cập nhật</ColorButtonContained>
                         </Box>
                     </Box>
                 )
@@ -196,25 +241,109 @@ function AccountInfo() {
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            flexDirection: 'row',
+                            flexDirection: 'column',
                             paddingBottom: 30,
                             paddingTop: 10
                         }}>
-                        <div>
-                            <img alt="not found" width={"250px"} src={account[0].picture_char} />
-                        </div>
+                        <Box
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flexDirection: 'column',
+                                paddingBottom: 30,
+                                paddingTop: 10
+                            }}>
+                            <Avatar
+                                alt="Remy Sharp"
+                                src={account[0].picture_char}
+                                sx={{ width: 200, height: 200 }}
+                            />
+                        </Box>
                         <Box
                             style={{
                                 display: 'flex',
                                 flexDirection: 'column',
-                                width: 250,
+                                width: 300,
                                 paddingLeft: 10
                             }}
                         >
-                            <input type="file" onChange={saveFile} />
-                            <Button variant='contained' onClick={saveImage}>Cập nhật ảnh đại diện</Button>
+                            <Box
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    width: 300,
+                                    paddingLeft: 10,
+                                    paddingBottom: 10
+                                }}
+                            >
+                                <input className="custom-file-input" type="file" onChange={saveFile} />
+                            </Box>
+                            <ColorButtonContained variant='contained' onClick={saveImage}>Cập nhật ảnh đại diện</ColorButtonContained>
                         </Box>
                     </Box >
+                )
+            case '2':
+                return (
+                    <Box
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                            paddingBottom: 30,
+                            paddingTop: 10
+                        }}>
+                        <Box
+                            style={{
+                                display: 'flex',
+                                width: '50%',
+                                justifyContent: 'space-between',
+                                flexDirection: 'column',
+                                backgroundColor: 'white',
+                                padding: 20,
+                                borderRadius: 10,
+                                height: 200
+                            }}>
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                type={'password'}
+                                label="Mật khẩu hiện tại"
+                                size="small"
+                                defaultValue={''}
+                                onChange={(e) => { setEditAccount({ ...editAccount, name_customer: e.target.value }) }}
+                            />
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Mật khẩu mới"
+                                type={'password'}
+                                size="small"
+                                defaultValue={''}
+                                onChange={(e) => { setEditAccount({ ...editAccount, name_customer: e.target.value }) }}
+                            />
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                type={'password'}
+                                label="Nhập lại mật khẩu mới"
+                                size="small"
+                                defaultValue={''}
+                                onChange={(e) => { setEditAccount({ ...editAccount, name_customer: e.target.value }) }}
+                            />
+                        </Box>
+                        <Box
+                            style={{
+                                display: 'flex',
+                                width: '50%',
+                                justifyContent: 'space-between',
+                                flexDirection: 'column',
+                                padding: 20,
+                            }}>
+                            <ColorButtonContained variant='contained' onClick={handleClickUpadte}>Cập nhật</ColorButtonContained>
+                        </Box>
+                    </Box>
                 )
             default:
                 break;
@@ -299,34 +428,37 @@ function AccountInfo() {
     if (account[0] !== undefined) {
         return (
             <Box style={{}}>
-                <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', borderRadius: '10px', marginTop: 50,  }}>
-                    <Box
-                        style={{
-                            display: 'flex',
-                            height: 50,
-                            alignItems: 'center',
-                        }}>
-                        <Breadcrumbs aria-label="breadcrumb">
-                            <Link underline="hover" color="inherit" to="/">
-                                <Typography color="text.primary">Trang Chủ</Typography>
-                            </Link>
-                            <Typography color="text.primary">
-                                Thông tin cá nhân
-                            </Typography>
-                        </Breadcrumbs>
-                    </Box>
-                    <Box sx={{ width: '100%', typography: 'body1' }}>
-                        <TabContext value={statusValue}>
-                            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                <TabList onChange={handleChange} aria-label="lab API tabs example">
-                                    <Tab label="Thông tin cá nhân" value="0" />
-                                    <Tab label="Ảnh đại diện" value="1" />
-                                </TabList>
+                <Container maxWidth="lg" style={{ backgroundColor: 'var(--background1)', borderRadius: '10px', marginTop: 70, padding: 0 }}>
+                    <Grid container spacing={2} minHeight={700}>
+                        <Grid item xs={3} style={{ paddingTop: 0 }}>
+                            <Box sx={{ width: '100%', typography: 'body1', backgroundColor: 'rgb(45, 45, 45)', height: '100%', borderStartStartRadius: 10, borderBottomLeftRadius: 10 }}>
+                                <AntTabs
+                                    orientation="vertical"
+                                    value={statusValue}
+                                    onChange={handleChange}
+                                >
+                                    <AntTab icon={<InfoIcon />} iconPosition="start" label="Thông tin cá nhân" value="0" />
+                                    <AntTab icon={<ImageIcon />} iconPosition="start" label="Ảnh đại diện" value="1" />
+                                    <AntTab icon={<LockIcon />} iconPosition="start" label="Bảo mật" value="2" />
+                                </AntTabs>
                             </Box>
-                        </TabContext>
-                    </Box>
-                    <Grid container spacing={2} minHeight={600}>
-                        <Grid item xs={12}>
+                        </Grid>
+                        <Grid item xs={9}>
+                            <Box
+                                style={{
+                                    display: 'flex',
+                                    height: 50,
+                                    alignItems: 'center',
+                                }}>
+                                <Breadcrumbs aria-label="breadcrumb">
+                                    <Link underline="hover" color="inherit" to="/">
+                                        <Typography color="text.primary">Trang Chủ</Typography>
+                                    </Link>
+                                    <Typography color="text.primary">
+                                        Thông tin cá nhân
+                                    </Typography>
+                                </Breadcrumbs>
+                            </Box>
                             {handleShowEditAccount()}
                         </Grid>
                     </Grid>

@@ -72,7 +72,7 @@ function Cart({ resetPage, handleResetPage }) {
     }, [resetPage])
 
     return (
-        <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', borderRadius: '10px', marginTop: 50, minHeight: 600 }}>
+        <Container maxWidth="lg" style={{ backgroundColor: 'var(--background1)', borderRadius: '10px', marginTop: 50, minHeight: 600 }}>
             <Box
                 style={{
                     display: 'flex',

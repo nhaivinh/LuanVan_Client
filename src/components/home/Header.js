@@ -25,6 +25,7 @@ import {
 } from '@material-ui/core';
 import AccountInfo from "../Customers/Account/AccountInfo";
 import { Grid } from "@mui/material";
+import { actions, useStore } from "../Store";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -78,6 +79,8 @@ const Header = ({ resetPage, handleResetPage }) => {
 
     const navigate = useNavigate();
 
+    const [state, dispatchStore] = useStore();
+    
     const [countCart, setCountCart] = React.useState(0)
 
     const [accountInfo, setAccountInfo] = React.useState({})
@@ -101,8 +104,8 @@ const Header = ({ resetPage, handleResetPage }) => {
                 .then(res => {
                     const AccountInfo = res.data;
                     setAccountInfo(AccountInfo[0]);
+                    dispatchStore(actions.setInfoAccount(AccountInfo[0]))
                 })
-            console.log("log again")
         }
     }, [resetPage])
 
@@ -187,6 +190,7 @@ const Header = ({ resetPage, handleResetPage }) => {
     }
     function handleClickLogOut() {
         removeCookie('Account', { path: '/' })
+        navigate('/')
         handleClose();
         window.location.reload()
     }
@@ -210,30 +214,70 @@ const Header = ({ resetPage, handleResetPage }) => {
                             style={{
                                 display: 'flex',
                                 paddingTop: 2,
-                                width: 100,
-                                paddingLeft: 25
+                                width: '15%',
+                                paddingTop: 10,                             
+                                paddingBottom: 15
                             }}>
-                            <img src={require('../../images/Logo/logoPCOrange.png')} width='160px' />
-                        </Box>                     
-                        <SearchBar
-                            className={classes.searchBar}
-                            value={searchItem}
-                            onChange={value => {
-                                setSearchItem(value);
-                            }}
-                            onRequestSearch={() => navigate('/search/?page=1&name=' + searchItem)}
+                            <img src={require('../../images/Logo/logoPCOrange.png')} width='200px' />
+                        </Box>
+
+                        <Box
                             style={{
-                                margin: "0 auto",
-                                minWidth: 500
+                                display: 'flex',
+                                width: '60%',
+                                justifyContent: 'center',
+                                alignItems: 'center'
                             }}
-                        />
+                        >
+                            <Box
+                                sx={style}
+                            >
+                                <Link to="/" className={classes.toolbarTitle}>
+                                    <Typography >Trang Chủ</Typography>
+                                </Link>
+                            </Box>
+                            <Box
+                                sx={style}
+                            >
+                                <Link to="/search" className={classes.toolbarTitle}>
+                                    <Typography>Sản Phẩm</Typography>
+                                </Link>
+                            </Box>
+                            <Box
+                                sx={style}>
+                                <Link to="/buildpc" className={classes.toolbarTitle}>
+                                    <Typography>Xây Dựng Cấu Hình</Typography>
+                                </Link>
+                            </Box>
+                            <Box
+                                sx={style}>
+                                <Link to="/suggestbuildpc" className={classes.toolbarTitle}>
+                                    <Typography>Tư Vấn Cấu Hình</Typography>
+                                </Link>
+                            </Box>
+                            <SearchBar
+                                className={classes.searchBar}
+                                value={searchItem}
+                                placeholder={"Tìm kiếm...."}
+                                onChange={value => {
+                                    setSearchItem(value);
+                                }}
+                                onRequestSearch={() => navigate('/search/?page=1&name=' + searchItem)}
+                                style={{
+                                    margin: "0 auto",
+                                    width: 200,
+                                    borderRadius: 10,
+                                    backgroundColor: 'var(--background1)',
+                                    color: orange[500],
+                                }}
+                            />
+                        </Box>
                         <Link to="/cart" className={classes.toolbarTitle}>
                             <Box
                                 style={{
                                     display: 'flex',
-                                    alignItems: 'center',
+                                    alignItems: 'right',
                                     flexDirection: 'row',
-                                    marginLeft: 50,
                                 }}>
                                 <ShoppingCartOutlinedIcon fontSize="large" />
                                 <Box
@@ -284,7 +328,7 @@ const Header = ({ resetPage, handleResetPage }) => {
                             </MenuItem>
                         </Menu>
                     </Toolbar>
-                    <Toolbar variant="dense">
+                    {/* <Toolbar variant="dense">
                         <Box
                             sx={style}
                         >
@@ -317,7 +361,7 @@ const Header = ({ resetPage, handleResetPage }) => {
                                 <Typography>Chính Sách Bảo Hành</Typography>
                             </Link>
                         </Box>
-                    </Toolbar>
+                    </Toolbar> */}
                 </Container>
             </AppBar>
             <Box style={{ marginBottom: 40 }}>

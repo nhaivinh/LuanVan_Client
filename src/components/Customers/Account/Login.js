@@ -45,12 +45,15 @@ const useStyles = makeStyles({
     }
 })
 
-const Login = ({resetPage, handleResetPage}) => {
+const Login = () => {
     const navigate = useNavigate();
     const classes = useStyles();
     const [cookies, setCookie] = useCookies(["user"]);
     const [open, setOpen] = React.useState(false);
     const [, dispatch] = React.useContext(SnackBarContext);
+
+
+
     const [StateLogin, setStateLogin] = useState("Not connect")
     const [login, setLogin] = useState({
         Username: '',
@@ -80,7 +83,8 @@ const Login = ({resetPage, handleResetPage}) => {
                         setStateLogin(res)
                         handleCookie(res)     
                         navigate('/')  
-                        window.location.reload()                
+                        window.location.reload()    
+       
                         dispatch(setOpenSnackBar());
                         dispatch(setMessage("Đăng nhập thành công"));
                         dispatch(setSeverity("success"));                       
