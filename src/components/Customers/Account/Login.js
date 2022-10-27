@@ -52,7 +52,7 @@ const Login = () => {
     const [open, setOpen] = React.useState(false);
     const [, dispatch] = React.useContext(SnackBarContext);
 
-
+    var md5 = require('md5');
 
     const [StateLogin, setStateLogin] = useState("Not connect")
     const [login, setLogin] = useState({
@@ -68,9 +68,8 @@ const Login = () => {
         setCookie("Account", id, {
             path: "/"
         });
-
-
     }
+
     const Checklogin = () => {
         if (login.Username.length !== 0 && login.Password.length !== 0) {
             axios.post('https://localhost:7253/api/Login', login)
@@ -126,7 +125,7 @@ const Login = () => {
                                 required
                                 type={'password'}
                                 variant="outlined"
-                                onChange={(e) => { setLogin({ ...login, Password: e.target.value }) }}
+                                onChange={(e) => { setLogin({ ...login, Password: md5(e.target.value) }) }}
                             >
                             </TextField>
                         </Box>

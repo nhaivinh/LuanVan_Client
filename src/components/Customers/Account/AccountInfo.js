@@ -79,9 +79,21 @@ function getFormattedDate(date) {
 
 function AccountInfo() {
 
+    var md5 = require('md5');
+
+    const textInput1 = React.useRef(null);
+    const textInput2 = React.useRef(null);
+    const textInput3 = React.useRef(null);
+
     const [resetpage, setResetPage] = React.useState(false)
 
     const [account, setAccount] = React.useState({})
+
+    const [changePassword, setChangePassword] = React.useState({
+        oldPassword: '',
+        newPassword: '',
+        repeatNewPassword: ''
+    })
 
     const [editAccount, setEditAccount] = React.useState({});
 
@@ -93,14 +105,36 @@ function AccountInfo() {
 
     const [posts, setPosts] = React.useState([]);
 
+    const [postsChangePassword, setPostsChangePassword] = React.useState([]);
+
     const client = axios.create({
         baseURL: "https://localhost:7253/api/Customer"
+    });
+
+    const clientChangePassword = axios.create({
+        baseURL: "https://localhost:7253/api/Login/changepassword"
     });
 
     const [statusValue, setStatusValue] = React.useState('0');
 
     const handleChange = (event, newValue) => {
         setStatusValue(newValue);
+        if (textInput1.current !== null && textInput2.current !== null && textInput3.current !== null) {
+            switch (newValue) {
+                case '0':
+                    textInput1.current.value = editAccount.name_customer
+                    textInput2.current.value = editAccount.email_customer
+                    textInput3.current.value = editAccount.phone_number_customer
+                    break;
+                case '2':
+                    textInput1.current.value = changePassword.oldPassword
+                    textInput2.current.value = changePassword.newPassword
+                    textInput3.current.value = changePassword.repeatNewPassword
+                    break;
+                default:
+                    break;
+            }
+        }
     };
 
 
@@ -173,6 +207,7 @@ function AccountInfo() {
                                 variant="outlined"
                                 label="Họ tên"
                                 size="small"
+                                inputRef={textInput1}
                                 defaultValue={account[0].name_customer}
                                 onChange={(e) => { setEditAccount({ ...editAccount, name_customer: e.target.value }) }}
                             />
@@ -180,6 +215,7 @@ function AccountInfo() {
                                 id="outlined-basic"
                                 label="Email"
                                 variant="outlined" size="small"
+                                inputRef={textInput2}
                                 defaultValue={account[0].email_customer}
                                 onChange={(e) => { setEditAccount({ ...editAccount, email_customer: e.target.value }) }}
                             />
@@ -187,6 +223,7 @@ function AccountInfo() {
                                 id="outlined-basic"
                                 variant="outlined"
                                 size="small"
+                                inputRef={textInput3}
                                 label="Số điện thoại"
                                 defaultValue={account[0].phone_number_customer}
                                 onChange={(e) => { setEditAccount({ ...editAccount, phone_number_customer: e.target.value }) }}
@@ -202,7 +239,8 @@ function AccountInfo() {
                             <TextField
                                 required
                                 type="date"
-                                label="Sinh nhật" variant="outlined"
+                                label="Sinh nhật"
+                                variant="outlined"
                                 defaultValue={getFormattedDate(DateOfBirthCustomer)}
                                 onChange={(e) => { setEditAccount({ ...editAccount, date_of_birth_customer: e.target.value }) }}
                             >
@@ -230,7 +268,7 @@ function AccountInfo() {
                                 flexDirection: 'column',
                                 padding: 20,
                             }}>
-                            <ColorButtonContained variant='contained' onClick={handleClickUpadte}>Cập nhật</ColorButtonContained>
+                            <ColorButtonContained variant='contained' onClick={handleClickUpdate}>Cập nhật</ColorButtonContained>
                         </Box>
                     </Box>
                 )
@@ -306,31 +344,31 @@ function AccountInfo() {
                                 height: 200
                             }}>
                             <TextField
-                                id="outlined-basic"
-                                variant="outlined"
                                 type={'password'}
+                                variant="outlined"
                                 label="Mật khẩu hiện tại"
+                                inputRef={textInput1}
+                                defaultValue={changePassword.oldPassword}
                                 size="small"
-                                defaultValue={''}
-                                onChange={(e) => { setEditAccount({ ...editAccount, name_customer: e.target.value }) }}
+                                onChange={(e) => { setChangePassword({ ...changePassword, oldPassword: e.target.value }) }}
                             />
                             <TextField
-                                id="outlined-basic"
+                                type={'password'}
                                 variant="outlined"
                                 label="Mật khẩu mới"
-                                type={'password'}
+                                defaultValue={""}
+                                inputRef={textInput2}
                                 size="small"
-                                defaultValue={''}
-                                onChange={(e) => { setEditAccount({ ...editAccount, name_customer: e.target.value }) }}
+                                onChange={(e) => { setChangePassword({ ...changePassword, newPassword: md5(e.target.value) }) }}
                             />
                             <TextField
-                                id="outlined-basic"
-                                variant="outlined"
                                 type={'password'}
+                                variant="outlined"
+                                defaultValue={""}
+                                inputRef={textInput3}
                                 label="Nhập lại mật khẩu mới"
                                 size="small"
-                                defaultValue={''}
-                                onChange={(e) => { setEditAccount({ ...editAccount, name_customer: e.target.value }) }}
+                                onChange={(e) => { setChangePassword({ ...changePassword, repeatNewPassword: md5(e.target.value) }) }}
                             />
                         </Box>
                         <Box
@@ -341,7 +379,7 @@ function AccountInfo() {
                                 flexDirection: 'column',
                                 padding: 20,
                             }}>
-                            <ColorButtonContained variant='contained' onClick={handleClickUpadte}>Cập nhật</ColorButtonContained>
+                            <ColorButtonContained variant='contained' onClick={handleClickChangePassword}>Cập nhật</ColorButtonContained>
                         </Box>
                     </Box>
                 )
@@ -350,7 +388,7 @@ function AccountInfo() {
         }
     }
 
-    function handleClickUpadte() {
+    function handleClickUpdate() {
         const current = new Date();
         const date = getFormattedDate(current);
 
@@ -407,6 +445,53 @@ function AccountInfo() {
             })
             .then((response) => {
                 setPosts([response.data, ...posts]);
+                dispatch(setOpenSnackBar());
+                dispatch(setMessage(response.data.message));
+                dispatch(setSeverity(response.data.severity));
+            })
+            .catch((err) => {
+                if (err.response) {
+                    // The client was given an error response (5xx, 4xx)
+                    console.log(err.response.data);
+                    console.log(err.response.status);
+                    console.log(err.response.headers);
+                } else if (err.request) {
+                    // The client never received a response, and the request was never left
+                } else {
+                    // Anything else
+                }
+            });
+    };
+
+    function handleClickChangePassword() {
+
+
+        let thongbao = "";
+        let validPassword = false;
+        let validNewPassword = false;
+        let validRepeatNewPassword = false;
+
+        if (changePassword.newPassword !== changePassword.repeatNewPassword) {
+            thongbao = thongbao + "Nhập lại mật khẩu"
+        } else validRepeatNewPassword = true
+
+        if (validRepeatNewPassword) {
+            addPostsChangePassword(editAccount, changePassword);
+        } else {
+            alert(thongbao);
+            console.log(editAccount);
+        }
+    }
+
+    const addPostsChangePassword = (Account, ChangePassword) => {
+        clientChangePassword
+            .put('', {
+                "idAccount": Account.id_account,
+                "password": ChangePassword.oldPassword,
+                "newPassword": ChangePassword.newPassword,
+            })
+            .then((response) => {
+                setPostsChangePassword([response.data, ...postsChangePassword]);
                 dispatch(setOpenSnackBar());
                 dispatch(setMessage(response.data.message));
                 dispatch(setSeverity(response.data.severity));
