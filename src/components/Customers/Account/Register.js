@@ -25,6 +25,7 @@ import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBa
 // import { cookie, CreateCookie, GetCookie } from '../../Cookie/CookieFunc';
 import { styled } from '@mui/material/styles';
 import { orange } from '@mui/material/colors';
+import md5 from "md5";
 
 const ColorButtonContained = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(orange[500]),
@@ -47,6 +48,8 @@ function getFormattedDate(date) {
 }
 
 const Register = () => {
+
+    var md5 = require('md5');
 
     const navigate = useNavigate();
 
@@ -206,7 +209,7 @@ const Register = () => {
                             style={{
                                 display: 'flex',
                                 flexDirection: 'column',
-                                width: 800,
+                                width: 1000,
                                 marginBottom: 10
                             }}>
                             <Box
@@ -229,7 +232,7 @@ const Register = () => {
                                         type="password"
                                         label="Mật khẩu"
                                         size="small"
-                                        onChange={(e) => { setRegister({ ...register, Password: e.target.value }) }}
+                                        onChange={(e) => { setRegister({ ...register, Password: md5(e.target.value) }) }}
                                     >
                                     </TextField>
                                     <TextField
@@ -238,7 +241,7 @@ const Register = () => {
                                         type="password"
                                         label="Nhập lại mật khẩu"
                                         size="small"
-                                        onChange={(e) => { setRegister({ ...register, RepeatPassword: e.target.value }) }}
+                                        onChange={(e) => { setRegister({ ...register, RepeatPassword: md5(e.target.value) }) }}
                                     >
                                     </TextField>
                                     <TextField

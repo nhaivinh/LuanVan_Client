@@ -80,7 +80,7 @@ const Header = ({ resetPage, handleResetPage }) => {
     const navigate = useNavigate();
 
     const [state, dispatchStore] = useStore();
-    
+
     const [countCart, setCountCart] = React.useState(0)
 
     const [accountInfo, setAccountInfo] = React.useState({})
@@ -198,7 +198,7 @@ const Header = ({ resetPage, handleResetPage }) => {
         <Box style={{ marginBottom: 10 }}>
             <AppBar position="fixed" elevation={0} style={{ backgroundColor: '#2d2d2d' }}>
                 <Container maxWidth="xl" >
-                    <Toolbar variant="dense">
+                    {/* <Toolbar variant="dense">
                         <Box style={{
                             display: 'flex',
                             justifyContent: 'center',
@@ -208,23 +208,24 @@ const Header = ({ resetPage, handleResetPage }) => {
                                 src={'https://lh3.googleusercontent.com/fZCbLDJ59Ioqx7aWR0qyoBXETqQezHo-ingVbETJPLVZPgZEr4f0D1uv046V4_0_DhmDfxP-e3_Duxd3avGLFdHPrUd-VrTY=w1920-rw'}
                             />
                         </Box>
-                    </Toolbar>
-                    <Toolbar>
+                    </Toolbar> */}
+                    <Toolbar variant="dense">
                         <Box
                             style={{
                                 display: 'flex',
                                 paddingTop: 2,
-                                width: '15%',
-                                paddingTop: 10,                             
+                                width: '10%',
+                                paddingTop: 10,
+                                marginRight: 50,
                                 paddingBottom: 15
                             }}>
-                            <img src={require('../../images/Logo/logoPCOrange.png')} width='200px' />
+                            <img src={require('../../images/Logo/logoPCOrange.png')} width='150px' />
                         </Box>
 
                         <Box
                             style={{
                                 display: 'flex',
-                                width: '60%',
+                                width: '75%',
                                 justifyContent: 'center',
                                 alignItems: 'center'
                             }}
@@ -265,68 +266,77 @@ const Header = ({ resetPage, handleResetPage }) => {
                                 onRequestSearch={() => navigate('/search/?page=1&name=' + searchItem)}
                                 style={{
                                     margin: "0 auto",
-                                    width: 200,
+                                    width: 300,
                                     borderRadius: 10,
                                     backgroundColor: 'var(--background1)',
                                     color: orange[500],
                                 }}
                             />
                         </Box>
-                        <Link to="/cart" className={classes.toolbarTitle}>
-                            <Box
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'right',
-                                    flexDirection: 'row',
-                                }}>
-                                <ShoppingCartOutlinedIcon fontSize="large" />
+                        <Box
+                            style={{
+                                display: 'flex',
+                                width: '25%',
+                                justifyContent: 'flex-end',
+                                alignItems: 'center'
+                            }}
+                        >
+                            <Link to="/cart" className={classes.toolbarTitle}>
                                 <Box
                                     style={{
                                         display: 'flex',
-                                        alignItems: 'center',
-                                        flexDirection: 'column',
-                                        marginLeft: 2,
-                                        marginRight: 3
+                                        alignItems: 'right',
+                                        flexDirection: 'row',
                                     }}>
-                                    <Typography variant="body2">Giỏ hàng của bạn</Typography>
-                                    <Typography variant="body2">{countCart} sản phẩm</Typography>
+                                    <ShoppingCartOutlinedIcon fontSize="large" />
+                                    <Box
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            flexDirection: 'column',
+                                            marginLeft: 2,
+                                            marginRight: 20
+                                        }}>
+                                        <Typography variant="body2">Giỏ hàng của bạn</Typography>
+                                        <Typography variant="body2">{countCart} sản phẩm</Typography>
+                                    </Box>
                                 </Box>
-                            </Box>
-                        </Link>
-                        {handleShowAvatar()}
-                        <Menu
-                            id="basic-menu"
-                            anchorEl={anchorEl}
-                            open={open}
-                            onClose={handleClose}
-                            MenuListProps={{
-                                'aria-labelledby': 'basic-button',
-                            }}
-                        >
-                            <MenuItem onClick={handleClose}>
-                                <Link to="/account">
-                                    Thông tin cá nhân
-                                </Link>
-                            </MenuItem>
-                            <MenuItem onClick={handleClose}>
-                                <Link to="/order">
-                                    Quản lý đơn hàng
-                                </Link>
-                            </MenuItem>
-                            {accountInfo.role === "staff" &&
-                                <MenuItem
-                                    onClick={handleClose}
-                                >
-                                    <a href="/admin/dashboard">Trang quản lý</a>
-                                </MenuItem>
-                            }
-
-                            <MenuItem
-                                onClick={handleClickLogOut}
+                            </Link>
+                            {handleShowAvatar()}
+                            <Menu
+                                id="basic-menu"
+                                anchorEl={anchorEl}
+                                open={open}
+                                onClose={handleClose}
+                                MenuListProps={{
+                                    'aria-labelledby': 'basic-button',
+                                }}
                             >
-                                Đăng xuất
-                            </MenuItem>
-                        </Menu>
+                                <MenuItem onClick={handleClose}>
+                                    <Link to="/account">
+                                        Thông tin cá nhân
+                                    </Link>
+                                </MenuItem>
+                                <MenuItem onClick={handleClose}>
+                                    <Link to="/order">
+                                        Quản lý đơn hàng
+                                    </Link>
+                                </MenuItem>
+                                {accountInfo.role === "staff" &&
+                                    <MenuItem
+                                        onClick={handleClose}
+                                    >
+                                        <a href="/admin/dashboard">Trang quản lý</a>
+                                    </MenuItem>
+                                }
+
+                                <MenuItem
+                                    onClick={handleClickLogOut}
+                                >
+                                    Đăng xuất
+                                </MenuItem>
+                            </Menu>
+                        </Box>
                     </Toolbar>
                     {/* <Toolbar variant="dense">
                         <Box
@@ -364,9 +374,9 @@ const Header = ({ resetPage, handleResetPage }) => {
                     </Toolbar> */}
                 </Container>
             </AppBar>
-            <Box style={{ marginBottom: 40 }}>
+            <Box style={{ marginBottom: 20 }}>
                 <div className={classes.toolbar}></div>
-                <div className={classes.toolbar}></div>
+                {/* <div className={classes.toolbar}></div> */}
             </Box>
 
         </Box >

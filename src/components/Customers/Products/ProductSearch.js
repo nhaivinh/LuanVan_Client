@@ -1524,13 +1524,29 @@ function ProductSearch() {
                 <Grid container spacing={2}>
                     <Grid item xs={3}>
                         <Container maxWidth="xl" style={{ backgroundColor: 'rgb(255, 255, 255)', borderRadius: '10px', marginTop: 10, padding: 0 }}>
+                            {params.name !== undefined &&
+                                <Box style={{
+                                    width: '100%',
+                                    borderBottom: '1px solid rgb(234, 234, 234)',
+                                    WebkitBoxPack: 'justify',
+                                    justifyContent: 'center',
+                                    alignItems: 'flex-start',
+                                    fontSize: 14,
+                                    height: 70,
+                                    display: 'flex',
+                                    flexDirection: 'column'
+                                }}>
+                                    <Typography style={{ paddingLeft: 20 }}>Kết quả tìm kiếm cho : <b>{params.name}</b></Typography>
+                                    <Typography style={{ paddingLeft: 20 }}>Có <b>{handleChosenProducts(products).length}</b> kết quả</Typography>
+                                </Box>
+                            }
                             <Box
                                 style={{
                                     display: 'flex',
                                     padding: 20,
                                     flexDirection: 'column',
                                 }}>
-                                <Stack direction="row" spacing={2} justifyContent="space-between" borderLeft={'5px solid black'} marginTop={2} marginBottom={2} paddingRight={3}>
+                                <Stack direction="row" spacing={2} justifyContent="space-between" borderLeft={'5px solid black'} marginBottom={2} paddingRight={3}>
                                     <Typography variant='h6' paddingLeft={2}>Bộ lọc</Typography>
                                 </Stack>
                                 <Box

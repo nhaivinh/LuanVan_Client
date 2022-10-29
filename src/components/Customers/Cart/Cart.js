@@ -24,6 +24,7 @@ import DecreaseCart from './DecreaseCart'
 import IncreaseCart from './IncreaseCart'
 import { styled } from '@mui/material/styles';
 import { orange } from '@mui/material/colors';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 const ColorButtonContained = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(orange[500]),
@@ -88,134 +89,154 @@ function Cart({ resetPage, handleResetPage }) {
                     </Typography>
                 </Breadcrumbs>
             </Box>
-            <Grid container spacing={2}>
-                <Grid item xs={8} >
-                    <Box style={{}}>
-                        <TableContainer component={Paper} sx={{ maxHeight: 700 }}>
-                            <Table stickyHeader={true} sx={{ minWidth: 650 }} size="small" aria-label="simple table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell style={{ width: '55%' }} colSpan={2}><Typography variant='h6'>Thông tin sản phẩm</Typography></TableCell>
-                                        <TableCell style={{ width: '20%' }} align="left">Đơn giá</TableCell>
-                                        <TableCell style={{ width: '15%' }} align="left">Số lượng</TableCell>
-                                        <TableCell style={{ width: '20%' }} align="left">Thành tiền</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {cart.map(function (row) {
-                                        return (
-                                            <TableRow
-                                                key={row.id_product}
-                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                            >
-                                                <TableCell component="th" scope="row" style={{ width: '30%' }}>
-                                                    <img src={"data:image/png;base64, " + row.picture_link_product} alt="product images" width={'100%'} height={'100%'} />
-                                                </TableCell>
-                                                <TableCell component="th" scope="row" align="left">
-                                                    {row.name_product}
-                                                </TableCell>
-                                                <TableCell align="left">
-                                                    <Box
-                                                        style={{
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            flexDirection: 'column'
-                                                        }}
-                                                    >
-                                                        <Typography >
-                                                            {(row.unit_price_product * (1 - row.discount_product * 0.01)).toLocaleString('vi-VI',
+            {cart.length !== 0 ?
+                <Grid container spacing={2}>
+                    <Grid item xs={8} >
+                        <Box style={{}}>
+                            <TableContainer component={Paper} sx={{ maxHeight: 700 }}>
+                                <Table stickyHeader={true} sx={{ minWidth: 650 }} size="small" aria-label="simple table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell style={{ width: '55%' }} colSpan={2}><Typography variant='h6'>Thông tin sản phẩm</Typography></TableCell>
+                                            <TableCell style={{ width: '20%' }} align="left">Đơn giá</TableCell>
+                                            <TableCell style={{ width: '15%' }} align="left">Số lượng</TableCell>
+                                            <TableCell style={{ width: '20%' }} align="left">Thành tiền</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {cart.map(function (row) {
+                                            return (
+                                                <TableRow
+                                                    key={row.id_product}
+                                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                >
+                                                    <TableCell component="th" scope="row" style={{ width: '30%' }}>
+                                                        <img src={"data:image/png;base64, " + row.picture_link_product} alt="product images" width={'100%'} height={'100%'} />
+                                                    </TableCell>
+                                                    <TableCell component="th" scope="row" align="left">
+                                                        {row.name_product}
+                                                    </TableCell>
+                                                    <TableCell align="left">
+                                                        <Box
+                                                            style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                flexDirection: 'column'
+                                                            }}
+                                                        >
+                                                            <Typography >
+                                                                {(row.unit_price_product * (1 - row.discount_product * 0.01)).toLocaleString('vi-VI',
+                                                                    {
+                                                                        style: 'currency',
+                                                                        currency: 'VND'
+                                                                    })}
+                                                            </Typography>
+                                                            {row.discount_product !== 0 &&
+                                                                <Typography variant='body2'>
+                                                                    <del>
+                                                                        {row.unit_price_product.toLocaleString('vi-VI',
+                                                                            {
+                                                                                style: 'currency',
+                                                                                currency: 'VND'
+                                                                            })}
+                                                                    </del>
+                                                                </Typography>
+                                                            }
+                                                        </Box>
+                                                    </TableCell>
+                                                    <TableCell align="left">
+                                                        <Box
+                                                            style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                flexDirection: 'column'
+                                                            }}>
+                                                            <Box
+                                                                style={{
+                                                                    display: 'flex',
+                                                                    alignItems: 'center'
+                                                                }}>
+                                                                <DecreaseCart idAccount={row.id_account} idProduct={row.id_product} handleResetPage={handleResetPage} />
+                                                                {row.quantity_product_cart}
+                                                                <IncreaseCart idAccount={row.id_account} idProduct={row.id_product} handleResetPage={handleResetPage} />
+                                                            </Box>
+                                                            <DeleteCart idAccount={row.id_account} idProduct={row.id_product} handleResetPage={handleResetPage} />
+                                                        </Box>
+                                                    </TableCell>
+                                                    <TableCell align="left">
+                                                        <Typography variant='body1'>{
+                                                            (row.unit_price_product * row.quantity_product_cart * (1 - row.discount_product * 0.01)).toLocaleString('vi-VI',
                                                                 {
                                                                     style: 'currency',
                                                                     currency: 'VND'
                                                                 })}
                                                         </Typography>
-                                                        {row.discount_product !== 0 &&
-                                                            <Typography variant='body2'>
-                                                                <del>
-                                                                    {row.unit_price_product.toLocaleString('vi-VI',
-                                                                        {
-                                                                            style: 'currency',
-                                                                            currency: 'VND'
-                                                                        })}
-                                                                </del>
-                                                            </Typography>
-                                                        }
-                                                    </Box>
-                                                </TableCell>
-                                                <TableCell align="left">
-                                                    <Box
-                                                        style={{
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            flexDirection: 'column'
-                                                        }}>
-                                                        <Box
-                                                            style={{
-                                                                display: 'flex',
-                                                                alignItems: 'center'
-                                                            }}>
-                                                            <DecreaseCart idAccount={row.id_account} idProduct={row.id_product} handleResetPage={handleResetPage} />
-                                                            {row.quantity_product_cart}
-                                                            <IncreaseCart idAccount={row.id_account} idProduct={row.id_product} handleResetPage={handleResetPage} />
-                                                        </Box>
-                                                        <DeleteCart idAccount={row.id_account} idProduct={row.id_product} handleResetPage={handleResetPage} />
-                                                    </Box>
-                                                </TableCell>
-                                                <TableCell align="left">
-                                                    <Typography variant='body1'>{
-                                                        (row.unit_price_product * row.quantity_product_cart * (1 - row.discount_product * 0.01)).toLocaleString('vi-VI',
-                                                            {
-                                                                style: 'currency',
-                                                                currency: 'VND'
-                                                            })}
-                                                    </Typography>
-                                                </TableCell>
-                                            </TableRow>
-                                        )
+                                                    </TableCell>
+                                                </TableRow>
+                                            )
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Box style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            backgroundColor: 'white',
+                            borderRadius: 10,
+                            paddingLeft: 20,
+                            paddingRight: 20,
+                            height: 200,
+                            justifyContent: 'space-around'
+                        }}
+                        >
+                            <Typography variant="h5">Thanh Toán</Typography>
+                            <Typography>{"Tổng tạm tính: " +
+                                totalPrice.toLocaleString('vi-VI',
+                                    {
+                                        style: 'currency',
+                                        currency: 'VND'
                                     })}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Box>
+                            </Typography>
+                            <Typography>{"Giảm giá: " +
+                                (totalDiscount).toLocaleString('vi-VI',
+                                    {
+                                        style: 'currency',
+                                        currency: 'VND'
+                                    })}
+                            </Typography>
+                            <Typography>{"Thành tiền: " +
+                                (totalPrice - totalDiscount).toLocaleString('vi-VI',
+                                    {
+                                        style: 'currency',
+                                        currency: 'VND'
+                                    })}
+                            </Typography>
+                            <ColorButtonContained variant='contained' onClick={() => navigate('/checkout')}>Đặt mua</ColorButtonContained>
+                        </Box>
+                    </Grid>
                 </Grid>
-                <Grid item xs={4}>
-                    <Box style={{
+                :
+                <Box
+                    style={{
                         display: 'flex',
-                        flexDirection: 'column',
-                        backgroundColor: 'white',
-                        borderRadius: 10,
-                        paddingLeft: 20,
-                        paddingRight: 20,
-                        height: 200,
-                        justifyContent: 'space-around'
+                        width: '100%',
+                        height: 220,
+                        paddingTop: 100,
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        flexDirection: 'column'
                     }}
-                    >
-                        <Typography variant="h5">Thanh Toán</Typography>
-                        <Typography>{"Tổng tạm tính: " +
-                            totalPrice.toLocaleString('vi-VI',
-                                {
-                                    style: 'currency',
-                                    currency: 'VND'
-                                })}
-                        </Typography>
-                        <Typography>{"Giảm giá: " +
-                            (totalDiscount).toLocaleString('vi-VI',
-                                {
-                                    style: 'currency',
-                                    currency: 'VND'
-                                })}
-                        </Typography>
-                        <Typography>{"Thành tiền: " +
-                            (totalPrice - totalDiscount).toLocaleString('vi-VI',
-                                {
-                                    style: 'currency',
-                                    currency: 'VND'
-                                })}
-                        </Typography>
-                        <ColorButtonContained variant='contained' onClick={() => navigate('/checkout')}>Đặt mua</ColorButtonContained>
-                    </Box>
-                </Grid>
-            </Grid>
+                >
+                    <ErrorOutlineIcon sx={{ fontSize: 120, color: 'orange' }} />
+                    <Typography>Giỏ hàng chưa có sản phẩm nào</Typography>
+                    <Link to="/search">
+                        <ColorButtonContained>Mua sắm ngay</ColorButtonContained>
+                    </Link>
+                </Box>
+            }
         </Container>
     )
 }
