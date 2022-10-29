@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { Routes, Route } from 'react-router-dom';
 import React from 'react';
 import '../../CSS/AdminHome.css'
@@ -9,9 +10,21 @@ import ImportProductHome from './ImportProduct/ImportProductHome';
 import CustomerManagementHome from './CustomerManagement/CustomerManagementHome';
 import DashboardHome from './Dashboard/DashboardHome';
 import StatisticHome from './Statistic/StatisticHome';
-
+import { actions, useStore } from '../Store';
 
 function AdminHome() {
+
+  const [, dispatch] = useStore()
+
+
+  React.useEffect(() => {
+    axios.get(`https://localhost:7253/api/Product/`)
+      .then(res => {
+        const Products = res.data;
+        dispatch(actions.loadProduct(Products))
+      })
+  }, [])
+
   return (
     <div className="App">
       <React.Fragment>

@@ -98,7 +98,7 @@ const Register = () => {
 
         if (register.Password !== register.RepeatPassword) {
             thongbao = thongbao + "\nNhập lại mật khẩu"
-        } else validUsername = true
+        } else validPassword = true
 
         if (register.Name === "" || register.Name.search(/[0-9]/) >= 0) {
             thongbao = thongbao + "\nHọ và Tên"

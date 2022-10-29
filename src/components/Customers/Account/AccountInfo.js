@@ -17,9 +17,54 @@ import Avatar from '@mui/material/Avatar';
 import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
 import { useCookies } from "react-cookie";
-import Tab from '@material-ui/core/Tab';
-import TabContext from '@material-ui/lab/TabContext';
-import TabList from '@material-ui/lab/TabList';
+import Tab from '@mui/material/Tab';
+import { Tabs } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
+import ImageIcon from '@mui/icons-material/Image';
+import LockIcon from '@mui/icons-material/Lock';
+import { styled } from '@mui/material/styles';
+import { orange } from '@mui/material/colors';
+
+const AntTabs = styled(Tabs)({
+    '& .MuiTabs-indicator': {
+        backgroundColor: orange[500],
+        left: 0,
+        paddingLeft: 10,
+        borderRadius: 10
+    },
+});
+
+const ColorButtonContained = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[500]),
+    fontWeight: 900,
+    backgroundColor: orange[500],
+    '&:hover': {
+        backgroundColor: orange[700],
+    },
+}));
+
+const AntTab = styled((props) => <Tab disableRipple {...props} />)(({ theme }) => ({
+    textTransform: 'none',
+    minWidth: 0,
+    fontSize: 16,
+    [theme.breakpoints.up('sm')]: {
+        minWidth: 0,
+    },
+    fontWeight: theme.typography.fontWeightRegular,
+    marginRight: theme.spacing(1),
+    color: orange[400],
+    '&:hover': {
+        color: orange[900],
+        opacity: 1,
+    },
+    '&.Mui-selected': {
+        color: orange[400],
+        fontWeight: theme.typography.fontWeightMedium,
+    },
+    '&.Mui-focusVisible': {
+        backgroundColor: '#d1eaff',
+    },
+}));
 
 function getFormattedDate(date) {
     var year = date.getFullYear();
@@ -34,9 +79,21 @@ function getFormattedDate(date) {
 
 function AccountInfo() {
 
+    var md5 = require('md5');
+
+    const textInput1 = React.useRef(null);
+    const textInput2 = React.useRef(null);
+    const textInput3 = React.useRef(null);
+
     const [resetpage, setResetPage] = React.useState(false)
 
     const [account, setAccount] = React.useState({})
+
+    const [changePassword, setChangePassword] = React.useState({
+        oldPassword: '',
+        newPassword: '',
+        repeatNewPassword: ''
+    })
 
     const [editAccount, setEditAccount] = React.useState({});
 
@@ -48,14 +105,36 @@ function AccountInfo() {
 
     const [posts, setPosts] = React.useState([]);
 
+    const [postsChangePassword, setPostsChangePassword] = React.useState([]);
+
     const client = axios.create({
         baseURL: "https://localhost:7253/api/Customer"
+    });
+
+    const clientChangePassword = axios.create({
+        baseURL: "https://localhost:7253/api/Login/changepassword"
     });
 
     const [statusValue, setStatusValue] = React.useState('0');
 
     const handleChange = (event, newValue) => {
         setStatusValue(newValue);
+        if (textInput1.current !== null && textInput2.current !== null && textInput3.current !== null) {
+            switch (newValue) {
+                case '0':
+                    textInput1.current.value = editAccount.name_customer
+                    textInput2.current.value = editAccount.email_customer
+                    textInput3.current.value = editAccount.phone_number_customer
+                    break;
+                case '2':
+                    textInput1.current.value = changePassword.oldPassword
+                    textInput2.current.value = changePassword.newPassword
+                    textInput3.current.value = changePassword.repeatNewPassword
+                    break;
+                default:
+                    break;
+            }
+        }
     };
 
 
@@ -128,6 +207,7 @@ function AccountInfo() {
                                 variant="outlined"
                                 label="Họ tên"
                                 size="small"
+                                inputRef={textInput1}
                                 defaultValue={account[0].name_customer}
                                 onChange={(e) => { setEditAccount({ ...editAccount, name_customer: e.target.value }) }}
                             />
@@ -135,6 +215,7 @@ function AccountInfo() {
                                 id="outlined-basic"
                                 label="Email"
                                 variant="outlined" size="small"
+                                inputRef={textInput2}
                                 defaultValue={account[0].email_customer}
                                 onChange={(e) => { setEditAccount({ ...editAccount, email_customer: e.target.value }) }}
                             />
@@ -142,6 +223,7 @@ function AccountInfo() {
                                 id="outlined-basic"
                                 variant="outlined"
                                 size="small"
+                                inputRef={textInput3}
                                 label="Số điện thoại"
                                 defaultValue={account[0].phone_number_customer}
                                 onChange={(e) => { setEditAccount({ ...editAccount, phone_number_customer: e.target.value }) }}
@@ -157,7 +239,8 @@ function AccountInfo() {
                             <TextField
                                 required
                                 type="date"
-                                label="Sinh nhật" variant="outlined"
+                                label="Sinh nhật"
+                                variant="outlined"
                                 defaultValue={getFormattedDate(DateOfBirthCustomer)}
                                 onChange={(e) => { setEditAccount({ ...editAccount, date_of_birth_customer: e.target.value }) }}
                             >
@@ -185,7 +268,7 @@ function AccountInfo() {
                                 flexDirection: 'column',
                                 padding: 20,
                             }}>
-                            <Button variant='contained' onClick={handleClickUpadte}>Cập nhật</Button>
+                            <ColorButtonContained variant='contained' onClick={handleClickUpdate}>Cập nhật</ColorButtonContained>
                         </Box>
                     </Box>
                 )
@@ -196,32 +279,116 @@ function AccountInfo() {
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            flexDirection: 'row',
+                            flexDirection: 'column',
                             paddingBottom: 30,
                             paddingTop: 10
                         }}>
-                        <div>
-                            <img alt="not found" width={"250px"} src={account[0].picture_char} />
-                        </div>
+                        <Box
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flexDirection: 'column',
+                                paddingBottom: 30,
+                                paddingTop: 10
+                            }}>
+                            <Avatar
+                                alt="Remy Sharp"
+                                src={account[0].picture_char}
+                                sx={{ width: 200, height: 200 }}
+                            />
+                        </Box>
                         <Box
                             style={{
                                 display: 'flex',
                                 flexDirection: 'column',
-                                width: 250,
+                                width: 300,
                                 paddingLeft: 10
                             }}
                         >
-                            <input type="file" onChange={saveFile} />
-                            <Button variant='contained' onClick={saveImage}>Cập nhật ảnh đại diện</Button>
+                            <Box
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    width: 300,
+                                    paddingLeft: 10,
+                                    paddingBottom: 10
+                                }}
+                            >
+                                <input className="custom-file-input" type="file" onChange={saveFile} />
+                            </Box>
+                            <ColorButtonContained variant='contained' onClick={saveImage}>Cập nhật ảnh đại diện</ColorButtonContained>
                         </Box>
                     </Box >
+                )
+            case '2':
+                return (
+                    <Box
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                            paddingBottom: 30,
+                            paddingTop: 10
+                        }}>
+                        <Box
+                            style={{
+                                display: 'flex',
+                                width: '50%',
+                                justifyContent: 'space-between',
+                                flexDirection: 'column',
+                                backgroundColor: 'white',
+                                padding: 20,
+                                borderRadius: 10,
+                                height: 200
+                            }}>
+                            <TextField
+                                type={'password'}
+                                variant="outlined"
+                                label="Mật khẩu hiện tại"
+                                inputRef={textInput1}
+                                defaultValue={changePassword.oldPassword}
+                                size="small"
+                                onChange={(e) => { setChangePassword({ ...changePassword, oldPassword: md5(e.target.value) }) }}
+                            />
+                            <TextField
+                                type={'password'}
+                                variant="outlined"
+                                label="Mật khẩu mới"
+                                defaultValue={""}
+                                inputRef={textInput2}
+                                size="small"
+                                onChange={(e) => { setChangePassword({ ...changePassword, newPassword: md5(e.target.value) }) }}
+                            />
+                            <TextField
+                                type={'password'}
+                                variant="outlined"
+                                defaultValue={""}
+                                inputRef={textInput3}
+                                label="Nhập lại mật khẩu mới"
+                                size="small"
+                                onChange={(e) => { setChangePassword({ ...changePassword, repeatNewPassword: md5(e.target.value) }) }}
+                            />
+                        </Box>
+                        <Box
+                            style={{
+                                display: 'flex',
+                                width: '50%',
+                                justifyContent: 'space-between',
+                                flexDirection: 'column',
+                                padding: 20,
+                            }}>
+                            <ColorButtonContained variant='contained' onClick={handleClickChangePassword}>Cập nhật</ColorButtonContained>
+                        </Box>
+                    </Box>
                 )
             default:
                 break;
         }
     }
 
-    function handleClickUpadte() {
+    function handleClickUpdate() {
         const current = new Date();
         const date = getFormattedDate(current);
 
@@ -296,37 +463,87 @@ function AccountInfo() {
             });
     };
 
+    function handleClickChangePassword() {
+
+
+        let thongbao = "";
+        let validPassword = false;
+        let validNewPassword = false;
+        let validRepeatNewPassword = false;
+
+        if (changePassword.newPassword !== changePassword.repeatNewPassword) {
+            thongbao = thongbao + "Nhập lại mật khẩu"
+        } else validRepeatNewPassword = true
+
+        if (validRepeatNewPassword) {
+            addPostsChangePassword(editAccount, changePassword);
+        } else {
+            alert(thongbao);
+            console.log(editAccount);
+        }
+    }
+
+    const addPostsChangePassword = (Account, ChangePassword) => {
+        clientChangePassword
+            .put('', {
+                "idAccount": Account.id_account,
+                "password": ChangePassword.oldPassword,
+                "newPassword": ChangePassword.newPassword,
+            })
+            .then((response) => {
+                setPostsChangePassword([response.data, ...postsChangePassword]);
+                dispatch(setOpenSnackBar());
+                dispatch(setMessage(response.data.message));
+                dispatch(setSeverity(response.data.severity));
+            })
+            .catch((err) => {
+                if (err.response) {
+                    // The client was given an error response (5xx, 4xx)
+                    console.log(err.response.data);
+                    console.log(err.response.status);
+                    console.log(err.response.headers);
+                } else if (err.request) {
+                    // The client never received a response, and the request was never left
+                } else {
+                    // Anything else
+                }
+            });
+    };
+
     if (account[0] !== undefined) {
         return (
             <Box style={{}}>
-                <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', borderRadius: '10px', marginTop: 50,  }}>
-                    <Box
-                        style={{
-                            display: 'flex',
-                            height: 50,
-                            alignItems: 'center',
-                        }}>
-                        <Breadcrumbs aria-label="breadcrumb">
-                            <Link underline="hover" color="inherit" to="/">
-                                <Typography color="text.primary">Trang Chủ</Typography>
-                            </Link>
-                            <Typography color="text.primary">
-                                Thông tin cá nhân
-                            </Typography>
-                        </Breadcrumbs>
-                    </Box>
-                    <Box sx={{ width: '100%', typography: 'body1' }}>
-                        <TabContext value={statusValue}>
-                            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                <TabList onChange={handleChange} aria-label="lab API tabs example">
-                                    <Tab label="Thông tin cá nhân" value="0" />
-                                    <Tab label="Ảnh đại diện" value="1" />
-                                </TabList>
+                <Container maxWidth="lg" style={{ backgroundColor: 'var(--background1)', borderRadius: '10px', marginTop: 70, padding: 0 }}>
+                    <Grid container spacing={2} minHeight={700}>
+                        <Grid item xs={3} style={{ paddingTop: 0 }}>
+                            <Box sx={{ width: '100%', typography: 'body1', backgroundColor: 'rgb(45, 45, 45)', height: '100%', borderStartStartRadius: 10, borderBottomLeftRadius: 10 }}>
+                                <AntTabs
+                                    orientation="vertical"
+                                    value={statusValue}
+                                    onChange={handleChange}
+                                >
+                                    <AntTab icon={<InfoIcon />} iconPosition="start" label="Thông tin cá nhân" value="0" />
+                                    <AntTab icon={<ImageIcon />} iconPosition="start" label="Ảnh đại diện" value="1" />
+                                    <AntTab icon={<LockIcon />} iconPosition="start" label="Bảo mật" value="2" />
+                                </AntTabs>
                             </Box>
-                        </TabContext>
-                    </Box>
-                    <Grid container spacing={2} minHeight={600}>
-                        <Grid item xs={12}>
+                        </Grid>
+                        <Grid item xs={9}>
+                            <Box
+                                style={{
+                                    display: 'flex',
+                                    height: 50,
+                                    alignItems: 'center',
+                                }}>
+                                <Breadcrumbs aria-label="breadcrumb">
+                                    <Link underline="hover" color="inherit" to="/">
+                                        <Typography color="text.primary">Trang Chủ</Typography>
+                                    </Link>
+                                    <Typography color="text.primary">
+                                        Thông tin cá nhân
+                                    </Typography>
+                                </Breadcrumbs>
+                            </Box>
                             {handleShowEditAccount()}
                         </Grid>
                     </Grid>

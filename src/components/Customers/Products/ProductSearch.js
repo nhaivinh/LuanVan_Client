@@ -18,6 +18,7 @@ import Slider from '@mui/material/Slider';
 import { TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { orange } from '@mui/material/colors';
+import { useStore } from '../../Store';
 
 const ColorSlider = styled(Slider)(({ theme }) => ({
     color: orange[400],
@@ -69,7 +70,12 @@ const ColorButtonOutline = styled(Button)(({ theme }) => ({
 }));
 
 function ProductSearch() {
-    const [products, setProducts] = React.useState([])
+
+    const [state, dispatch] = useStore()
+
+    const [products, setProducts] = React.useState(state.products)
+
+    const [chosenProducts, setChosenProducts] = React.useState([])
 
     const [cpus, setCpus] = React.useState([])
     const [mainboards, setMainboards] = React.useState([])
@@ -85,6 +91,12 @@ function ProductSearch() {
     const handleChange = (event, newValue) => {
         setRangePrice(newValue);
     };
+
+    const [resetPage, setResetPage] = React.useState(false)
+
+    const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
+
+    const params = Object.fromEntries([...searchParams]);
 
     const [filter, setFilter] = React.useState({
         brand_product: "all",
@@ -115,14 +127,10 @@ function ProductSearch() {
         type_cooling_system: "all",
         size_cooling_system: "all"
     })
+
     React.useEffect(() => {
-        axios.get(`https://localhost:7253/api/Product/`)
-            .then(res => {
-                const Products = res.data;
-                setProducts(Products);
-                handleChosenProducts(Products);
-            })
-    }, [])
+        setProducts(state.products);
+    }, [state])
 
     React.useEffect(() => {
         axios.get(`https://localhost:7253/api/cpu`)
@@ -167,21 +175,9 @@ function ProductSearch() {
             })
     }, [])
 
-    const [chosenProducts, setChosenProducts] = React.useState([])
-
-    const [resetPage, setResetPage] = React.useState(false)
-
-    const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
-
-    const params = Object.fromEntries([...searchParams]);
-
     const handleResetPage = function () {
         setResetPage(!resetPage);
     }
-
-    React.useEffect(() => {
-        handleChosenProducts(products)
-    }, [searchParams, filter, rangePrice])
 
     function handleGetIDProduct(products) {
         var chosenProducts = [];
@@ -401,8 +397,7 @@ function ProductSearch() {
             })
         }
 
-        handleResetPage()
-        setChosenProducts(exportProduct)
+        return (exportProduct)
     }
 
     const handleChangePage = (event, newPage) => {
@@ -1566,7 +1561,7 @@ function ProductSearch() {
                                                         Tất Cả
                                                     </MenuItem>
                                                     {[...new Set(
-                                                        products
+                                                        state.products
                                                             .map(item => item.type_product)
                                                     )]
                                                         .map((type, index) => (
@@ -1684,11 +1679,11 @@ function ProductSearch() {
                         </Container>
                     </Grid>
                     <Grid item xs={9}>
-                        <Container maxWidth="xl" style={{ 
-                            backgroundColor: 'rgb(248, 248, 252)', 
-                            borderRadius: '10px', 
-                            marginTop: 10 ,              
-                            }}>
+                        <Container maxWidth="xl" style={{
+                            backgroundColor: 'var(--background1)',
+                            borderRadius: '10px',
+                            marginTop: 10,
+                        }}>
                             <Box style={{
                                 width: '100%',
                                 borderBottom: '1px solid rgb(234, 234, 234)',
@@ -1809,7 +1804,7 @@ function ProductSearch() {
                                 padding: '2px 0px'
                             }}>
                                 {
-                                    showProducts(chosenProducts)
+                                    showProducts(handleChosenProducts(products))
                                 }
                             </Box>
                             <Box style={{
@@ -1819,7 +1814,7 @@ function ProductSearch() {
                                 height: 50
                             }}>
                                 <Pagination
-                                    count={Math.ceil(chosenProducts.length / 20)}
+                                    count={Math.ceil(handleChosenProducts(products).length / 20)}
                                     page={parseInt(params.page)}
                                     onChange={handleChangePage}
                                     showFirstButton

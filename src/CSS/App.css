@@ -1,21 +1,47 @@
-a{text-decoration: none}
+a {
+  text-decoration: none
+}
 
-:root{
-  --color1 : #ebebeb;
-  --color2 : #0466c8;
-  --color3 : #1b98e0;
-  --color4 : #474747;
-  --color5 : #52b69a;
-  --color6 : rgb(4, 41, 122);
-  --color7 : #229631;
-  --color8 : #e8bd21;
-  --color9 : #d90429;
-  --color10 : rgb(200, 250, 205);
-  --color11 :  rgb(208, 242, 255);
-  --color12 : rgb(255, 247, 205);
-  --color13 : rgb(255, 231, 217);
-  --colortext10 : rgb(0, 82, 73);
-  --colortext11 :rgb(4, 41, 122);
-  --colortext12 :   rgb(122, 79, 1);
-  --colortext13 : rgb(122, 12, 46);
-} 
+:root {
+  --color1: #ebebeb;
+  --color2: #0466c8;
+  --color3: #1b98e0;
+  --color4: #474747;
+  --color5: #52b69a;
+  --color6: rgb(4, 41, 122);
+  --color7: #229631;
+  --color8: #e8bd21;
+  --color9: #d90429;
+  --color10: rgb(200, 250, 205);
+  --color11: rgb(208, 242, 255);
+  --color12: rgb(255, 247, 205);
+  --color13: rgb(255, 231, 217);
+  --colortext10: rgb(0, 82, 73);
+  --colortext11: rgb(4, 41, 122);
+  --colortext12: rgb(122, 79, 1);
+  --colortext13: rgb(122, 12, 46);
+  --background1: #FAFBFC;
+}
+
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.custom-file-input::before {
+  content: 'Chọn ảnh';
+  display: inline-block;
+  background-color: orange;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 10pt;
+}
+.custom-file-input:hover::before {
+  border-color: black;
+}
+.custom-file-input:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}

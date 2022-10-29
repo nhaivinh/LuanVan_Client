@@ -156,14 +156,6 @@ function ImportProductHome() {
             })
     }, [resetPage])
 
-    React.useEffect(() => {
-        axios.get(`https://localhost:7253/api/ImportNote`)
-            .then(res => {
-                const ImportNotes = res.data;
-                setChosenImportNotes(ImportNotes);
-            })
-    }, [])
-
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -284,8 +276,8 @@ function ImportProductHome() {
                     break;
             }
         }
-        handleResetPage()
-        setChosenImportNotes(exportImportNotes)
+
+        return(exportImportNotes)
     }
 
     const showImportNote = function (items) {
@@ -409,7 +401,7 @@ function ImportProductHome() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {showImportNote(chosenImportNotes)}
+                            {showImportNote(handleChosenImportNote(importNotes))}
                             {emptyRows > 0 && (
                                 <StyledTableRow style={{ height: 53 * emptyRows }}>
                                     <StyledTableCell colSpan={10} />
@@ -421,7 +413,7 @@ function ImportProductHome() {
                                 <TablePagination
                                     rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
                                     colSpan={10}
-                                    count={importNotes.length}
+                                    count={handleChosenImportNote(importNotes).length}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     SelectProps={{

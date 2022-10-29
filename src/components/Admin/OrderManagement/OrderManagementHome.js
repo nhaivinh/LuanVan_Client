@@ -229,9 +229,9 @@ function OrderManagementHome() {
 
     const [searchInput, setSearchInput] = React.useState('');
 
-    React.useEffect(() => {
-        handleChosenOrder(orders)
-    }, [searchField, searchInput, chosenStatusOrder])
+    // React.useEffect(() => {
+    //     handleChosenOrder(orders)
+    // }, [searchField, searchInput, chosenStatusOrder, resetPage])
 
     const handleChangeSearchInput = (event) => {
         setSearchInput(event.target.value)
@@ -311,8 +311,7 @@ function OrderManagementHome() {
                     break;
             }
         }
-        handleResetPage()
-        setChosenOrders(exportOrders)
+        return(exportOrders)
     }
 
     const showOrders = function (items) {
@@ -465,7 +464,7 @@ function OrderManagementHome() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {showOrders(chosenOrders)}
+                            {showOrders(handleChosenOrder(orders))}
                             {emptyRows > 0 && (
                                 <StyledTableRow style={{ height: 53 * emptyRows }}>
                                     <StyledTableCell colSpan={10} />
@@ -477,7 +476,7 @@ function OrderManagementHome() {
                                 <TablePagination
                                     rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
                                     colSpan={10}
-                                    count={orders.length}
+                                    count={handleChosenOrder(orders).length}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     SelectProps={{

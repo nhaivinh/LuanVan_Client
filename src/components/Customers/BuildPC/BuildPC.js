@@ -319,7 +319,7 @@ function BuildPC() {
     };
 
     return (
-        <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', marginTop: 50 , borderRadius: '10px' }}>
+        <Container maxWidth="lg" style={{ backgroundColor: 'var(--background1)', marginTop: 50 , borderRadius: '10px' }}>
             <Box
                 style={{
                     display: 'flex',

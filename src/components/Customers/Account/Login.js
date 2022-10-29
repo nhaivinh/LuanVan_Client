@@ -45,12 +45,15 @@ const useStyles = makeStyles({
     }
 })
 
-const Login = ({resetPage, handleResetPage}) => {
+const Login = () => {
     const navigate = useNavigate();
     const classes = useStyles();
     const [cookies, setCookie] = useCookies(["user"]);
     const [open, setOpen] = React.useState(false);
     const [, dispatch] = React.useContext(SnackBarContext);
+
+    var md5 = require('md5');
+
     const [StateLogin, setStateLogin] = useState("Not connect")
     const [login, setLogin] = useState({
         Username: '',
@@ -65,9 +68,8 @@ const Login = ({resetPage, handleResetPage}) => {
         setCookie("Account", id, {
             path: "/"
         });
-
-
     }
+
     const Checklogin = () => {
         if (login.Username.length !== 0 && login.Password.length !== 0) {
             axios.post('https://localhost:7253/api/Login', login)
@@ -80,7 +82,8 @@ const Login = ({resetPage, handleResetPage}) => {
                         setStateLogin(res)
                         handleCookie(res)     
                         navigate('/')  
-                        window.location.reload()                
+                        window.location.reload()    
+       
                         dispatch(setOpenSnackBar());
                         dispatch(setMessage("Đăng nhập thành công"));
                         dispatch(setSeverity("success"));                       
@@ -122,7 +125,7 @@ const Login = ({resetPage, handleResetPage}) => {
                                 required
                                 type={'password'}
                                 variant="outlined"
-                                onChange={(e) => { setLogin({ ...login, Password: e.target.value }) }}
+                                onChange={(e) => { setLogin({ ...login, Password: md5(e.target.value) }) }}
                             >
                             </TextField>
                         </Box>

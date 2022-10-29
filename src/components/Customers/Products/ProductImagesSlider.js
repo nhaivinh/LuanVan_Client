@@ -13,7 +13,7 @@ const ProductImagesSlider = props => {
 
     return <>
         <Swiper
-            loop={true}
+            loop={false}
             spaceBetween={10}
             navigation={true}
             modules={[Navigation, Thumbs]}
@@ -24,13 +24,11 @@ const ProductImagesSlider = props => {
             {
                 props.images.map((item, index) => (
                     <SwiperSlide key={index}>
-                        <ImageViewer>
                             {item.picture_product !== null ?
                                 <img src={item.picture_product} alt="product" />
                                 :
                                 <img src={"data:image/png;base64, " + item.picture_link_product} alt="product" />
                             }
-                        </ImageViewer>
                     </SwiperSlide>
                 ))
             }

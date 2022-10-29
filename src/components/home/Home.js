@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Header from './Header'
 import Body from './Body';
 import { Routes, Route } from 'react-router-dom';
@@ -15,14 +16,23 @@ import Register from '../Customers/Account/Register'
 // import '../../CSS/ClientHome.css'
 import './home.scss'
 import AutoBuildPC from '../Customers/AutoBuildPC/AutoBuildPC';
-
+import { actions, useStore } from '../Store';
 function Home() {
+  const [, dispatch] = useStore()
 
   const [resetPage, setResetPage] = React.useState(false);
 
   function handleResetPage() {
     setResetPage(!resetPage);
   }
+
+  React.useEffect(() => {
+    axios.get(`https://localhost:7253/api/Product/`)
+      .then(res => {
+        const Products = res.data;
+        dispatch(actions.loadProduct(Products))
+      })
+  }, [resetPage])
 
   React.useEffect(() => {
     document.body.className = 'clientCustomer';
@@ -39,7 +49,7 @@ function Home() {
         <Route exact path='/register' element={<Register />} />
         <Route exact path='/product/:productId' element={<ProductDetails resetPage={resetPage} handleResetPage={handleResetPage} />} />
         <Route exact path='/search' element={<ProductSearch />} />
-        <Route exact path='/cart' element={<Cart resetPage={resetPage} handleResetPage={handleResetPage}/>} />
+        <Route exact path='/cart' element={<Cart resetPage={resetPage} handleResetPage={handleResetPage} />} />
         <Route exact path='/account' element={<AccountInfo />} />
         <Route exact path='/order' element={<OrderInfo />} />
         <Route exact path='/checkout' element={<Checkout />} />

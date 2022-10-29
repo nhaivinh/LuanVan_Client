@@ -22,6 +22,7 @@ function OrderManagementFormChangeStatus({ idOrder, Order, idStaff, handleResetP
             })
             .then((response) => {
                 setPosts([response.data, ...posts]);
+                handleResetPage();
                 dispatch(setOpenSnackBar());
                 dispatch(setMessage(response.data.message));
                 dispatch(setSeverity(response.data.severity));
@@ -38,7 +39,6 @@ function OrderManagementFormChangeStatus({ idOrder, Order, idStaff, handleResetP
                     // Anything else
                 }
             });
-        handleResetPage();
     };
     function showFunction() {
         switch (Order.delivery_status) {

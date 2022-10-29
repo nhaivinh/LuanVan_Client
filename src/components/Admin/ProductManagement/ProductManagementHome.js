@@ -34,6 +34,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import { useStore } from '../../Store';
+
 import ProductManagementFormUpdateImage from './ProductManagementFormUpdateImage';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -119,6 +121,8 @@ TablePaginationActions.propTypes = {
 
 function ProductManagementHome() {
 
+    const [state, dispatchStore] = useStore();
+
     const [products, setProducts] = React.useState([])
 
     const [chosenProducts, setChosenProducts] = React.useState([])
@@ -128,14 +132,10 @@ function ProductManagementHome() {
     function handleResetPage() {
         setResetPage(!resetPage);
     }
-    
+
     React.useEffect(() => {
-        axios.get(`https://localhost:7253/api/Product`)
-            .then(res => {
-                const Products = res.data;
-                setProducts(Products)
-            })
-    }, [resetPage])
+        setProducts(state.products);
+    }, [state])
 
     React.useEffect(() => {
         setChosenProducts(products)
@@ -149,10 +149,6 @@ function ProductManagementHome() {
     const [chosenTypeProduct, setChosenTypeProduct] = React.useState('all');
 
     const [chosenStatusProduct, setChosenStatusProduct] = React.useState(-1);
-
-    React.useEffect(() => {
-        handleChosenProduct(products)
-    }, [searchField, searchInput, chosenTypeProduct, resetPage])
 
     const handleChangeSearchInput = (event) => {
         setSearchInput(event.target.value)
@@ -205,6 +201,12 @@ function ProductManagementHome() {
             })
         }
 
+        if (chosenStatusProduct !== -1) {
+            exportProducts = exportProducts.filter(function (product) {
+                return (product.status_product === chosenStatusProduct)
+            })
+        }
+
         if (SearchInput !== "") {
             switch (searchField) {
                 case 1:
@@ -226,8 +228,8 @@ function ProductManagementHome() {
                     break;
             }
         }
-        handleResetPage()
-        setChosenProducts(exportProducts)
+
+        return (exportProducts)
     }
 
     const [page, setPage] = React.useState(0);
@@ -471,7 +473,7 @@ function ProductManagementHome() {
                         </TableHead>
                         <TableBody>
                             {
-                                showCustomer(chosenProducts)
+                                showCustomer(handleChosenProduct(products))
                             }
                             {emptyRows > 0 && (
                                 <StyledTableRow style={{ height: 53 * emptyRows }}>
@@ -484,7 +486,7 @@ function ProductManagementHome() {
                                 <TablePagination
                                     rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
                                     colSpan={11}
-                                    count={chosenProducts.length}
+                                    count={handleChosenProduct(products).length}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     SelectProps={{

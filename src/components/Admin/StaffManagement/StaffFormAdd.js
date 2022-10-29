@@ -36,6 +36,9 @@ const style = {
 
 export default function StaffFormAdd({ handleResetPage }) {
 
+    var md5 = require('md5');
+    console.log(md5('admin'))
+
     const client = axios.create({
         baseURL: "https://localhost:7253/api/staff"
     });
