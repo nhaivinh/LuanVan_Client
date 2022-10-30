@@ -11,7 +11,7 @@ import CustomerManagementHome from './CustomerManagement/CustomerManagementHome'
 import DashboardHome from './Dashboard/DashboardHome';
 import StatisticHome from './Statistic/StatisticHome';
 import { actions, useStore } from '../Store';
-
+import PageNotFound from '../PageNotFound';
 function AdminHome() {
 
   const [, dispatch] = useStore()
@@ -37,6 +37,7 @@ function AdminHome() {
             <Route path='/order' element={<OrderManagementHome />} />
             <Route path='/staff' element={<StaffManagementHome />} />
             <Route path='/statistic' element={<StatisticHome />} />
+            <Route exact path='*' element={<PageNotFound />} />
           </Route>
         </Routes>
       </React.Fragment>

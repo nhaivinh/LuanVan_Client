@@ -31,7 +31,6 @@ class App extends React.Component {
             <Routes>
               <Route exact path='/*' element={<Home />} />
               <Route exact path='/admin/*' element={<AdminHome />} />
-              <Route exact path='*' element={<PageNotFound />} />
             </Routes>
           </StoreProvider>
         </React.Fragment>

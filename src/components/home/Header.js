@@ -179,8 +179,8 @@ const Header = ({ resetPage, handleResetPage }) => {
                                 marginRight: 3
                             }}>
 
-                            <Typography variant="body2">Xin chào!</Typography>
-                            <Typography variant="body2">{accountInfo.name_customer}</Typography>
+                            <Typography variant="body2" >Xin chào!</Typography>
+                            <Typography variant="body2" >{accountInfo.name_customer}</Typography>
                         </Box>
                     </Box>
 

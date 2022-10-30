@@ -16,6 +16,7 @@ import Register from '../Customers/Account/Register'
 // import '../../CSS/ClientHome.css'
 import './home.scss'
 import AutoBuildPC from '../Customers/AutoBuildPC/AutoBuildPC';
+import PageNotFound from '../PageNotFound';
 import { actions, useStore } from '../Store';
 function Home() {
   const [, dispatch] = useStore()
@@ -55,6 +56,7 @@ function Home() {
         <Route exact path='/checkout' element={<Checkout />} />
         <Route exact path='/buildpc' element={<BuildPC />} />
         <Route exact path='/suggestbuildpc' element={<AutoBuildPC />} />
+        <Route exact path='*' element={<PageNotFound />} />
       </Routes>
       <footer>
         <Footer />
