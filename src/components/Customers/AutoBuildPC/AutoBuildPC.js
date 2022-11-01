@@ -38,11 +38,12 @@ const ColorButtonOutline = styled(Button)(({ theme }) => ({
 
 
 function AutoBuildPC() {
-    const [state, ] = useStore();
+    const [state,] = useStore();
     const [, dispatch] = React.useContext(SnackBarContext);
 
     //get form api
     const [products, setProducts] = React.useState([])
+    const [coupleProducts, setCoupleProduct] = React.useState([])
     const [cpus, setCpus] = React.useState([])
     const [mainboards, setMainboards] = React.useState([])
     const [rams, setRams] = React.useState([])
@@ -71,43 +72,43 @@ function AutoBuildPC() {
         {
             type: 'cpu',
             quantity: 0,
-            priority: 10,
+            priority: 3,
             isChosen: false,
         },
         {
             type: 'gpu',
             quantity: 0,
-            priority: 60,
+            priority: 2,
             isChosen: false,
         },
         {
             type: 'mainboard',
             quantity: 0,
-            priority: 5,
+            priority: 2,
             isChosen: false
         },
         {
             type: 'ram',
             quantity: 0,
-            priority: 4,
+            priority: 6,
             isChosen: false,
         },
         {
             type: 'psu',
             quantity: 0,
-            priority: 3,
+            priority: 5,
             isChosen: false,
         },
         {
             type: 'harddisk',
             quantity: 0,
-            priority: 2,
+            priority: 5,
             isChosen: false,
         },
         {
             type: 'casepc',
             quantity: 0,
-            priority: 1,
+            priority: 4,
             isChosen: false,
         },
     ])
@@ -119,6 +120,11 @@ function AutoBuildPC() {
             .then(res => {
                 const Products = res.data;
                 setProducts(Products);
+            })
+        axios.get(`https://localhost:7253/api/Product/getCoupleProduct`)
+            .then(res => {
+                const Products = res.data;
+                setCoupleProduct(Products);
             })
         axios.get(`https://localhost:7253/api/cpu`)
             .then(res => {
@@ -169,15 +175,19 @@ function AutoBuildPC() {
         var filteredProducts = products.filter(function (product) {
             switch (product.type_product) {
                 case 'cpu':
-                    return (product.unit_price_product > (W * 30 / 100))
+                    //return (true)
+                    return (product.unit_price_product > (W * 5 / 100))
                 //return (product.unit_price_product < (W * 90 / 100) && product.unit_price_product > (W * 30 / 100))
                 case 'gpu':
-                    // return (true)
-                    return (product.unit_price_product > (W * 10 / 100))
+                    //return (true)
+                    return (product.unit_price_product > (W * 5 / 100))
                 case 'mainboard':
-                    return (product.unit_price_product < (W * 25 / 100) && product.unit_price_product > (W * 10 / 100))
+                    //return (true)
+                    return (product.unit_price_product > (W * 5 / 100))
+                //return (product.unit_price_product < (W * 25 / 100) && product.unit_price_product > (W * 10 / 100))
                 default:
-                    return (product.unit_price_product < (W * 10 / 100) && product.unit_price_product > (W * 2 / 100) && product.type_product !== "cooling_system")
+                    // return (product.unit_price_product < (W * 10 / 100) && product.unit_price_product > (W * 2 / 100) && product.type_product !== "cooling_system")
+                    return (product.unit_price_product > (W * 2 / 100) && product.type_product !== "cooling_system")
             }
             // if (product.type_product === 'cpu')
 
@@ -216,53 +226,96 @@ function AutoBuildPC() {
 
     }, [W])
 
+    function handleAnalyzeArrayChosenProduct(items) {
+        let chosenCPUGPU = []
+        var chosenProducts = []
+
+        if (items.length !== 0) {
+            let Cpu = items.find(element => element.type_product === 'cpu')
+            let Gpu = items.find(element => element.type_product === 'gpu')
+            console.log(Cpu)
+            console.log(Gpu)
+            items
+                .map(function (product) {
+                    if (product.type_product !== 'cpu' && product.type_product !== 'gpu')
+                        chosenProducts.push(product.id_product)
+                })          
+            chosenCPUGPU =
+                coupleProducts.filter(function (item) {
+                    return (item.totalprice < (Cpu.unit_price_product + Gpu.unit_price_product + (Cpu.unit_price_product + Gpu.unit_price_product)*10/100 ))
+                }).sort((a, b) => a.totalscope < b.totalscope ? 1 : -1)[0]
+            if(chosenCPUGPU.length === 0){
+                chosenCPUGPU =
+                coupleProducts.filter(function (item) {
+                    return (item.totalprice < (Cpu.unit_price_product + Gpu.unit_price_product + (Cpu.unit_price_product + Gpu.unit_price_product)*30/100 ))
+                }).sort((a, b) => a.totalscope < b.totalscope ? 1 : -1)[0]
+            }
+
+            chosenProducts.push(chosenCPUGPU.cpu_id)
+            chosenProducts.push(chosenCPUGPU.gpu_id)
+            console.log(chosenProducts)
+            return (
+                chosenProducts
+            )
+        }
+    }
+
     function handleAnalyzeSelectedProduct(items) {
         if (items.length !== 0) {
-            let idCpu = items.find(element => element.type_product === 'cpu').id_product
-            let idGpu = items.find(element => element.type_product === 'gpu').id_product
-            let idMainboard = items.find(element => element.type_product === 'mainboard').id_product
-            let idPsu = items.find(element => element.type_product === 'psu').id_product
-            let idRam = items.find(element => element.type_product === 'ram').id_product
-            let idHarddisk = items.find(element => element.type_product === 'harddisk').id_product
-            let idCasepc = items.find(element => element.type_product === 'casepc').id_product
+            let Cpu = items.find(element => element.type_product === 'cpu')
+            let Gpu = items.find(element => element.type_product === 'gpu')
+            let Mainboard = items.find(element => element.type_product === 'mainboard')
+            let Psu = items.find(element => element.type_product === 'psu')
+            let Ram = items.find(element => element.type_product === 'ram')
+            let Harddisk = items.find(element => element.type_product === 'harddisk')
+            let Casepc = items.find(element => element.type_product === 'casepc')
+            console.log(items)
             return (
                 {
                     cpu: {
-                        id_product: idCpu,
-                        quantity: 1
+                        id_product: Cpu.id_product,
+                        quantity: 1,
+                        unit_price_product: Cpu.unit_price_product
                     },
                     mainboard: {
-                        id_product: idMainboard,
-                        quantity: 1
+                        id_product: Mainboard.id_product,
+                        quantity: 1,
+                        unit_price_product: Mainboard.unit_price_product
                     },
                     ram: {
-                        id_product: idRam,
-                        quantity: 1
+                        id_product: Ram.id_product,
+                        quantity: 1,
+                        unit_price_product: Ram.unit_price_product
                     },
                     gpu: {
-                        id_product: idGpu,
-                        quantity: 1
+                        id_product: Gpu.id_product,
+                        quantity: 1,
+                        unit_price_product: Gpu.unit_price_product
                     },
                     psu: {
-                        id_product: idPsu,
-                        quantity: 1
+                        id_product: Psu.id_product,
+                        quantity: 1,
+                        unit_price_product: Psu.unit_price_product
                     },
                     harddisk1: {
-                        id_product: idHarddisk,
-                        quantity: 1
+                        id_product: Harddisk.id_product,
+                        quantity: 1,
+                        unit_price_product: Harddisk.unit_price_product
                     },
                     harddisk2: {
                         id_product: 0,
                         quantity: 0
                     },
                     casepc: {
-                        id_product: idCasepc,
-                        quantity: 1
+                        id_product: Casepc.id_product,
+                        quantity: 1,
+                        unit_price_product: Casepc.unit_price_product
                     },
                 }
             )
         }
     }
+
 
     function handleGetIDProduct(products) {
         var chosenProducts = [];
@@ -312,28 +365,13 @@ function AutoBuildPC() {
         var filteredProducts = ChosenProducts
         var chosenProduct = filteredProducts.map(function (product) {
             let priority = 0
-            let scope = 0
             switch (product.type_product) {
                 case 'cpu':
                     priority = typeProducts[0].priority
-                    scope = cpus.find(element => element.id_product === product.id_product).scope_cpu
-                    return ({
-                        id_product: product.id_product,
-                        unit_price_product: product.unit_price_product,
-                        type_product: product.type_product,
-                        PA: 0,
-                        gia_tri: (scope * priority * 10000)
-                    })
+                    break;
                 case 'gpu':
                     priority = typeProducts[1].priority
-                    scope = gpus.find(element => element.id_product === product.id_product).scope_gpu
-                    return ({
-                        id_product: product.id_product,
-                        unit_price_product: product.unit_price_product,
-                        type_product: product.type_product,
-                        PA: 0,
-                        gia_tri: (scope * priority * 10000)
-                    })
+                    break;
                 case 'mainboard':
                     priority = typeProducts[2].priority
                     break;
@@ -373,15 +411,24 @@ function AutoBuildPC() {
         })
 
         if (filteredProducts !== undefined) {
-            exportProducts = handleGetIDProduct(filteredProducts).map(function (id) {
+            exportProducts = handleAnalyzeArrayChosenProduct(filteredProducts).map(function (id) {
                 return (
                     products.find(element => element.id_product === id)
                 )
             })
         }
-        setSelectedProducts(exportProducts.sort((a, b) =>
-            a.id_product > b.id_product ? 1 : -1,
-        ))
+
+        setSelectedProducts(
+            [
+                exportProducts.find(element => element.type_product === 'cpu'),
+                exportProducts.find(element => element.type_product === 'mainboard'),
+                exportProducts.find(element => element.type_product === 'gpu'),
+                exportProducts.find(element => element.type_product === 'ram'),
+                exportProducts.find(element => element.type_product === 'psu'),
+                exportProducts.find(element => element.type_product === 'harddisk'),
+                exportProducts.find(element => element.type_product === 'casepc'),
+            ]
+        )
     }
 
     let product = listChosenProduct
@@ -410,9 +457,8 @@ function AutoBuildPC() {
 
     function HandleClickBuild() {
         nhanhCan(0)
-        console.log("ok")
+        console.log(product)
         handleGetChosenProduct(product)
-        {console.log(product)}
     }
 
     function nhanhCan(i) {
@@ -440,7 +486,6 @@ function AutoBuildPC() {
                 aCT = aTGT
             }
             if (aCT > aGLNTT) {
-                // console.log("kt cập nhật")
                 let count = 0
                 aX[i] = j
                 for (let k = 0; k < aBool.length; k++) {
@@ -454,7 +499,6 @@ function AutoBuildPC() {
                         capNhatDaLayTT()
                     }
                 } else {
-                    // console.log("chay nhanh can tiep theo")
                     nhanhCan(i + 1)
                 }
             }
