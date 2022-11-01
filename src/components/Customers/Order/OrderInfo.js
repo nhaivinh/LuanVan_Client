@@ -144,7 +144,7 @@ function OrderInfo() {
         <Box style={{}}>
             <Container maxWidth="lg" style={{ backgroundColor: 'var(--background1)', borderRadius: '10px', marginTop: 70, paddingLeft: 0 }}>
                 <Box sx={{ width: '100%', typography: 'body1' }}>
-                    <Grid container spacing={2} minHeight={600}>
+                    <Grid container spacing={2} minHeight={700}>
                         <Grid item xs={2} style={{ paddingTop: 0 }}>
                             <Box sx={{ width: '100%', typography: 'body1', backgroundColor: 'rgb(45, 45, 45)', height: '100%', borderStartStartRadius: 10, borderBottomLeftRadius: 10 }}>
                                 <AntTabs

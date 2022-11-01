@@ -282,6 +282,7 @@ function StaffFormEdit({ Staff, handleResetPage }) {
                             <FormControlLabel control={<Checkbox value="1" checked={roles.includes(1)} onChange={() => handleCheck(1)} />} label="Quản lý sản phẩm" />
                             <FormControlLabel control={<Checkbox value="2" checked={roles.includes(2)} onChange={() => handleCheck(2)} />} label="Quản lý nhập hàng" />
                             <FormControlLabel control={<Checkbox value="3" checked={roles.includes(3)} onChange={() => handleCheck(3)} />} label="Quản lý đơn hàng" />
+                            <FormControlLabel control={<Checkbox value="7" checked={roles.includes(7)} onChange={() => handleCheck(7)} />} label="Quản lý nhà cung cấp" />
                         </Grid>
                         <Grid item xs={6}>
                             <FormControlLabel control={<Checkbox value="4" checked={roles.includes(4)} onChange={() => handleCheck(4)} />} label="Quản lý thông tin khách hàng" />

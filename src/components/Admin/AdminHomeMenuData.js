@@ -31,6 +31,11 @@ const QuyenChung = [
     },
     {
         icon: <i className='bx bx-home'></i>,
+        display : 'Quản Lý Cung Ứng',
+        to :'/admin/supplier'
+    },
+    {
+        icon: <i className='bx bx-home'></i>,
         display : 'Thống Kê Báo Cáo',
         to :'/admin/statistic'
     }

@@ -1524,22 +1524,6 @@ function ProductSearch() {
                 <Grid container spacing={2}>
                     <Grid item xs={3}>
                         <Container maxWidth="xl" style={{ backgroundColor: 'rgb(255, 255, 255)', borderRadius: '10px', marginTop: 10, padding: 0 }}>
-                            {params.name !== undefined &&
-                                <Box style={{
-                                    width: '100%',
-                                    borderBottom: '1px solid rgb(234, 234, 234)',
-                                    WebkitBoxPack: 'justify',
-                                    justifyContent: 'center',
-                                    alignItems: 'flex-start',
-                                    fontSize: 14,
-                                    height: 70,
-                                    display: 'flex',
-                                    flexDirection: 'column'
-                                }}>
-                                    <Typography style={{ paddingLeft: 20 }}>Kết quả tìm kiếm cho : <b>{params.name}</b></Typography>
-                                    <Typography style={{ paddingLeft: 20 }}>Có <b>{handleChosenProducts(products).length}</b> kết quả</Typography>
-                                </Box>
-                            }
                             <Box
                                 style={{
                                     display: 'flex',
@@ -1813,6 +1797,32 @@ function ProductSearch() {
                             </Box>
                             <Box style={{
                                 display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                height: 50,
+                                flexDirection: 'row-reverse'
+                            }}>
+                                <Pagination
+                                    count={Math.ceil(handleChosenProducts(products).length / 20)}
+                                    page={parseInt(params.page)}
+                                    onChange={handleChangePage}
+                                    showFirstButton
+                                    showLastButton
+                                />
+                                {params.name !== undefined &&
+                                    <Box style={{              
+                                        width: '30%',                        
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        display: 'flex',
+                                    }}>
+                                        <Typography>Kết quả tìm kiếm cho : <b>{params.name}</b></Typography>
+                                        <Typography>Có <b>{handleChosenProducts(products).length}</b> kết quả</Typography>
+                                    </Box>
+                                }
+                            </Box>
+                            <Box style={{
+                                display: 'flex',
                                 flexWrap: 'wrap',
                                 columnGap: 2,
                                 placeContent: 'flex-start space-between',
@@ -1823,20 +1833,7 @@ function ProductSearch() {
                                     showProducts(handleChosenProducts(products))
                                 }
                             </Box>
-                            <Box style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                height: 50
-                            }}>
-                                <Pagination
-                                    count={Math.ceil(handleChosenProducts(products).length / 20)}
-                                    page={parseInt(params.page)}
-                                    onChange={handleChangePage}
-                                    showFirstButton
-                                    showLastButton
-                                />
-                            </Box>
+
                         </Container >
                     </Grid>
                 </Grid>

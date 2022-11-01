@@ -10,12 +10,14 @@ import ImportProductHome from './ImportProduct/ImportProductHome';
 import CustomerManagementHome from './CustomerManagement/CustomerManagementHome';
 import DashboardHome from './Dashboard/DashboardHome';
 import StatisticHome from './Statistic/StatisticHome';
+import SupplierManagementHome from './SupplierManagement/SupplierManagementHome';
 import { actions, useStore } from '../Store';
 import PageNotFound from '../PageNotFound';
+
+
 function AdminHome() {
 
   const [, dispatch] = useStore()
-
 
   React.useEffect(() => {
     axios.get(`https://localhost:7253/api/Product/`)
@@ -37,6 +39,7 @@ function AdminHome() {
             <Route path='/order' element={<OrderManagementHome />} />
             <Route path='/staff' element={<StaffManagementHome />} />
             <Route path='/statistic' element={<StatisticHome />} />
+            <Route path='/supplier' element={<SupplierManagementHome />} />
             <Route exact path='*' element={<PageNotFound />} />
           </Route>
         </Routes>

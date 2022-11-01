@@ -30,9 +30,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import StaffFormView from './StaffFormView';
-import StaffFormEdit from './StaffFormEdit';
-import StaffFormAdd from './StaffFormAdd';
+
+import SupplierFormView from './SupplierFormView';
+import SupplierFormEdit from './SupplierFormEdit';
+import SupplierFormAdd from './SupplierFormAdd';
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -115,9 +117,9 @@ TablePaginationActions.propTypes = {
     rowsPerPage: PropTypes.number.isRequired,
 };
 
-function StaffManagementHome() {
+function SupplierManagementHome() {
 
-    const [staffs, setStaffs] = React.useState([])
+    const [suppliers, setSuppliers] = React.useState([])
 
     const [resetPage, setResetPage] = React.useState(false);
 
@@ -127,10 +129,10 @@ function StaffManagementHome() {
 
 
     React.useEffect(() => {
-        axios.get(`https://localhost:7253/api/Staff`)
+        axios.get(`https://localhost:7253/api/Supplier`)
             .then(res => {
-                const Staffs = res.data;
-                setStaffs(Staffs);             
+                const Supplier = res.data;
+                setSuppliers(Supplier);
             })
     }, [resetPage])
 
@@ -138,7 +140,7 @@ function StaffManagementHome() {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - staffs.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - handleChosenSuppliers(suppliers).length) : 0;
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -186,49 +188,44 @@ function StaffManagementHome() {
         return str;
     }
 
-    const handleChosenStaffs = function (Staffs) {
+    const handleChosenSuppliers = function (Suppliers) {
         var SearchInput = removeAccents(searchInput.toLowerCase())
-        var exportStaffs = Staffs
+        var exportSuppliers = Suppliers
         if (SearchInput !== "") {
             switch (searchField) {
                 case 1:
-                    exportStaffs = exportStaffs.filter(function (staff) {
-                        return (removeAccents(staff.name_staff.toLowerCase()).includes(SearchInput))
+                    exportSuppliers = exportSuppliers.filter(function (staff) {
+                        return (staff.id_supplier === parseInt(SearchInput))
                     })
                     break;
                 case 2:
-                    exportStaffs = exportStaffs.filter(function (staff) {
-                        return (removeAccents(staff.email_staff.toLowerCase()).includes(SearchInput))
+                    exportSuppliers = exportSuppliers.filter(function (staff) {
+                        return (removeAccents(staff.name_supplier.toLowerCase()).includes(SearchInput))
                     })
                     break;
                 case 3:
-                    exportStaffs = exportStaffs.filter(function (staff) {
-                        return (staff.identity_card_staff.includes(SearchInput))
+                    exportSuppliers = exportSuppliers.filter(function (staff) {
+                        return (removeAccents(staff.email_supplier.toLowerCase()).includes(SearchInput))
                     })
                     break;
                 case 4:
-                    exportStaffs = exportStaffs.filter(function (staff) {
-                        return (removeAccents(staff.position.toLowerCase()).includes(SearchInput))
+                    exportSuppliers = exportSuppliers.filter(function (staff) {
+                        return (removeAccents(staff.address_supplier.toLowerCase()).includes(SearchInput))
                     })
                     break;
                 case 5:
-                    exportStaffs = exportStaffs.filter(function (staff) {
-                        return (removeAccents(staff.address_staff.toLowerCase()).includes(SearchInput))
-                    })
-                    break;
-                case 6:
-                    exportStaffs = exportStaffs.filter(function (staff) {
-                        return (staff.phone_number_staff.includes(SearchInput))
+                    exportSuppliers = exportSuppliers.filter(function (staff) {
+                        return (staff.phone_number_supplier.includes(SearchInput))
                     })
                     break;
                 default:
                     break;
             }
         }
-        return(exportStaffs)
+        return (exportSuppliers)
     }
 
-    const showStaff = function (items) {
+    const showSuppliers = function (items) {
         if (items.length > 0) {
             if (rowsPerPage > 0) {
                 return (
@@ -237,30 +234,24 @@ function StaffManagementHome() {
                             return (
                                 <StyledTableRow key={row.id_staff}>
                                     <StyledTableCell component="th" scope="row" align="left">
-                                        {row.id_staff}
+                                        {row.id_supplier}
                                     </StyledTableCell>
                                     <StyledTableCell component="th" scope="row" align="left">
-                                        {row.name_staff}
+                                        {row.name_supplier}
                                     </StyledTableCell>
                                     <StyledTableCell component="th" scope="row" align="left">
-                                        {row.email_staff}
+                                        {row.phone_number_supplier}
                                     </StyledTableCell>
                                     <StyledTableCell component="th" scope="row" align="left">
-                                        {row.position}
+                                        {row.email_supplier}
                                     </StyledTableCell>
                                     <StyledTableCell component="th" scope="row" align="left">
-                                        {row.identity_card_staff}
-                                    </StyledTableCell>
-                                    <StyledTableCell component="th" scope="row" align="left">
-                                        {row.phone_number_staff}
-                                    </StyledTableCell>
-                                    <StyledTableCell component="th" scope="row" align="left">
-                                        {row.address_staff}
+                                        {row.address_supplier}
                                     </StyledTableCell>
                                     <StyledTableCell align="center">
                                         <Stack direction="row" spacing={2} justifyContent={'center'}>
-                                            <StaffFormView Staff={row} />
-                                            <StaffFormEdit Staff={row} handleResetPage={handleResetPage} />
+                                            <SupplierFormView Staff={row} />
+                                            <SupplierFormEdit Supplier={row} handleResetPage={handleResetPage} />
                                         </Stack>
                                     </StyledTableCell>
                                 </StyledTableRow>
@@ -293,13 +284,11 @@ function StaffManagementHome() {
                             label="Danh Mục"
                             onChange={handleChangeSearchField}
                         >
-                            <MenuItem value={1}>Họ Tên</MenuItem>
-                            <MenuItem value={2}>Email</MenuItem>
-                            <MenuItem value={3}>CCCD</MenuItem>
-                            <MenuItem value={4}>Chức vụ</MenuItem>
-                            <MenuItem value={5}>Địa chỉ</MenuItem>
-                            <MenuItem value={6}>Số điện thoại</MenuItem>
-
+                            <MenuItem value={1}>Mã</MenuItem>
+                            <MenuItem value={2}>Tên</MenuItem>
+                            <MenuItem value={3}>Email</MenuItem>
+                            <MenuItem value={4}>Địa chỉ</MenuItem>
+                            <MenuItem value={5}>Số điện thoại</MenuItem>
                         </Select>
                     </FormControl>
                     {/* TextField tim kiem */}
@@ -333,34 +322,32 @@ function StaffManagementHome() {
                             }
                         }
                     >
-                        Quản lý nhân viên
+                        Quản lý nhà cung cấp
                     </Typography>
-                    <StaffFormAdd handleResetPage={handleResetPage} />
+                    <SupplierFormAdd handleResetPage={handleResetPage} />
                 </Stack>
                 <Divider sx={{ marginBottom: 3 }}></Divider>
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
                         <TableHead>
                             <TableRow style={{ backgroundColor: '#474747', color: 'white' }}>
-                                <TableCell style={{ width: '5%', color: 'white' }} align="left">Mã</TableCell>
-                                <TableCell style={{ width: '15%', color: 'white' }} align="left">Tên nhân viên</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Email</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Chức vụ</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="left">CCCD</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Số điện thoại</TableCell>
-                                <TableCell style={{ width: '20%', color: 'white' }} align="left">Địa chỉ</TableCell>
-                                <TableCell style={{ width: '10%', color: 'white' }} align="center">Thao tác</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Mã</TableCell>
+                                <TableCell style={{ width: '10%', color: 'white' }} align="left">Tên</TableCell>
+                                <TableCell style={{ width: '15%', color: 'white' }} align="left">Email</TableCell>
+                                <TableCell style={{ width: '15%', color: 'white' }} align="left">Số điện thoại</TableCell>
+                                <TableCell style={{ width: '30%', color: 'white' }} align="left">Địa chỉ</TableCell>
+                                <TableCell style={{ width: '20%', color: 'white' }} align="center">Thao tác</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {showStaff(handleChosenStaffs(staffs))}
+                            {showSuppliers(handleChosenSuppliers(suppliers))}
                         </TableBody>
                         <TableFooter>
                             <StyledTableRow>
                                 <TablePagination
                                     rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
                                     colSpan={10}
-                                    count={handleChosenStaffs(staffs).length}
+                                    count={handleChosenSuppliers(suppliers).length}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     SelectProps={{
@@ -382,4 +369,4 @@ function StaffManagementHome() {
     )
 }
 
-export default StaffManagementHome
+export default SupplierManagementHome

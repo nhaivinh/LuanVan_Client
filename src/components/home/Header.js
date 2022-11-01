@@ -225,7 +225,7 @@ const Header = ({ resetPage, handleResetPage }) => {
                         <Box
                             style={{
                                 display: 'flex',
-                                width: '75%',
+                                width: '60%',
                                 justifyContent: 'center',
                                 alignItems: 'center'
                             }}
@@ -266,7 +266,7 @@ const Header = ({ resetPage, handleResetPage }) => {
                                 onRequestSearch={() => navigate('/search/?page=1&name=' + searchItem)}
                                 style={{
                                     margin: "0 auto",
-                                    width: 300,
+                                    width: 200,
                                     borderRadius: 10,
                                     backgroundColor: 'var(--background1)',
                                     color: orange[500],
@@ -276,7 +276,7 @@ const Header = ({ resetPage, handleResetPage }) => {
                         <Box
                             style={{
                                 display: 'flex',
-                                width: '25%',
+                                width: '30%',
                                 justifyContent: 'flex-end',
                                 alignItems: 'center'
                             }}
