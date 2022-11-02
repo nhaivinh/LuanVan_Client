@@ -54,8 +54,8 @@ function Home() {
         <Route exact path='/account' element={<AccountInfo />} />
         <Route exact path='/order' element={<OrderInfo />} />
         <Route exact path='/checkout' element={<Checkout />} />
-        <Route exact path='/buildpc' element={<BuildPC />} />
-        <Route exact path='/suggestbuildpc' element={<AutoBuildPC />} />
+        <Route exact path='/buildpc' element={<BuildPC resetPage={resetPage} handleResetPage={handleResetPage}/>} />
+        <Route exact path='/suggestbuildpc' element={<AutoBuildPC resetPage={resetPage} handleResetPage={handleResetPage}/>} />
         <Route exact path='*' element={<PageNotFound />} />
       </Routes>
       <footer>

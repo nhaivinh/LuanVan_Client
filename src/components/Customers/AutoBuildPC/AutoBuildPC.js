@@ -37,7 +37,7 @@ const ColorButtonOutline = styled(Button)(({ theme }) => ({
 }));
 
 
-function AutoBuildPC() {
+function AutoBuildPC({ resetPage, handleResetPage }) {
     const [state,] = useStore();
     const [, dispatch] = React.useContext(SnackBarContext);
 
@@ -65,6 +65,8 @@ function AutoBuildPC() {
 
     const [sLLK, setSLLK] = React.useState(7);
 
+    const [validW, setValidW] = React.useState(false);
+
     const [totalPrice, setTotalPrice] = React.useState(0)
 
     const [typeProducts, setTypeProducts] = React.useState([
@@ -72,43 +74,43 @@ function AutoBuildPC() {
         {
             type: 'cpu',
             quantity: 0,
-            priority: 3,
+            priority: 4,
             isChosen: false,
         },
         {
             type: 'gpu',
             quantity: 0,
-            priority: 2,
+            priority: 4,
             isChosen: false,
         },
         {
             type: 'mainboard',
             quantity: 0,
-            priority: 2,
+            priority: 1,
             isChosen: false
         },
         {
             type: 'ram',
             quantity: 0,
-            priority: 6,
+            priority: 12,
             isChosen: false,
         },
         {
             type: 'psu',
             quantity: 0,
-            priority: 5,
+            priority: 10,
             isChosen: false,
         },
         {
             type: 'harddisk',
             quantity: 0,
-            priority: 5,
+            priority: 8,
             isChosen: false,
         },
         {
             type: 'casepc',
             quantity: 0,
-            priority: 4,
+            priority: 8,
             isChosen: false,
         },
     ])
@@ -131,7 +133,7 @@ function AutoBuildPC() {
                 const Cpus = res.data;
                 setCpus(Cpus);
             })
-        axios.get(`https://localhost:7253/api/mainboard`)
+        axios.get(`https://localhost:7253/api/Mainboard/getInfoMainboard`)
             .then(res => {
                 const Mainboards = res.data;
                 setMainboards(Mainboards);
@@ -176,29 +178,19 @@ function AutoBuildPC() {
             switch (product.type_product) {
                 case 'cpu':
                     //return (true)
-                    return (product.unit_price_product > (W * 5 / 100))
-                //return (product.unit_price_product < (W * 90 / 100) && product.unit_price_product > (W * 30 / 100))
+                    //return (product.unit_price_product > (W * 20 / 100))
+                    return (product.unit_price_product < (W * 50 / 100) && product.unit_price_product > (W * 30 / 100))
                 case 'gpu':
                     //return (true)
-                    return (product.unit_price_product > (W * 5 / 100))
+                    return (product.unit_price_product < (W * 50 / 100) && product.unit_price_product > (W * 30 / 100))
                 case 'mainboard':
                     //return (true)
-                    return (product.unit_price_product > (W * 5 / 100))
-                //return (product.unit_price_product < (W * 25 / 100) && product.unit_price_product > (W * 10 / 100))
+                    //return (product.unit_price_product > (W * 5 / 100))
+                    return (product.unit_price_product < (W * 20 / 100) && product.unit_price_product > (W * 10 / 100))
                 default:
-                    // return (product.unit_price_product < (W * 10 / 100) && product.unit_price_product > (W * 2 / 100) && product.type_product !== "cooling_system")
                     return (product.unit_price_product > (W * 2 / 100) && product.type_product !== "cooling_system")
+                //return (product.type_product !== "cooling_system")
             }
-            // if (product.type_product === 'cpu')
-
-            // else
-            //     if (product.type_product == 'gpu')
-            //         return (product.unit_price_product < (W * 30 / 100))
-            //     else
-            //         if (product.type_product == 'mainboard')
-            //             return (product.unit_price_product < (W * 30 / 100) )
-            //         else
-            //             return (product.unit_price_product < (W * 20 / 100) && product.type_product !== "cooling_system")
         })
         var filterCpus = cpus.filter(function (product) {
             return (handleGetIDProduct(filteredProducts).includes(product.id_product))
@@ -221,6 +213,19 @@ function AutoBuildPC() {
         var filterCasePCs = casepcs.filter(function (product) {
             return (handleGetIDProduct(filteredProducts).includes(product.id_product))
         })
+        if (
+            filterCpus.length !== 0
+            && filterMainboards.length !== 0
+            && filterGpus.length !== 0
+            && filterRams.length !== 0
+            && filterPsus.length !== 0
+            && filterHarddisks.length !== 0
+            && filterCasePCs.length !== 0
+        ) {
+            setValidW(true)
+        } else {
+            setValidW(false)
+        }
         handleListChosenProduct(filteredProducts)
         HandleQuantityProductByType(filterCpus.length, filterGpus.length, filterMainboards.length, filterRams.length, filterPsus.length, filterHarddisks.length, filterCasePCs.length)
 
@@ -228,32 +233,38 @@ function AutoBuildPC() {
 
     function handleAnalyzeArrayChosenProduct(items) {
         let chosenCPUGPU = []
+        let chosenMainboard = []
         var chosenProducts = []
-
         if (items.length !== 0) {
             let Cpu = items.find(element => element.type_product === 'cpu')
             let Gpu = items.find(element => element.type_product === 'gpu')
-            console.log(Cpu)
-            console.log(Gpu)
+            let Mainboard = items.find(element => element.type_product === 'mainboard')
+
             items
                 .map(function (product) {
-                    if (product.type_product !== 'cpu' && product.type_product !== 'gpu')
+                    if (product.type_product !== 'cpu' && product.type_product !== 'gpu' && product.type_product !== 'mainboard')
                         chosenProducts.push(product.id_product)
-                })          
+                })
             chosenCPUGPU =
                 coupleProducts.filter(function (item) {
-                    return (item.totalprice < (Cpu.unit_price_product + Gpu.unit_price_product + (Cpu.unit_price_product + Gpu.unit_price_product)*10/100 ))
-                }).sort((a, b) => a.totalscope < b.totalscope ? 1 : -1)[0]
-            if(chosenCPUGPU.length === 0){
-                chosenCPUGPU =
-                coupleProducts.filter(function (item) {
-                    return (item.totalprice < (Cpu.unit_price_product + Gpu.unit_price_product + (Cpu.unit_price_product + Gpu.unit_price_product)*30/100 ))
-                }).sort((a, b) => a.totalscope < b.totalscope ? 1 : -1)[0]
-            }
+                    return (Math.abs(item.totalprice - (Cpu.unit_price_product + Gpu.unit_price_product)) < 1000000)
+                }).sort((a, b) => Math.abs(a.totalprice) < Math.abs(b.totalprice) ? 1 : -1)
+                    .sort((a, b) => Math.abs(a.percentCompatible - 1) > Math.abs(b.percentCompatible - 1) ? 1 : -1)[0]
+
+            chosenMainboard = mainboards.filter(function (item) {
+                return (
+                    item.socket_mainboard
+                    ===
+                    cpus.find(function (item) {
+                        return (item.id_product === chosenCPUGPU.cpu_id)
+                    }).socket_cpu
+                )
+            }).sort((a, b) => Math.abs(a.unit_price_product - Mainboard.unit_price_product) > Math.abs(b.unit_price_product - Mainboard.unit_price_product) ? 1 : -1)
 
             chosenProducts.push(chosenCPUGPU.cpu_id)
             chosenProducts.push(chosenCPUGPU.gpu_id)
-            console.log(chosenProducts)
+            chosenProducts.push(chosenMainboard[0].id_product)
+
             return (
                 chosenProducts
             )
@@ -269,7 +280,6 @@ function AutoBuildPC() {
             let Ram = items.find(element => element.type_product === 'ram')
             let Harddisk = items.find(element => element.type_product === 'harddisk')
             let Casepc = items.find(element => element.type_product === 'casepc')
-            console.log(items)
             return (
                 {
                     cpu: {
@@ -315,7 +325,6 @@ function AutoBuildPC() {
             )
         }
     }
-
 
     function handleGetIDProduct(products) {
         var chosenProducts = [];
@@ -410,12 +419,22 @@ function AutoBuildPC() {
             return (product.PA !== 0)
         })
 
-        if (filteredProducts !== undefined) {
+        // if (filteredProducts !== undefined) {
+        //     exportProducts = handleGetIDProduct(filteredProducts).map(function (id) {
+        //         return (
+        //             products.find(element => element.id_product === id)
+        //         )
+        //     })
+        // }
+
+        if (filteredProducts.length !== 0) {
             exportProducts = handleAnalyzeArrayChosenProduct(filteredProducts).map(function (id) {
                 return (
                     products.find(element => element.id_product === id)
                 )
             })
+        } else {
+            alert("Số tiền nhập vào chưa phù hợp")
         }
 
         setSelectedProducts(
@@ -439,6 +458,7 @@ function AutoBuildPC() {
     let aBool = [false, false, false, false, false, false, false]
     let achosen = []
     let aX = []
+    console.log(listChosenProduct)
 
     function capNhatDaLayTT() {
         for (let i = 0; i < aBool.length; i++) {
@@ -456,23 +476,111 @@ function AutoBuildPC() {
     }
 
     function HandleClickBuild() {
-        nhanhCan(0)
-        console.log(product)
-        handleGetChosenProduct(product)
+        if (validW === true) {
+            nhanhCan(0)
+            handleGetChosenProduct(product)
+        } else {
+            alert("Số tiền nhập vào chưa phù hợp")
+        }
+
     }
 
     function nhanhCan(i) {
         let yk = 0
         let y
-        for (y = 0; y < typeProducts.length; y++) {
-            if (listChosenProduct[i].type_product === typeProducts[y].type) {
-                if (aBool[y] === true) {
-                    yk = 0
-                } else {
-                    yk = Math.min(1, parseInt(aW / listChosenProduct[i].unit_price_product))
+        // let x
+        // let scopeCPU = 0
+        // let scopeGPU = 0
+        switch (listChosenProduct[i].type_product) {
+            // case 'cpu':
+            //     for (x = 0; x < typeProducts.length; x++) {
+            //         if (typeProducts[x].type === 'gpu') {
+            //             if (aBool[x] === true) {
+            //                 aX.filter(function (element, index) {
+            //                     if (element === 1) {
+            //                         if (gpus.filter(element => (element.id_product == index)).length !== 0)
+            //                             scopeGPU = gpus.filter(element => (element.id_product == index))[0].scope_gpu
+            //                     }
+            //                 })
+            //                 scopeCPU = cpus.find(element => (element.id_product == listChosenProduct[i].id_product)).scope_cpus
+            //                 // xử lý chọn cpu tương ứng
+            //             }
+            //         }
+            //     }
+            //     for (y = 0; y < typeProducts.length; y++) {
+            //         if (listChosenProduct[i].type_product === typeProducts[y].type) {
+            //             if (aBool[y] === true) {
+            //                 yk = 0
+            //             } else {
+            //                 if (aBool[1] === true) {
+            //                     // console.log(scopeCPU + "-" + scopeGPU)
+            //                     // console.log((Math.abs(scopeCPU - scopeGPU) / Math.max(scopeCPU, scopeGPU) * 100).toFixed(0))   
+            //                     if ((Math.abs(scopeCPU - scopeGPU) / Math.max(scopeCPU, scopeGPU) * 100).toFixed(0) < 20) {
+            //                         yk = Math.min(1, parseInt(aW / listChosenProduct[i].unit_price_product))
+            //                         // console.log("chọn cpu:" + listChosenProduct[i].id_product)
+            //                     }
+            //                     else {
+            //                         yk = 0
+            //                     }
+            //                 } else {
+            //                     yk = Math.min(1, parseInt(aW / listChosenProduct[i].unit_price_product))
+            //                 }
+            //             }
+            //             break;
+            //         }
+            //     }
+            //     break;
+            // case 'gpu':
+            //     for (x = 0; x < typeProducts.length; x++) {
+            //         if (typeProducts[x].type === 'cpu') {
+            //             if (aBool[x] === true) {
+            //                 scopeCPU = 0
+            //                 scopeGPU = 0
+            //                 aX.filter(function (element, index) {
+            //                     if (element === 1) {
+            //                         if (cpus.filter(element => (element.id_product == index)).length !== 0)
+            //                             scopeCPU = cpus.filter(element => (element.id_product == index))[0].scope_cpu
+            //                     }
+            //                 })
+            //                 scopeGPU = gpus.find(element => (element.id_product == listChosenProduct[i].id_product)).scope_gpu
+            //                 // xử lý chọn cpu tương ứng
+            //             }
+            //         }
+            //     }
+            //     for (y = 0; y < typeProducts.length; y++) {
+            //         if (listChosenProduct[i].type_product === typeProducts[y].type) {
+            //             if (aBool[y] === true) {
+            //                 yk = 0
+            //             } else {
+            //                 if (aBool[0] === true) {
+            //                     // console.log(scopeCPU + "-" + scopeGPU)
+            //                     // console.log((Math.abs(scopeCPU - scopeGPU) / Math.max(scopeCPU, scopeGPU) * 100).toFixed(0))   
+            //                     if ((Math.abs(scopeCPU - scopeGPU) / Math.max(scopeCPU, scopeGPU) * 100).toFixed(0) < 20) {
+            //                         yk = Math.min(1, parseInt(aW / listChosenProduct[i].unit_price_product))
+            //                         // console.log("chọn gpu:" + listChosenProduct[i].id_product)
+            //                     }
+            //                     else {
+            //                         yk = 0
+            //                     }
+            //                 } else {
+            //                     yk = Math.min(1, parseInt(aW / listChosenProduct[i].unit_price_product))
+            //                 }
+            //             }
+            //             break;
+            //         }
+            //     }
+            //     break;
+            default:
+                for (y = 0; y < typeProducts.length; y++) {
+                    if (listChosenProduct[i].type_product === typeProducts[y].type) {
+                        if (aBool[y] === true) {
+                            yk = 0
+                        } else {
+                            yk = Math.min(1, parseInt(aW / listChosenProduct[i].unit_price_product))
+                        }
+                        break;
+                    }
                 }
-                break;
-            }
         }
         for (let j = yk; j >= 0; j--) {
             if (j === 1) {
@@ -485,7 +593,7 @@ function AutoBuildPC() {
             } catch (error) {
                 aCT = aTGT
             }
-            if (aCT > aGLNTT) {
+            if ((aCT > aGLNTT)) {
                 let count = 0
                 aX[i] = j
                 for (let k = 0; k < aBool.length; k++) {
@@ -675,6 +783,7 @@ function AutoBuildPC() {
                 dispatch(setOpenSnackBar());
                 dispatch(setMessage(response.data.message));
                 dispatch(setSeverity(response.data.severity));
+                handleResetPage()
             })
             .catch((err) => {
                 if (err.response) {
@@ -740,7 +849,7 @@ function AutoBuildPC() {
 
                 </Grid>
                 <Grid item xs={7}>
-                    {selectedProducts.length !== 0 &&
+                    {(selectedProducts.length !== 0)&&
                         <Box
                             style={{
                                 display: 'flex',
