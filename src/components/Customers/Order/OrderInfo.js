@@ -16,8 +16,8 @@ import { useCookies } from "react-cookie";
 import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
 import Grid from '@mui/material/Grid';
-
 import ShowDetailsOrder from './ShowDetailsOrder'
+import RateProducts from './RateProducts';
 import Tab from '@mui/material/Tab';
 import { Tabs } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -41,9 +41,9 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(({ theme }) =
     },
     fontWeight: theme.typography.fontWeightRegular,
     marginRight: theme.spacing(1),
-    color: orange[400],
+    color: theme.palette.getContrastText(orange[800]),
     '&:hover': {
-        color: orange[900],
+        color: orange[700],
         opacity: 1,
     },
     '&.Mui-selected': {
@@ -215,7 +215,12 @@ function OrderInfo() {
                                                                     })}
                                                             </TableCell>
                                                             <TableCell align="center">
-                                                                <ShowDetailsOrder Order={row} idOrder={row.id_order} />
+                                                                <Box
+                                                                style={{ display: 'flex', justifyContent: 'center'}}
+                                                                >
+                                                                    <ShowDetailsOrder Order={row} idOrder={row.id_order} />
+                                                                    <RateProducts Order={row} idOrder={row.id_order} />
+                                                                </Box>
                                                             </TableCell>
                                                             <TableCell align="left">
                                                                 {showStatusOrder(row.delivery_status)}

@@ -164,7 +164,7 @@ function ShowDetailsOrder({ idOrder, Order }) {
                         </Grid>
                         <Grid item xs={6} >
                             <Typography variant="body1" style={{ paddingBottom: 20 }}>
-                                Tổng tiền:  &nbsp;  
+                                Tổng tiền:  &nbsp;
                                 {
                                     Order.total_payment.toLocaleString('vi-VI',
                                         {
@@ -207,7 +207,11 @@ function ShowDetailsOrder({ idOrder, Order }) {
                                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                 >
                                                     <TableCell component="th" scope="row" style={{ width: '20%' }}>
-                                                        <img src={"data:image/png;base64, " + row.picture_link_product} alt="product images" width={'100%'} height={'100%'} />
+                                                        {row.picture_product !== null ?
+                                                            <img src={row.picture_product} alt="product" width='100%' />
+                                                            :
+                                                            <img src={"data:image/png;base64, " + row.picture_link_product} alt="product" width='100%' />
+                                                        }
                                                     </TableCell>
                                                     <TableCell component="th" scope="row" align="left">
                                                         {row.name_product}

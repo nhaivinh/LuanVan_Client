@@ -13,11 +13,18 @@ import StatisticHome from './Statistic/StatisticHome';
 import SupplierManagementHome from './SupplierManagement/SupplierManagementHome';
 import { actions, useStore } from '../Store';
 import PageNotFound from '../PageNotFound';
+import InfoStaff from './InfoStaff/InfoStaff';
 
 
 function AdminHome() {
 
   const [, dispatch] = useStore()
+
+  const [resetPage, setResetPage] = React.useState(false);
+
+  function handleResetPage() {
+      setResetPage(!resetPage);
+  }
 
   React.useEffect(() => {
     axios.get(`https://localhost:7253/api/Product/`)
@@ -25,7 +32,7 @@ function AdminHome() {
         const Products = res.data;
         dispatch(actions.loadProduct(Products))
       })
-  }, [])
+  }, [resetPage])
 
   return (
     <div className="App">
@@ -33,13 +40,14 @@ function AdminHome() {
         <Routes>
           <Route path='/' element={<AdminHomePage />}>
             <Route path='/dashboard' element={<DashboardHome />} />
-            <Route path='/product' element={<ProductManagementHome />} />
+            <Route path='/product' element={<ProductManagementHome resetPage={resetPage} handleResetPage={handleResetPage}/>} />
             <Route path='/customer' element={<CustomerManagementHome />} />
             <Route path='/import' element={<ImportProductHome />} />
             <Route path='/order' element={<OrderManagementHome />} />
             <Route path='/staff' element={<StaffManagementHome />} />
             <Route path='/statistic' element={<StatisticHome />} />
             <Route path='/supplier' element={<SupplierManagementHome />} />
+            <Route path='/info' element={<InfoStaff />} />
             <Route exact path='*' element={<PageNotFound />} />
           </Route>
         </Routes>

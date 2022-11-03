@@ -6,33 +6,22 @@ import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import { QuyenChung } from './AdminHomeMenuData'
 // import logo from '../../image/Logo.jpg';
 import { Outlet } from 'react-router-dom';
-import { Container } from '@mui/system';
-import Sidebar from './Sidebar/Sidebar';
 import { useEffect, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../Admin/Sidebar/sidebar.scss';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import { useCookies, removeCookie } from "react-cookie";
 import Avatar from '@mui/material/Avatar';
-import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
+import { useCookies } from "react-cookie";
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { Button } from '@mui/material';
 
 function AdminHomePage() {
 
@@ -87,7 +76,7 @@ function AdminHomePage() {
     }));
 
 
-
+    const navigate = useNavigate();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
@@ -105,24 +94,24 @@ function AdminHomePage() {
         setAnchorEl(null);
     };
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
+    const handleClick = () => {
+        navigate('/admin/info')
     };
 
-    function handleClickLogOut() {
+    const handleClickLogOut = () => {
         removeCookie('Account', { path: '/' })
-        handleClose();
+        navigate('/')
         window.location.reload()
-    }
+    };
 
     const [accountInfo, setAccountInfo] = React.useState({})
+    const [roleByStaff, setRoleByStaff] = React.useState([])
 
     const [activeIndex, setActiveIndex] = useState(0);
     const [stepHeight, setStepHeight] = useState(0);
     const sidebarRef = useRef();
     const indicatorRef = useRef();
     const location = useLocation();
-
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const openAvatar = Boolean(anchorEl);
@@ -137,6 +126,33 @@ function AdminHomePage() {
         }
     }, [])
 
+    React.useEffect(() => {
+        if (accountInfo.id_staff !== undefined) {
+            axios.get(`https://localhost:7253/api/Staff/getRoleStaffByID/` + accountInfo.id_staff)
+                .then(res => {
+                    const RoleByStaff = res.data;
+                    setRoleByStaff(RoleByStaff);
+                })
+        }
+    }, [accountInfo])
+
+    function handleRoleByStaff(items) {
+        let exportItems = []
+        let roleStaff = roleByStaff.map(function (item) {
+            return (item.id_permission)
+        })
+        roleStaff.push(0)
+        roleStaff.push(-1)
+        exportItems = items.filter(function (item) {
+            return (
+                roleStaff.includes(item.id)
+            )
+        })
+        return (
+            exportItems
+        )
+    }
+
     useEffect(() => {
         setTimeout(() => {
             const sidebarItem = sidebarRef.current.querySelector('.sidebar__menu__item');
@@ -145,18 +161,109 @@ function AdminHomePage() {
         }, 100);
     }, []);
 
+
+
     // change active index
     useEffect(() => {
         const curPath = window.location.pathname;
-        const activeItem = QuyenChung.findIndex(item => item.to === curPath);
+        const activeItem = handleRoleByStaff(QuyenChung).findIndex(item => item.to === curPath);
         setActiveIndex(curPath.length === 0 ? 0 : activeItem);
     }, [location]);
+
+    function handleShowAvatar() {
+        if (cookies.Account === undefined) {
+            return (
+                <Link to="/login">
+                    <Box
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            flexDirection: 'row',
+                            marginLeft: 3,
+                        }}>
+                        <AccountCircleOutlinedIcon fontSize="large" />
+                        <Box
+                            style={{
+                                display: 'flex',
+                                alignItems: 'flex-start',
+                                flexDirection: 'column',
+                                marginLeft: 2,
+                                marginRight: 3
+                            }}>
+                            <Typography variant="body2">Đăng nhập</Typography>
+                            <Typography variant="body2">Đăng ký</Typography>
+                        </Box>
+                    </Box>
+                </Link>)
+        } else {
+            return (
+                <Box
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                        marginLeft: 10,
+                    }}>
+                    <Box
+                        onClick={handleClick}
+                        style={{
+                            display: 'flex',
+                            cursor: 'pointer'
+                        }}>
+                        {accountInfo.picture_char !== null ?
+                            <Avatar
+                                id="basic-button"
+                                aria-controls={open ? 'basic-menu' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={open ? 'true' : undefined}
+                                src={accountInfo.picture_char}
+                            >
+                            </Avatar>
+                            :
+                            <Avatar
+                                id="basic-button"
+                                aria-controls={open ? 'basic-menu' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={open ? 'true' : undefined}
+                                src={"data:image/png;base64, " + accountInfo.picture_link_avatar}
+                            >
+                            </Avatar>
+                        }
+                        <Box
+                            style={{
+                                display: 'flex',
+                                alignItems: 'flex-start',
+                                flexDirection: 'column',
+                                marginLeft: 5,
+                                marginRight: 3
+                            }}>
+                            <Typography variant="body2" >Xin chào!</Typography>
+                            <Typography variant="body2" >{accountInfo.name_staff}</Typography>
+                        </Box>
+                        <Button
+                            onClick={handleClickLogOut}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                marginLeft: 20,
+                                color: 'white'
+                            }}
+                        >
+                            <LogoutIcon />
+                            <Typography variant='body2'>Đăng xuất</Typography>
+                        </Button>
+                    </Box>
+                </Box >
+            )
+        }
+    }
 
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <AppBar position="fixed" open={open} style={{ backgroundColor: '#2d2d2d' }}>
                 <Toolbar >
+
                     <Box
                         style={{
                             display: 'flex',
@@ -179,7 +286,8 @@ function AdminHomePage() {
                             >
                                 <MenuIcon />
                             </IconButton>
-                            <a href="/">
+
+                            <Link to="/admin/dashboard">
                                 <Box
                                     style={{
                                         display: 'flex',
@@ -189,139 +297,10 @@ function AdminHomePage() {
                                     }}>
                                     <img src={require('../../images/Logo/logoPCWhite.png')} width='160px' />
                                 </Box>
-                            </a>
-                        </Box>
-                        <Box
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexDirection: 'row',
-                                marginLeft: 10,
-                            }}>
-                            <Box
-                                style={{
-                                    display: 'flex'
-                                }}>
-                                {accountInfo.picture_char !== null ?
-                                    <Avatar
-                                        id="basic-button"
-                                        aria-controls={open ? 'basic-menu' : undefined}
-                                        aria-haspopup="true"
-                                        aria-expanded={open ? 'true' : undefined}
-                                        onClick={handleClick}
-                                        src={accountInfo.picture_char}
-                                    >
-                                    </Avatar>
-                                    :
-                                    <Avatar
-                                        id="basic-button"
-                                        aria-controls={open ? 'basic-menu' : undefined}
-                                        aria-haspopup="true"
-                                        aria-expanded={open ? 'true' : undefined}
-                                        onClick={handleClick}
-                                        src={"data:image/png;base64, " + accountInfo.picture_link_avatar}
-                                    >
-                                    </Avatar>
-                                }
-                                <Box
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'flex-start',
-                                        flexDirection: 'column',
-                                        marginLeft: 5,
-                                        marginRight: 3
-                                    }}>
-
-                                    <Typography variant="body2">Xin chào!</Typography>
-                                    <Typography variant="body2">{accountInfo.name_customer}</Typography>
-                                </Box>
-                            </Box>
-                        </Box>
-                    </Box>
-                    <Menu
-                        anchorEl={anchorEl}
-                        id="account-menu"
-                        open={openAvatar}
-                        onClose={handleClose}
-                        onClick={handleClose}
-                        PaperProps={{
-                            elevation: 0,
-                            sx: {
-                                overflow: 'visible',
-                                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                mt: 1.5,
-                                '& .MuiAvatar-root': {
-                                    width: 32,
-                                    height: 32,
-                                    ml: -0.5,
-                                    mr: 1,
-                                },
-                                '&:before': {
-                                    content: '""',
-                                    display: 'block',
-                                    position: 'absolute',
-                                    top: 0,
-                                    right: 14,
-                                    width: 10,
-                                    height: 10,
-                                    bgcolor: 'background.paper',
-                                    transform: 'translateY(-50%) rotate(45deg)',
-                                    zIndex: 0,
-                                },
-                            },
-                        }}
-                        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                    >
-                        <MenuItem>
-                            <ListItemIcon>
-                                <PersonAdd fontSize="small" />
-                            </ListItemIcon>
-                            Add another account
-                        </MenuItem>
-                        <MenuItem>
-                            <ListItemIcon>
-                                <Settings fontSize="small" />
-                            </ListItemIcon>
-                            Settings
-                        </MenuItem>
-                        <MenuItem>
-                            <ListItemIcon>
-                                <Logout fontSize="small" />
-                            </ListItemIcon>
-                            Logout
-                        </MenuItem>
-                    </Menu>
-                    {/* <Menu
-                        id="basic-menu"
-                        anchorEl={anchorEl}
-                        open={openAvatar}
-                        onClose={handleClose}
-                        MenuListProps={{
-                            'aria-labelledby': 'basic-button',
-                        }}
-                    >
-                        <MenuItem>
-                            <Link to="/account">
-                                Thông tin cá nhân
                             </Link>
-                        </MenuItem>
-                        {accountInfo.role === "staff" &&
-                            <MenuItem
-                                onClick={handleClose}
-                            >
-                                <Link to="/admin/dashboard">
-                                    Trang quản lý
-                                </Link>
-                            </MenuItem>
-                        }
-
-                        <MenuItem
-                            onClick={handleClickLogOut}
-                        >
-                            Đăng xuất
-                        </MenuItem>
-                    </Menu> */}
+                        </Box>
+                        {handleShowAvatar()}
+                    </Box>
                 </Toolbar>
             </AppBar>
 
@@ -359,11 +338,12 @@ function AdminHomePage() {
                             style={{
                                 transform: `translateX(-50%) translateY(${activeIndex * stepHeight}px)`
                             }}
-                        ></div>
+                        >
+                        </div>
                         {
-                            QuyenChung.map((item, index) => (
+                            handleRoleByStaff(QuyenChung).map((item, index) => (
                                 <Link to={item.to} key={index}>
-                                    <div className={`sidebar__menu__item ${activeIndex === index ? 'active' : ''}`}>
+                                    <div className={`sidebar__menu__item ${activeIndex === (index) ? 'active' : ''}`}>
                                         <div className="sidebar__menu__item__icon">
                                             {item.icon}
                                         </div>

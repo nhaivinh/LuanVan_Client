@@ -23,11 +23,12 @@ import InfoIcon from '@mui/icons-material/Info';
 import ImageIcon from '@mui/icons-material/Image';
 import LockIcon from '@mui/icons-material/Lock';
 import { styled } from '@mui/material/styles';
-import { orange } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
+import Edit from '@mui/icons-material/Edit';
 
 const AntTabs = styled(Tabs)({
     '& .MuiTabs-indicator': {
-        backgroundColor: orange[500],
+        backgroundColor: grey[500],
         left: 0,
         paddingLeft: 10,
         borderRadius: 10
@@ -35,11 +36,12 @@ const AntTabs = styled(Tabs)({
 });
 
 const ColorButtonContained = styled(Button)(({ theme }) => ({
-    color: theme.palette.getContrastText(orange[500]),
+    color: theme.palette.getContrastText(grey[300]),
     fontWeight: 900,
-    backgroundColor: orange[500],
+    backgroundColor: grey[300],
     '&:hover': {
-        backgroundColor: orange[700],
+        color: theme.palette.getContrastText(grey[500]),
+        backgroundColor: grey[500],
     },
 }));
 
@@ -52,13 +54,13 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(({ theme }) =
     },
     fontWeight: theme.typography.fontWeightRegular,
     marginRight: theme.spacing(1),
-    color: orange[400],
+    color: grey[300],
     '&:hover': {
-        color: orange[900],
+        color: grey[500],
         opacity: 1,
     },
     '&.Mui-selected': {
-        color: orange[400],
+        color: grey[300],
         fontWeight: theme.typography.fontWeightMedium,
     },
     '&.Mui-focusVisible': {
@@ -77,7 +79,8 @@ function getFormattedDate(date) {
     return year + '-' + month + '-' + day;
 }
 
-function AccountInfo() {
+
+export default function InfoStaff() {
 
     var md5 = require('md5');
 
@@ -105,10 +108,12 @@ function AccountInfo() {
 
     const [posts, setPosts] = React.useState([]);
 
+    const [roles, setRoles] = React.useState([]);
+
     const [postsChangePassword, setPostsChangePassword] = React.useState([]);
 
     const client = axios.create({
-        baseURL: "https://localhost:7253/api/Customer"
+        baseURL: "https://localhost:7253/api/Staff"
     });
 
     const clientChangePassword = axios.create({
@@ -122,9 +127,9 @@ function AccountInfo() {
         if (textInput1.current !== null && textInput2.current !== null && textInput3.current !== null) {
             switch (newValue) {
                 case '0':
-                    textInput1.current.value = editAccount.name_customer
-                    textInput2.current.value = editAccount.email_customer
-                    textInput3.current.value = editAccount.phone_number_customer
+                    textInput1.current.value = editAccount.name_staff
+                    textInput2.current.value = editAccount.email_staff
+                    textInput3.current.value = editAccount.phone_number_staff
                     break;
                 case '2':
                     textInput1.current.value = changePassword.oldPassword
@@ -147,14 +152,24 @@ function AccountInfo() {
             })
     }, [resetpage])
 
+    React.useEffect(() => {
+        if (account.length !== undefined) {         
+            axios.get(`https://localhost:7253/api/Staff/getRoleStaffByID/` + account[0].id_staff)
+                .then(res => {
+                    const Roles = res.data;
+                    setRoles(Roles.map((Role) => Role.id_permission));
+                })
+        }
+    }, [account])
+
     function handleResetPage() {
         setResetPage(!resetpage)
     }
-
     const saveFile = (e) => {
         setAvatar(e.target.files)
     }
 
+    
     function saveImage() {
         let reader = new FileReader();
         reader.readAsDataURL(avatar[0])
@@ -181,7 +196,6 @@ function AccountInfo() {
     }
 
     function handleShowEditAccount() {
-        const DateOfBirthCustomer = new Date(account[0].date_of_birth_customer)
         switch (statusValue) {
             case '0':
                 return (
@@ -211,16 +225,16 @@ function AccountInfo() {
                                 label="Họ tên"
                                 size="small"
                                 inputRef={textInput1}
-                                defaultValue={account[0].name_customer}
-                                onChange={(e) => { setEditAccount({ ...editAccount, name_customer: e.target.value }) }}
+                                defaultValue={account[0].name_staff}
+                                onChange={(e) => { setEditAccount({ ...editAccount, name_staff: e.target.value }) }}
                             />
                             <TextField
                                 id="outlined-basic"
                                 label="Email"
                                 variant="outlined" size="small"
                                 inputRef={textInput2}
-                                defaultValue={account[0].email_customer}
-                                onChange={(e) => { setEditAccount({ ...editAccount, email_customer: e.target.value }) }}
+                                defaultValue={account[0].email_staff}
+                                onChange={(e) => { setEditAccount({ ...editAccount, email_staff: e.target.value }) }}
                             />
                             <TextField
                                 id="outlined-basic"
@@ -228,34 +242,34 @@ function AccountInfo() {
                                 size="small"
                                 inputRef={textInput3}
                                 label="Số điện thoại"
-                                defaultValue={account[0].phone_number_customer}
-                                onChange={(e) => { setEditAccount({ ...editAccount, phone_number_customer: e.target.value }) }}
+                                defaultValue={account[0].phone_number_staff}
+                                onChange={(e) => { setEditAccount({ ...editAccount, phone_number_staff: e.target.value }) }}
+                            />
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                size="small"
+                                inputRef={textInput3}
+                                label="Địa chỉ"
+                                defaultValue={account[0].address_staff}
+                                onChange={(e) => { setEditAccount({ ...editAccount, address_staff: e.target.value }) }}
                             />
                             <TextField
                                 id="outlined-basic"
                                 variant="outlined"
                                 size="small"
                                 label="Căn cước công dân"
-                                defaultValue={account[0].identity_card_customer}
-                                onChange={(e) => { setEditAccount({ ...editAccount, identity_card_customer: e.target.value }) }}
+                                defaultValue={account[0].identity_card_staff}
+                                onChange={(e) => { setEditAccount({ ...editAccount, identity_card_staff: e.target.value }) }}
                             />
-                            <TextField
-                                required
-                                type="date"
-                                label="Sinh nhật"
-                                variant="outlined"
-                                defaultValue={getFormattedDate(DateOfBirthCustomer)}
-                                onChange={(e) => { setEditAccount({ ...editAccount, date_of_birth_customer: e.target.value }) }}
-                            >
-                            </TextField>
                             <FormControl>
                                 <FormLabel id="demo-controlled-radio-buttons-group">Giới tính</FormLabel>
                                 <RadioGroup
                                     row
                                     aria-labelledby="demo-row-radio-buttons-group-label"
                                     name="row-radio-buttons-group"
-                                    defaultValue={account[0].gender_customer}
-                                    onChange={(e) => { setEditAccount({ ...editAccount, gender_customer: e.target.value }) }}
+                                    defaultValue={account[0].gender_staff}
+                                    onChange={(e) => { setEditAccount({ ...editAccount, gender_staff: e.target.value }) }}
                                 >
                                     <FormControlLabel value="male" control={<Radio />} label="Nam" />
                                     <FormControlLabel value="female" control={<Radio />} label="Nữ" />
@@ -318,7 +332,7 @@ function AccountInfo() {
                                     paddingBottom: 10
                                 }}
                             >
-                                <input className="custom-file-input" type="file" onChange={saveFile} />
+                                <input  type="file" onChange={saveFile} />
                             </Box>
                             <ColorButtonContained variant='contained' onClick={saveImage}>Cập nhật ảnh đại diện</ColorButtonContained>
                         </Box>
@@ -392,43 +406,37 @@ function AccountInfo() {
     }
 
     function handleClickUpdate() {
-        const current = new Date();
-        const date = getFormattedDate(current);
-
         let thongbao = "Hãy thêm thông tin đúng dạng cho :";
         let validName = false;
         let validEmail = false;
         let validPhoneNumber = false;
         let validIdentityCard = false;
-        let validDayOfBirth = false;
         let validGender = false;
 
-        if (editAccount.name_customer === "" || editAccount.name_customer.search(/[0-9]/) >= 0) {
+        if (editAccount.name_staff === "" || editAccount.name_staff.search(/[0-9]/) >= 0) {
             thongbao = thongbao + "\nHọ và Tên"
         } else validName = true
 
-        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(editAccount.email_customer)) {
+        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(editAccount.email_staff)) {
             thongbao = thongbao + "\nEmail"
         } else validEmail = true
 
 
-        if (!/^[0-9\b]+$/i.test(editAccount.phone_number_customer) || editAccount.phone_number_customer.length !== 10) {
+        if (!/^[0-9\b]+$/i.test(editAccount.phone_number_staff) || editAccount.phone_number_staff.length !== 10) {
             thongbao = thongbao + "\nSố điện thoại"
         } else validPhoneNumber = true
 
-        if (!/^[0-9\b]+$/i.test(editAccount.identity_card_customer) || editAccount.identity_card_customer.length !== 12) {
+        if (!/^[0-9\b]+$/i.test(editAccount.identity_card_staff) || editAccount.identity_card_staff.length !== 12) {
             thongbao = thongbao + "\nCăn cước công dân"
         } else validIdentityCard = true
 
-        if (editAccount.gender_customer.length === '') {
+        if (editAccount.gender_staff.length === '') {
             thongbao = thongbao + "\nGiới tính"
         } else validGender = true
 
-        if (editAccount.date_of_birth_customer > date) {
-            thongbao = thongbao + "\nNgày Cấp Phải Trước Ngày Hiện tại"
-        } else validDayOfBirth = true
+        console.log(editAccount)
 
-        if (validName && validEmail && validPhoneNumber && validDayOfBirth && validIdentityCard && validGender) {
+        if (validName && validEmail && validPhoneNumber && validIdentityCard && validGender) {
             addPosts(editAccount);
         } else {
             alert(thongbao);
@@ -436,15 +444,18 @@ function AccountInfo() {
         }
     }
     const addPosts = (Account) => {
+        console.log(Account)
         client
             .put('', {
-                "idCustomer": Account.id_customer,
-                "nameCustomer": Account.name_customer,
-                "emailCustomer": Account.email_customer,
-                "phoneNumberCustomer": Account.phone_number_customer,
-                "dateOfBirthCustomer": Account.date_of_birth_customer,
-                "identityCardCustomer": Account.identity_card_customer,
-                "genderCustomer": Account.gender_customer,
+                "idStaff": Account.id_staff,
+                "nameStaff": Account.name_staff,
+                "emailStaff": Account.email_staff,
+                "position": Account.position,
+                "phoneNumberStaff": Account.phone_number_staff,
+                "addressStaff": Account.address_staff,
+                "genderStaff": Account.gender_staff,
+                "identityCardStaff": Account.identity_card_staff,
+                "roles": roles,
             })
             .then((response) => {
                 setPosts([response.data, ...posts]);
@@ -516,7 +527,7 @@ function AccountInfo() {
     if (account[0] !== undefined) {
         return (
             <Box style={{}}>
-                <Container maxWidth="lg" style={{ backgroundColor: 'var(--background1)', borderRadius: '10px', marginTop: 70, padding: 0 }}>
+                <Container maxWidth="lg" style={{ backgroundColor: 'var(--background1)', borderRadius: '10px', marginTop: 0, padding: 0 }}>
                     <Grid container spacing={2} minHeight={700}>
                         <Grid item xs={3} style={{ paddingTop: 0 }}>
                             <Box sx={{ width: '100%', typography: 'body1', backgroundColor: 'rgb(45, 45, 45)', height: '100%', borderStartStartRadius: 10, borderBottomLeftRadius: 10 }}>
@@ -532,21 +543,6 @@ function AccountInfo() {
                             </Box>
                         </Grid>
                         <Grid item xs={9}>
-                            <Box
-                                style={{
-                                    display: 'flex',
-                                    height: 50,
-                                    alignItems: 'center',
-                                }}>
-                                <Breadcrumbs aria-label="breadcrumb">
-                                    <Link underline="hover" color="inherit" to="/">
-                                        <Typography color="text.primary">Trang Chủ</Typography>
-                                    </Link>
-                                    <Typography color="text.primary">
-                                        Thông tin cá nhân
-                                    </Typography>
-                                </Breadcrumbs>
-                            </Box>
                             {handleShowEditAccount()}
                         </Grid>
                     </Grid>
@@ -555,5 +551,3 @@ function AccountInfo() {
         )
     }
 }
-
-export default AccountInfo

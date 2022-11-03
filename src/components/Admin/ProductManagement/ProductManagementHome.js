@@ -119,19 +119,13 @@ TablePaginationActions.propTypes = {
     rowsPerPage: PropTypes.number.isRequired,
 };
 
-function ProductManagementHome() {
+function ProductManagementHome({ resetPage, handleResetPage }) {
 
     const [state, dispatchStore] = useStore();
 
     const [products, setProducts] = React.useState([])
 
     const [chosenProducts, setChosenProducts] = React.useState([])
-
-    const [resetPage, setResetPage] = React.useState(false);
-
-    function handleResetPage() {
-        setResetPage(!resetPage);
-    }
 
     React.useEffect(() => {
         setProducts(state.products);
@@ -140,7 +134,7 @@ function ProductManagementHome() {
     React.useEffect(() => {
         setChosenProducts(products)
     }, [products])
-    
+
 
     const [searchField, setSearchField] = React.useState(1);
 

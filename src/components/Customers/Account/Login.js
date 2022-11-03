@@ -95,7 +95,7 @@ const Login = () => {
     }
 
     return (
-        <div style={{ minHeight: 600 }}>
+        <div style={{ minHeight: 700 }}>
             <Container maxWidth="lg" style={{ backgroundColor: 'white', borderRadius: '5px', marginTop: 50 , height: 400 }}>
                 <Box style={{
                     display: 'flex',
