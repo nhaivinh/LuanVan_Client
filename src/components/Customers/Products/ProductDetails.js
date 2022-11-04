@@ -28,6 +28,7 @@ import { useCookies } from "react-cookie";
 import { makeStyles } from '@material-ui/core/styles';
 import { styled } from '@mui/material/styles';
 import { orange } from '@mui/material/colors';
+import ShowRateProduct from './ShowRateProduct';
 
 const useStyles = makeStyles({
     addToCartButton: {
@@ -45,11 +46,13 @@ const ColorButton = styled(Button)(({ theme }) => ({
     fontWeight: 900,
     backgroundColor: orange[500],
     '&:hover': {
-      backgroundColor: orange[700],
+        backgroundColor: orange[700],
     },
-  }));
+}));
 
-function ProductDetails({resetPage, handleResetPage}) {
+
+
+function ProductDetails({ resetPage, handleResetPage }) {
 
     const classes = useStyles();
 
@@ -58,6 +61,7 @@ function ProductDetails({resetPage, handleResetPage}) {
 
     const [product, setProduct] = React.useState([])
     const [images, setImages] = React.useState([])
+    const [rates, setRates] = React.useState([])
     const [, dispatch] = React.useContext(SnackBarContext);
     const [cookies, setCookie, removeCookie] = useCookies(["user"]);
     const [posts, setPosts] = React.useState([]);
@@ -74,6 +78,11 @@ function ProductDetails({resetPage, handleResetPage}) {
             .then(res => {
                 const Images = res.data;
                 setImages(Images);
+            })
+        axios.get(`https://localhost:7253/api/RateProduct/GetByIDProduct/` + params.productId)
+            .then(res => {
+                const Rates = res.data;
+                setRates(Rates);
             })
     }, [])
 
@@ -112,6 +121,22 @@ function ProductDetails({resetPage, handleResetPage}) {
                 }
             });
     };
+
+    function showRate(items){
+        if(items.length !== 0){
+            return(
+                items.map(function (item, index){
+                    return(
+                        <ShowRateProduct key={index} rate={item}/>
+                    )
+                })
+            )
+        }else{
+            return(
+                <Typography>Chưa có đánh giá</Typography>
+            )
+        }
+    }
 
     return (
         <Box style={{}}>
@@ -171,23 +196,23 @@ function ProductDetails({resetPage, handleResetPage}) {
                                         }}
                                     >
                                         <Typography variant="h5">{
-                                        (product[0].unit_price_product * (1 - product[0].discount_product*0.01)).toLocaleString('vi-VI',
+                                            (product[0].unit_price_product * (1 - product[0].discount_product * 0.01)).toLocaleString('vi-VI',
                                                 {
                                                     style: 'currency',
                                                     currency: 'VND'
                                                 })}
                                         </Typography>
                                         {product[0].discount_product !== 0 &&
-                                        <Typography variant='body2'>
-                                            <del>
-                                                {product[0].unit_price_product.toLocaleString('vi-VI',
-                                                    {
-                                                        style: 'currency',
-                                                        currency: 'VND'
-                                                    })}
-                                            </del>
-                                        </Typography>
-                                        }                                  
+                                            <Typography variant='body2'>
+                                                <del>
+                                                    {product[0].unit_price_product.toLocaleString('vi-VI',
+                                                        {
+                                                            style: 'currency',
+                                                            currency: 'VND'
+                                                        })}
+                                                </del>
+                                            </Typography>
+                                        }
                                     </Box>
                                     <Box
                                         style={{
@@ -227,14 +252,8 @@ function ProductDetails({resetPage, handleResetPage}) {
                             style={{
                                 paddingRight: 50
                             }}>
-                            <Typography variant="h5">Mô Tả Sản Phẩm</Typography>
-                            <Typography
-                                style={{
-                                    paddingTop: 10
-                                }}>
-                                Đánh giá chi tiết Bộ vi xử lý CPU Intel Comet Lake Core i9-10900K
-                                CPU là linh kiện quan trọng nhất của một bộ máy tính. Để lựa chọn cho mình một bộ vi xử lý tốc độ cao đáp ứng hầu như mọi nhu cầu sử dụng Bộ vi xử lý CPU Intel Comet Lake Core i9-10900K sẽ là một lựa chọn rất phù hợp với nhu cầu sử dụng cao cấp hiệu năng cao mà bạn đang mong chờ trên bộ PC của mình.
-                            </Typography>
+                            <Typography variant="h5">Đánh giá</Typography>
+                            {showRate(rates)}
                         </Box>
                     </Grid>
                     <Grid item xs={5}>

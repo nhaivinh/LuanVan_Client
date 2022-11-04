@@ -62,6 +62,16 @@ const ColorButtonContained = styled(Button)(({ theme }) => ({
     },
 }));
 
+const ColorButtonOutline = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[600]),
+    fontWeight: 900,
+    backgroundColor: 'white',
+    border: '1px solid ' + orange[500],
+    '&:hover': {
+        border: '1px solid ' + orange[700],
+    },
+}));
+
 export default function RateProduct({ item, resetPage, handleResetPage }) {
 
     const [value, setValue] = React.useState(0);
@@ -182,7 +192,12 @@ export default function RateProduct({ item, resetPage, handleResetPage }) {
                 />
             </TableCell>
             <TableCell component="th" scope="row" align="left">
-                <ColorButtonContained onClick={handleClickRate}>Đánh Giá</ColorButtonContained>
+                {canRate === false ?
+                    <ColorButtonOutline disabled>Đánh Giá</ColorButtonOutline>
+                    :
+                    <ColorButtonContained onClick={handleClickRate}>Đánh Giá</ColorButtonContained>
+                }
+
             </TableCell>
         </TableRow>
     )

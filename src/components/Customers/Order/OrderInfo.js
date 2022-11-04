@@ -19,7 +19,7 @@ import Grid from '@mui/material/Grid';
 import ShowDetailsOrder from './ShowDetailsOrder'
 import RateProducts from './RateProducts';
 import Tab from '@mui/material/Tab';
-import { Tabs } from '@mui/material';
+import { Button, Tabs } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { orange } from '@mui/material/colors';
 
@@ -184,10 +184,10 @@ function OrderInfo() {
                                             <TableRow>
                                                 <TableCell style={{ width: '10%' }} ><Typography variant='body2'>Mã số</Typography></TableCell>
                                                 <TableCell style={{ width: '20%' }} align="left">Hình thức thanh toán</TableCell>
-                                                <TableCell style={{ width: '15%' }} align="left">Ngày đặt hàng</TableCell>
-                                                <TableCell style={{ width: '15%' }} align="left">Tổng tiền</TableCell>
-                                                <TableCell style={{ width: '25%' }} align="center">Thao tác</TableCell>
-                                                <TableCell style={{ width: '15%' }} align="left">Trạng thái</TableCell>
+                                                <TableCell style={{ width: '20%' }} align="left">Ngày đặt hàng</TableCell>
+                                                <TableCell style={{ width: '20%' }} align="left">Tổng tiền</TableCell>
+                                                <TableCell style={{ width: '10%' }} align="left">Thao tác</TableCell>
+                                                <TableCell style={{ width: '20%' }} align="left">Trạng thái</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
@@ -216,10 +216,13 @@ function OrderInfo() {
                                                             </TableCell>
                                                             <TableCell align="center">
                                                                 <Box
-                                                                style={{ display: 'flex', justifyContent: 'center'}}
+                                                                    style={{ display: 'flex', justifyContent: 'left' }}
                                                                 >
                                                                     <ShowDetailsOrder Order={row} idOrder={row.id_order} />
-                                                                    <RateProducts Order={row} idOrder={row.id_order} />
+                                                                    {
+                                                                        row.delivery_status === 3 &&
+                                                                        <RateProducts Order={row} idOrder={row.id_order} />
+                                                                    }
                                                                 </Box>
                                                             </TableCell>
                                                             <TableCell align="left">
