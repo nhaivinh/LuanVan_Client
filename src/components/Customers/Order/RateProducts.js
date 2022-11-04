@@ -5,7 +5,7 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
 import RateReviewIcon from '@mui/icons-material/RateReview';
-import { Button, Stack, Typography } from '@mui/material';
+import { Button, Stack, TextField, Typography } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -14,7 +14,29 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TableHead from '@mui/material/TableHead';
 import CloseIcon from '@mui/icons-material/Close';
-import Rating from '@mui/material/Rating';
+import { makeStyles } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
+import { orange } from '@mui/material/colors';
+import RateProduct from './RateProduct';
+
+const ColorButtonContained = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[500]),
+    fontWeight: 900,
+    backgroundColor: orange[500],
+    '&:hover': {
+        backgroundColor: orange[700],
+    },
+}));
+
+const ColorButtonOutline = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[600]),
+    fontWeight: 900,
+    backgroundColor: 'white',
+    border: '1px solid ' + orange[500],
+    '&:hover': {
+        border: '1px solid ' + orange[700],
+    },
+}));
 
 const style = {
     position: 'absolute',
@@ -31,12 +53,17 @@ const style = {
 function RateProducts({ Order, idOrder }) {
     const [open, setOpen] = React.useState(false);
 
-    const [value, setValue] = React.useState([]);
+    const [resetPage, setResetPage] = React.useState(false);
 
     const handleOpen = () => {
         setOpen(true);
     }
+
     const handleClose = () => setOpen(false);
+
+    const handleResetPage = () => {
+        setResetPage(!resetPage);
+    }
 
     const [detailsOrder, setDetailsOrder] = React.useState([]);
 
@@ -46,9 +73,7 @@ function RateProducts({ Order, idOrder }) {
                 const Orders = res.data;
                 setDetailsOrder(Orders);
             })
-    }, [])
-
-    console.log(value)
+    }, [resetPage])
 
     function showDetail(items) {
 
@@ -58,46 +83,16 @@ function RateProducts({ Order, idOrder }) {
                     <TableHead>
                         <TableRow>
                             <TableCell style={{ width: '40%' }} colSpan={2}><Typography variant='h6'>Thông tin sản phẩm</Typography></TableCell>
-                            <TableCell style={{ width: '20%' }} align="left">Đánh giá</TableCell>
-                            <TableCell style={{ width: '20%' }} align="left">Thao Tác</TableCell>
+                            <TableCell style={{ width: '15%' }} align="left">Đánh giá</TableCell>
+                            <TableCell style={{ width: '30%' }} align="left">Nội dung đánh giá</TableCell>
+                            <TableCell style={{ width: '15%' }} align="left">Thao Tác</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {
                             items.map(function (row, index) {
                                 return (
-                                    <TableRow
-                                        key={index}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell align="left" style={{ width: '10%' }}>
-                                            {row.picture_product !== null ?
-                                                <img src={row.picture_product} alt="product" width='100%' />
-                                                :
-                                                <img src={"data:image/png;base64, " + row.picture_link_product} alt="product" width='100%' />
-                                            }
-                                        </TableCell>
-                                        <TableCell component="th" scope="row" align="left">
-                                            <Typography>{row.name_product}</Typography>
-                                        </TableCell>
-                                        <TableCell component="th" scope="row" align="left">
-                                            <Rating
-                                                name="simple-controlled"
-                                                value={value[index]}
-                                                onChange={(event, newValue) => {
-                                                    setValue([
-                                                        ...value, 
-                                                        {
-                                                            id_product: row.id_product,
-                                                            star: newValue
-                                                        }]);
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell component="th" scope="row" align="left">
-                                            <Button>Đánh Giá</Button>
-                                        </TableCell>
-                                    </TableRow>
+                                    <RateProduct key={index} item={row} resetPage={resetPage} handleResetPage={handleResetPage}/>
                                 )
                             })
                         }
