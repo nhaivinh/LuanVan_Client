@@ -29,6 +29,73 @@ import { makeStyles } from '@material-ui/core/styles';
 import { styled } from '@mui/material/styles';
 import { orange } from '@mui/material/colors';
 import ShowRateProduct from './ShowRateProduct';
+import Tab from '@mui/material/Tab';
+import { Tabs } from '@mui/material';
+import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
+import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
+import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
+import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAltOutlined";
+import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfied";
+import Pagination from '@mui/material/Pagination';
+const AntTabs = styled(Tabs)({
+    '& .MuiTabs-indicator': {
+        backgroundColor: orange[500],
+        left: 0,
+        paddingLeft: 10,
+    },
+});
+
+const AntTab = styled((props) => <Tab disableRipple {...props} />)(({ theme }) => ({
+    textTransform: 'none',
+    minWidth: 0,
+    fontSize: 16,
+    [theme.breakpoints.up('sm')]: {
+        minWidth: 0,
+    },
+    fontWeight: theme.typography.fontWeightRegular,
+    marginRight: theme.spacing(1),
+    color: theme.palette.getContrastText(orange[200]),
+    '&:hover': {
+        color: orange[700],
+        opacity: 1,
+    },
+    '&.Mui-selected': {
+        color: orange[800],
+        fontWeight: theme.typography.fontWeightMedium,
+    },
+    '&.Mui-focusVisible': {
+        backgroundColor: '#d1eaff',
+    },
+}));
+
+const customIcons = {
+    1: {
+        icon: <SentimentVeryDissatisfiedIcon color="error" />,
+        color: "error",
+        label: "Rất không hài lòng",
+        text: <SentimentVeryDissatisfiedIcon color="error" />
+    },
+    2: {
+        icon: <SentimentDissatisfiedIcon color="error" />,
+        color: "error",
+        label: "Không hài lòng"
+    },
+    3: {
+        icon: <SentimentSatisfiedIcon color="warning" />,
+        color: "warning",
+        label: "Bình Thường"
+    },
+    4: {
+        icon: <SentimentSatisfiedAltIcon color="success" />,
+        color: "warning",
+        label: "Hài Lòng"
+    },
+    5: {
+        icon: <SentimentVerySatisfiedIcon color="success" />,
+        color: "warning",
+        label: "Rất hài lòng"
+    }
+};
 
 const useStyles = makeStyles({
     addToCartButton: {
@@ -58,6 +125,14 @@ function ProductDetails({ resetPage, handleResetPage }) {
 
     let params = useParams();
     const navigate = useNavigate();
+
+    const [page, setPage] = React.useState(1);
+
+    const handleChangePage = (event, value) => {
+        setPage(value);
+    };
+
+    const [statusValue, setStatusValue] = React.useState('-1');
 
     const [product, setProduct] = React.useState([])
     const [images, setImages] = React.useState([])
@@ -122,18 +197,65 @@ function ProductDetails({ resetPage, handleResetPage }) {
             });
     };
 
-    function showRate(items){
-        if(items.length !== 0){
-            return(
-                items.map(function (item, index){
-                    return(
-                        <ShowRateProduct key={index} rate={item}/>
-                    )
-                })
-            )
-        }else{
-            return(
-                <Typography>Chưa có đánh giá</Typography>
+    const handleChange = (event, newValue) => {
+        setStatusValue(newValue);
+    };
+
+    function handleFilterRates(Rates) {
+        var filteredRates = Rates
+        if (statusValue != -1) {
+            filteredRates = Rates.filter(function (rate) {
+                return (rate.level_rate == statusValue)
+            })
+        }
+        return filteredRates
+    }
+
+    function showRate(items) {
+        let showArray = handleFilterRates(items)
+        if (showArray.length !== 0) {
+            if (showArray.length > 4) {
+                return (
+                    <>
+                        <Box
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                minHeight: 300,
+                                marginBottom: 20
+                            }}
+                        >
+                            {showArray
+                                .slice((page - 1) * 4, page * 4)
+                                .map(function (item, index) {
+                                    return (
+                                        <ShowRateProduct key={index} rate={item} />
+                                    )
+                                })}
+                        </Box>
+
+                        <Pagination
+                            count={Math.ceil(showArray.length / 4)}
+                            page={page}
+                            onChange={handleChangePage}
+                            showFirstButton
+                            showLastButton
+                        />
+                    </>
+
+                )
+            } else {
+                return (
+                    showArray.map(function (item, index) {
+                        return (
+                            <ShowRateProduct key={index} rate={item} />
+                        )
+                    })
+                )
+            }
+        } else {
+            return (
+                <Typography style={{ padding: 20 }}>Chưa có đánh giá</Typography>
             )
         }
     }
@@ -253,6 +375,19 @@ function ProductDetails({ resetPage, handleResetPage }) {
                                 paddingRight: 50
                             }}>
                             <Typography variant="h5">Đánh giá</Typography>
+                            <Box sx={{ width: '100%', typography: 'body1', height: '100%' }}>
+                                <AntTabs
+                                    value={statusValue}
+                                    onChange={handleChange}
+                                >
+                                    <AntTab label="Tất cả" value="-1" />
+                                    <AntTab label={customIcons[1].icon} value="1" />
+                                    <AntTab label={customIcons[2].icon} value="2" />
+                                    <AntTab label={customIcons[3].icon} value="3" />
+                                    <AntTab label={customIcons[4].icon} value="4" />
+                                    <AntTab label={customIcons[5].icon} value="5" />
+                                </AntTabs>
+                            </Box>
                             {showRate(rates)}
                         </Box>
                     </Grid>
