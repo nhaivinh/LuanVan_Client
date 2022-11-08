@@ -237,54 +237,60 @@ function BuildPC() {
     const [posts, setPosts] = React.useState([]);
 
     function handleClickAdd() {
-        if (
-            chosenPC.cpu.id !== 0 &&
-            chosenPC.cpu.quantity !== 0 &&
-            chosenPC.mainboard.id !== 0 &&
-            chosenPC.mainboard.quantity !== 0 &&
-            chosenPC.ram.id !== 0 &&
-            chosenPC.ram.quantity !== 0 &&
-            chosenPC.gpu.id !== 0 &&
-            chosenPC.gpu.quantity !== 0 &&
-            chosenPC.psu.id !== 0 &&
-            chosenPC.psu.quantity !== 0 &&
-            chosenPC.casepc.id !== 0 &&
-            chosenPC.casepc.quantity !== 0 &&
-            (
+        if (cookies.Account !== undefined) {
+            if (
+                chosenPC.cpu.id !== 0 &&
+                chosenPC.cpu.quantity !== 0 &&
+                chosenPC.mainboard.id !== 0 &&
+                chosenPC.mainboard.quantity !== 0 &&
+                chosenPC.ram.id !== 0 &&
+                chosenPC.ram.quantity !== 0 &&
+                chosenPC.gpu.id !== 0 &&
+                chosenPC.gpu.quantity !== 0 &&
+                chosenPC.psu.id !== 0 &&
+                chosenPC.psu.quantity !== 0 &&
+                chosenPC.casepc.id !== 0 &&
+                chosenPC.casepc.quantity !== 0 &&
                 (
+                    (
+                        chosenPC.harddisk1.id !== 0 &&
+                        chosenPC.harddisk1.quantity !== 0
+                    ) ||
+                    (
+                        chosenPC.harddisk2.id !== 0 &&
+                        chosenPC.harddisk2.quantity !== 0
+                    )
+                )
+            ) {
+                addPosts(cookies.Account, chosenPC.cpu.id_product, chosenPC.cpu.quantity);
+                addPosts(cookies.Account, chosenPC.mainboard.id_product, chosenPC.mainboard.quantity);
+                addPosts(cookies.Account, chosenPC.ram.id_product, chosenPC.ram.quantity);
+                addPosts(cookies.Account, chosenPC.gpu.id_product, chosenPC.gpu.quantity);
+                addPosts(cookies.Account, chosenPC.psu.id_product, chosenPC.psu.quantity);
+                addPosts(cookies.Account, chosenPC.casepc.id_product, chosenPC.casepc.quantity);
+                if (
                     chosenPC.harddisk1.id !== 0 &&
                     chosenPC.harddisk1.quantity !== 0
-                ) ||
-                (
+                ) {
+                    addPosts(cookies.Account, chosenPC.harddisk1.id_product, chosenPC.harddisk1.quantity);
+                }
+                if (
                     chosenPC.harddisk2.id !== 0 &&
                     chosenPC.harddisk2.quantity !== 0
-                )
-            )
-        ) {
-            addPosts(cookies.Account, chosenPC.cpu.id_product, chosenPC.cpu.quantity);
-            addPosts(cookies.Account, chosenPC.mainboard.id_product, chosenPC.mainboard.quantity);
-            addPosts(cookies.Account, chosenPC.ram.id_product, chosenPC.ram.quantity);
-            addPosts(cookies.Account, chosenPC.gpu.id_product, chosenPC.gpu.quantity);
-            addPosts(cookies.Account, chosenPC.psu.id_product, chosenPC.psu.quantity);
-            addPosts(cookies.Account, chosenPC.casepc.id_product, chosenPC.casepc.quantity);
-            if (
-                chosenPC.harddisk1.id !== 0 &&
-                chosenPC.harddisk1.quantity !== 0
-            ) {
-                addPosts(cookies.Account, chosenPC.harddisk1.id_product, chosenPC.harddisk1.quantity);
-            }
-            if (
-                chosenPC.harddisk2.id !== 0 &&
-                chosenPC.harddisk2.quantity !== 0
-            ) {
-                addPosts(cookies.Account, chosenPC.harddisk2.id_product, chosenPC.harddisk2.quantity);
+                ) {
+                    addPosts(cookies.Account, chosenPC.harddisk2.id_product, chosenPC.harddisk2.quantity);
+                }
+            } else {
+                dispatch(setOpenSnackBar());
+                dispatch(setMessage("Lỗi: Cần nhập đủ sản phẩm yêu cầu"));
+                dispatch(setSeverity("error"));
             }
         } else {
             dispatch(setOpenSnackBar());
-            dispatch(setMessage("Lỗi: Cần nhập đủ sản phẩm yêu cầu"));
+            dispatch(setMessage("Lỗi: Cần đăng nhập trước khi sử dụng chức năng này"));
             dispatch(setSeverity("error"));
+            navigate('/cart')
         }
-
     }
 
     function handleClickBuyNow() {
@@ -319,7 +325,7 @@ function BuildPC() {
     };
 
     return (
-        <Container maxWidth="lg" style={{ backgroundColor: 'var(--background1)', marginTop: 50 , borderRadius: '10px' }}>
+        <Container maxWidth="lg" style={{ backgroundColor: 'var(--background1)', marginTop: 50, borderRadius: '10px' }}>
             <Box
                 style={{
                     display: 'flex',
@@ -334,7 +340,7 @@ function BuildPC() {
                 </Breadcrumbs>
             </Box>
             {showAnalyze &&
-                <AnalyzeBuildPc chosenPC={chosenPC} Products={products} />
+                <AnalyzeBuildPc chosenPC={chosenPC} Products={products} handleSetChosenProduct={handleSetChosenProduct} showHint={true} />
             }
             <Grid container spacing={2} minHeight={600}>
                 <Grid item xs={8}>

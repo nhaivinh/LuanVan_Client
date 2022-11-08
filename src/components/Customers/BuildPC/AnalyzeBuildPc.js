@@ -13,8 +13,20 @@ import { Bar } from 'react-chartjs-2';
 import { ArcElement } from "chart.js";
 import Chart from "chart.js/auto";
 import "chartjs-plugin-datalabels";
+import { styled } from '@mui/material/styles';
+import { orange } from '@mui/material/colors';
+import { Cookies } from 'react-cookie';
 
-export default function AnalyzeBuildPc({ chosenPC, Products }) {
+const ColorButtonContained = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[500]),
+    fontWeight: 900,
+    backgroundColor: orange[500],
+    '&:hover': {
+        backgroundColor: orange[700],
+    },
+}));
+
+export default function AnalyzeBuildPc({ chosenPC, Products, handleSetChosenProduct, showHint }) {
     const [cpu, setCpu] = React.useState({})
     const [mainboard, setMainboard] = React.useState({})
     const [ram, setRam] = React.useState({})
@@ -26,8 +38,11 @@ export default function AnalyzeBuildPc({ chosenPC, Products }) {
 
     const [cpus, setCpus] = React.useState([])
     const [gpus, setGpus] = React.useState([])
-
-
+    const [mainboards, setMainboards] = React.useState([])
+    const [rams, setRams] = React.useState([])
+    const [psus, setPsus] = React.useState([])
+    const [harddisks, setHarddisks] = React.useState([])
+    const [casepcs, setCasePcs] = React.useState([])
 
     React.useEffect(() => {
         axios.get(`https://localhost:7253/api/cpu`)
@@ -39,6 +54,31 @@ export default function AnalyzeBuildPc({ chosenPC, Products }) {
             .then(res => {
                 const Gpus = res.data;
                 setGpus(Gpus);
+            })
+        axios.get(`https://localhost:7253/api/mainboard`)
+            .then(res => {
+                const Mainboards = res.data;
+                setMainboards(Mainboards);
+            })
+        axios.get(`https://localhost:7253/api/ram`)
+            .then(res => {
+                const Rams = res.data;
+                setRams(Rams);
+            })
+        axios.get(`https://localhost:7253/api/psu`)
+            .then(res => {
+                const Psus = res.data;
+                setPsus(Psus);
+            })
+        axios.get(`https://localhost:7253/api/harddisk`)
+            .then(res => {
+                const Harddisks = res.data;
+                setHarddisks(Harddisks);
+            })
+        axios.get(`https://localhost:7253/api/casepc`)
+            .then(res => {
+                const CasePCs = res.data;
+                setCasePcs(CasePCs);
             })
     }, [])
 
@@ -140,6 +180,11 @@ export default function AnalyzeBuildPc({ chosenPC, Products }) {
         return (chosenProducts)
     }
 
+
+    function handleClick(id, type) {
+        handleSetChosenProduct(id, type)
+    }
+
     function handleShowHintProduct(type, scope) {
         var exportProduct = Products
         var filteredProducts
@@ -155,6 +200,18 @@ export default function AnalyzeBuildPc({ chosenPC, Products }) {
                     return (product.scope_gpu < (scope + 3000) && product.scope_gpu > (scope - 3000))
                 })
                 filteredProducts.sort((a, b) => (Math.abs(a.scope_gpu - scope) > Math.abs(b.scope_gpu - scope)) ? 1 : -1)
+                break;
+            case 'mainboard':
+                filteredProducts = mainboards.filter(function (product) {
+                    return (product.socket_mainboard === scope)
+                })
+                filteredProducts.sort((a, b) => (Math.abs(a.unit_price_product - mainboard.unit_price_product) > Math.abs(a.unit_price_product - mainboard.unit_price_product)) ? 1 : -1)
+                break;
+            case 'ram':
+                filteredProducts = rams.filter(function (product) {
+                    return (product.generation_ram === scope)
+                })
+                filteredProducts.sort((a, b) => (Math.abs(a.unit_price_product - mainboard.unit_price_product) > Math.abs(a.unit_price_product - mainboard.unit_price_product)) ? 1 : -1)
                 break;
             default:
                 break;
@@ -172,10 +229,11 @@ export default function AnalyzeBuildPc({ chosenPC, Products }) {
                 <Box
                     style={{
                         display: 'flex',
-                        height: 320,
+                        height: 350,
                         flexFlow: 'row nowrap',
                         flexGrow: 1,
                         overflowX: 'auto',
+                        overflowY: 'hidden',
                         paddingLeft: 20,
                         paddingRight: 20,
                         flexWrap: 'wrap',
@@ -196,42 +254,59 @@ export default function AnalyzeBuildPc({ chosenPC, Products }) {
                                     borderRadius: 10
                                 }}
                             >
-                                <Link to={"/product/" + Product.id_product} target="_blank">
+
+                                <Box
+                                    key={Product.id_product}
+                                    style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
+                                >
+                                    {
+                                        Product.picture_product !== null ?
+                                            <img src={Product.picture_product} width={'200px'} />
+                                            :
+                                            <img src={"data:image/png;base64, " + Product.picture_link_product} alt="product images" width={'200px'} height={'200px'} />
+                                    }
                                     <Box
                                         key={Product.id_product}
-                                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
+                                        style={{
+                                            display: 'flex',
+                                            width: '100%',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            paddingTop: 10,
+                                        }}
                                     >
-                                        {
-                                            Product.picture_product !== null ?
-                                                <img src={Product.picture_product} width={'200px'} />
-                                                :
-                                                <img src={"data:image/png;base64, " + Product.picture_link_product} alt="product images" width={'200px'} height={'200px'} />
-                                        }
+                                        <Link to={"/product/" + Product.id_product} target="_blank">
+                                            <Typography variant='body2'>{Product.name_product}</Typography>
+                                        </Link>
                                         <Box
-                                            key={Product.id_product}
                                             style={{
                                                 display: 'flex',
                                                 width: '100%',
-                                                flexDirection: 'column',
+                                                justifyContent: 'space-around',
                                                 alignItems: 'center',
-                                                paddingTop: 10,
+                                                paddingBottom: 5,
+                                                paddingTop: 5
                                             }}
                                         >
-                                            <Typography variant='body2'>{Product.name_product}</Typography>
-                                            <Typography variant='body1'>{
+                                            <Typography variant='body2'>{
                                                 (Product.unit_price_product).toLocaleString('vi-VI',
                                                     {
                                                         style: 'currency',
                                                         currency: 'VND'
                                                     })}
                                             </Typography>
+                                            <ColorButtonContained
+                                                onClick={() => { handleClick(Product.id_product, Product.type_product) }}
+                                            > Chọn </ColorButtonContained>
                                         </Box>
                                     </Box>
-                                </Link>
-                            </Box>
+                                </Box>
+
+                            </Box >
                         )
-                    })}
-                </Box>
+                    })
+                    }
+                </Box >
             )
         } else {
             return (
@@ -239,7 +314,6 @@ export default function AnalyzeBuildPc({ chosenPC, Products }) {
             )
         }
     }
-
     function handleShowResult(percent) {
         if (percent < 10) {
             return (
@@ -292,38 +366,6 @@ export default function AnalyzeBuildPc({ chosenPC, Products }) {
                                 <Typography variant='body1'>CPU chỉ đạt hiệu năng: {(100 - percent).toFixed(1)}% khi GPU hoạt động với hiệu suất 100%</Typography>
                                 <Typography variant='body1'>Khi sử dụng các tác vụ năng GPU của bạn sẽ không đạt được hiệu năng tối đa. Do CPU không đủ nhanh để xử lý dữ liệu</Typography>
                             </Box>
-                            <Box
-                                style={{
-                                    display: 'flex',
-                                    background: 'white',
-                                    minHeight: 100,
-                                    padding: 10,
-                                    marginTop: 10,
-                                    borderRadius: 10,
-                                    flexDirection: 'column'
-                                }}
-                            >
-                                <Stack direction="row" spacing={2} justifyContent="space-between" borderLeft={'5px solid black'} marginTop={2} marginBottom={2} paddingRight={3}>
-                                    <Typography variant='h6' paddingLeft={2}>Gợi ý nâng cấp card đồ hoạ</Typography>
-                                </Stack>
-                                {handleShowHintProduct('gpu', cpu.scope_cpu)}
-                            </Box>
-                            <Box
-                                style={{
-                                    display: 'flex',
-                                    background: 'white',
-                                    minHeight: 100,
-                                    padding: 10,
-                                    marginTop: 10,
-                                    borderRadius: 10,
-                                    flexDirection: 'column'
-                                }}
-                            >
-                                <Stack direction="row" spacing={2} justifyContent="space-between" borderLeft={'5px solid black'} marginTop={2} marginBottom={2} paddingRight={3}>
-                                    <Typography variant='h6' paddingLeft={2}>Gợi ý hạ cấp vi xử lý</Typography>
-                                </Stack>
-                                {handleShowHintProduct('cpu', gpu.scope_gpu)}
-                            </Box>
                         </>
                     )
                 } else {
@@ -349,38 +391,6 @@ export default function AnalyzeBuildPc({ chosenPC, Products }) {
                                 <Typography variant='body1'>Độ nghẽn cổ chai của linh kiện là {(percent - 0).toFixed(1)}%</Typography>
                                 <Typography variant='body1'>GPU chỉ đạt hiệu năng: {(100 - percent).toFixed(1)}% khi CPU hoạt động với hiệu suất 100%</Typography>
                                 <Typography variant='body1'>Khi sử dụng các tác vụ năng GPU của bạn sẽ không đạt được hiệu năng tối đa. Do CPU không đủ nhanh để xử lý dữ liệu</Typography>
-                            </Box>
-                            <Box
-                                style={{
-                                    display: 'flex',
-                                    background: 'white',
-                                    minHeight: 100,
-                                    padding: 10,
-                                    marginTop: 10,
-                                    borderRadius: 10,
-                                    flexDirection: 'column'
-                                }}
-                            >
-                                <Stack direction="row" spacing={2} justifyContent="space-between" borderLeft={'5px solid black'} marginTop={2} marginBottom={2} paddingRight={3}>
-                                    <Typography variant='h6' paddingLeft={2}>Gợi ý nâng cấp vi xử lý</Typography>
-                                </Stack>
-                                {handleShowHintProduct('cpu', gpu.scope_gpu)}
-                            </Box>
-                            <Box
-                                style={{
-                                    display: 'flex',
-                                    background: 'white',
-                                    minHeight: 100,
-                                    padding: 10,
-                                    marginTop: 10,
-                                    borderRadius: 10,
-                                    flexDirection: 'column'
-                                }}
-                            >
-                                <Stack direction="row" spacing={2} justifyContent="space-between" borderLeft={'5px solid black'} marginTop={2} marginBottom={2} paddingRight={3}>
-                                    <Typography variant='h6' paddingLeft={2}>Gợi ý hạ cấp vi card đồ hoạ</Typography>
-                                </Stack>
-                                {handleShowHintProduct('gpu', cpu.scope_cpu)}
                             </Box>
                         </>
                     )
@@ -410,38 +420,6 @@ export default function AnalyzeBuildPc({ chosenPC, Products }) {
                                 <Typography variant='body1'>CPU chỉ đạt hiệu năng: {(100 - percent).toFixed(1)}% khi GPU hoạt động với hiệu suất 100%</Typography>
                                 <Typography variant='h6' style={{ color: 'red' }}>CPU và GPU không thể hoạt động hiệu quả</Typography>
                             </Box>
-                            <Box
-                                style={{
-                                    display: 'flex',
-                                    background: 'white',
-                                    minHeight: 100,
-                                    padding: 10,
-                                    marginTop: 10,
-                                    borderRadius: 10,
-                                    flexDirection: 'column'
-                                }}
-                            >
-                                <Stack direction="row" spacing={2} justifyContent="space-between" borderLeft={'5px solid black'} marginTop={2} marginBottom={2} paddingRight={3}>
-                                    <Typography variant='h6' paddingLeft={2}>Gợi ý nâng cấp card đồ hoạ</Typography>
-                                </Stack>
-                                {handleShowHintProduct('gpu', cpu.scope_cpu)}
-                            </Box>
-                            <Box
-                                style={{
-                                    display: 'flex',
-                                    background: 'white',
-                                    minHeight: 100,
-                                    padding: 10,
-                                    marginTop: 10,
-                                    borderRadius: 10,
-                                    flexDirection: 'column'
-                                }}
-                            >
-                                <Stack direction="row" spacing={2} justifyContent="space-between" borderLeft={'5px solid black'} marginTop={2} marginBottom={2} paddingRight={3}>
-                                    <Typography variant='h6' paddingLeft={2}>Gợi ý hạ cấp vi xử lý</Typography>
-                                </Stack>
-                                {handleShowHintProduct('cpu', gpu.scope_gpu)}
-                            </Box>
                         </>
                     )
                 } else {
@@ -467,38 +445,6 @@ export default function AnalyzeBuildPc({ chosenPC, Products }) {
                                 <Typography variant='body1'>Độ nghẽn cổ chai của linh kiện là {(percent - 0).toFixed(1)}%</Typography>
                                 <Typography variant='body1'>GPU chỉ đạt hiệu năng: {(100 - percent).toFixed(1)}% khi CPU hoạt động với hiệu suất 100%</Typography>
                                 <Typography variant='h6' style={{ color: 'red' }}>CPU và GPU không thể hoạt động hiệu quả</Typography>
-                            </Box>
-                            <Box
-                                style={{
-                                    display: 'flex',
-                                    background: 'white',
-                                    minHeight: 100,
-                                    padding: 10,
-                                    marginTop: 10,
-                                    borderRadius: 10,
-                                    flexDirection: 'column'
-                                }}
-                            >
-                                <Stack direction="row" spacing={2} justifyContent="space-between" borderLeft={'5px solid black'} marginTop={2} marginBottom={2} paddingRight={3}>
-                                    <Typography variant='h6' paddingLeft={2}>Gợi ý nâng cấp vi xử lý</Typography>
-                                </Stack>
-                                {handleShowHintProduct('cpu', gpu.scope_gpu)}
-                            </Box>
-                            <Box
-                                style={{
-                                    display: 'flex',
-                                    background: 'white',
-                                    minHeight: 100,
-                                    padding: 10,
-                                    marginTop: 10,
-                                    borderRadius: 10,
-                                    flexDirection: 'column'
-                                }}
-                            >
-                                <Stack direction="row" spacing={2} justifyContent="space-between" borderLeft={'5px solid black'} marginTop={2} marginBottom={2} paddingRight={3}>
-                                    <Typography variant='h6' paddingLeft={2}>Gợi ý hạ cấp vi card đồ hoạ</Typography>
-                                </Stack>
-                                {handleShowHintProduct('gpu', cpu.scope_cpu)}
                             </Box>
                         </>
                     )
@@ -546,6 +492,53 @@ export default function AnalyzeBuildPc({ chosenPC, Products }) {
         )
 
     }
+
+    function showHintMainboard() {
+        if (cpu.socket_cpu !== mainboard.socket_mainboard) {
+            return (
+                <Box
+                    style={{
+                        display: 'flex',
+                        background: 'white',
+                        minHeight: 100,
+                        padding: 10,
+                        marginTop: 10,
+                        borderRadius: 10,
+                        flexDirection: 'column'
+                    }}
+                >
+                    <Stack direction="row" spacing={2} justifyContent="space-between" borderLeft={'5px solid black'} marginTop={2} marginBottom={2} paddingRight={3}>
+                        <Typography variant='h6' paddingLeft={2}>Gợi ý bo mạch chủ phù hợp</Typography>
+                    </Stack>
+                    {handleShowHintProduct('mainboard', cpu.socket_cpu)}
+                </Box>
+            )
+        }
+    }
+
+    function showHintRam() {
+        if (ram.generation_ram !== mainboard.type_ram_support) {
+            return (
+                <Box
+                    style={{
+                        display: 'flex',
+                        background: 'white',
+                        minHeight: 100,
+                        padding: 10,
+                        marginTop: 10,
+                        borderRadius: 10,
+                        flexDirection: 'column'
+                    }}
+                >
+                    <Stack direction="row" spacing={2} justifyContent="space-between" borderLeft={'5px solid black'} marginTop={2} marginBottom={2} paddingRight={3}>
+                        <Typography variant='h6' paddingLeft={2}>Gợi ý Ram phù hợp với Bo mạch chủ</Typography>
+                    </Stack>
+                    {handleShowHintProduct('ram', mainboard.type_ram_support)}
+                </Box>
+            )
+        }
+    }
+
     return (
         <Box
             style={{
@@ -710,8 +703,47 @@ export default function AnalyzeBuildPc({ chosenPC, Products }) {
                 </Grid>
                 <Grid item xs={12}>
                     {handleShowResult(handlePercentBottleNeck())}
+                    {(showHint === true && handlePercentBottleNeck() > 10) &&
+                        <>
+                            < Box
+                                style={{
+                                    display: 'flex',
+                                    background: 'white',
+                                    minHeight: 100,
+                                    padding: 10,
+                                    marginTop: 10,
+                                    borderRadius: 10,
+                                    flexDirection: 'column'
+                                }}
+                            >
+                                <Stack direction="row" spacing={2} justifyContent="space-between" borderLeft={'5px solid black'} marginTop={2} marginBottom={2} paddingRight={3}>
+                                    <Typography variant='h6' paddingLeft={2}>Gợi ý nâng cấp vi xử lý</Typography>
+                                </Stack>
+                                {handleShowHintProduct('cpu', gpu.scope_gpu)}
+                            </Box>
+                            <Box
+                                style={{
+                                    display: 'flex',
+                                    background: 'white',
+                                    minHeight: 100,
+                                    padding: 10,
+                                    marginTop: 10,
+                                    borderRadius: 10,
+                                    flexDirection: 'column'
+                                }}
+                            >
+                                <Stack direction="row" spacing={2} justifyContent="space-between" borderLeft={'5px solid black'} marginTop={2} marginBottom={2} paddingRight={3}>
+                                    <Typography variant='h6' paddingLeft={2}>Gợi ý hạ cấp vi card đồ hoạ</Typography>
+                                </Stack>
+                                {handleShowHintProduct('gpu', cpu.scope_cpu)}
+                            </Box>
+
+                        </>
+                    }
+                    {showHintMainboard()}
+                    {showHintRam()}
                 </Grid>
             </Grid>
-        </Box>
+        </Box >
     )
 }

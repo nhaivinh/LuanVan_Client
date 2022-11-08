@@ -250,11 +250,6 @@ function BuildPCFormAdd({ Type, handleSetChosenProduct, Products, chosenProducts
                         return (product.socket_cpu.toLowerCase().includes(filter.socket_cpu.toLowerCase()))
                     })
                 }
-                if (chosenProducts.mainboard.id_product !== 0) {
-                    filteredProducts = filteredProducts.filter(function (product) {
-                        return ((product.socket_cpu).toLowerCase() === mainboards.find(element => element.id_product === chosenProducts.mainboard.id_product).socket_mainboard.toLowerCase())
-                    })
-                }
                 break;
             case 'mainboard':
                 filteredProducts = mainboards
@@ -268,11 +263,11 @@ function BuildPCFormAdd({ Type, handleSetChosenProduct, Products, chosenProducts
                         return (product.chipset_mainboard.toLowerCase().includes(filter.chipset_mainboard.toLowerCase()))
                     })
                 }
-                if (chosenProducts.cpu.id_product !== 0) {
-                    filteredProducts = mainboards.filter(function (product) {
-                        return (product.socket_mainboard === cpus.find(element => element.id_product === chosenProducts.cpu.id_product).socket_cpu)
-                    })
-                }
+                // if (chosenProducts.cpu.id_product !== 0) {
+                //     filteredProducts = mainboards.filter(function (product) {
+                //         return (product.socket_mainboard === cpus.find(element => element.id_product === chosenProducts.cpu.id_product).socket_cpu)
+                //     })
+                // }
                 break;
             case 'ram':
                 filteredProducts = rams
@@ -284,11 +279,6 @@ function BuildPCFormAdd({ Type, handleSetChosenProduct, Products, chosenProducts
                 if (filter.capacity_ram !== "all") {
                     filteredProducts = filteredProducts.filter(function (product) {
                         return (product.capacity_ram === filter.capacity_ram)
-                    })
-                }
-                if (chosenProducts.mainboard.id_product !== 0) {
-                    filteredProducts = rams.filter(function (product) {
-                        return (product.generation_ram.toLowerCase() === mainboards.find(element => element.id_product === chosenProducts.mainboard.id_product).type_ram_support.toLowerCase())
                     })
                 }
                 break;
@@ -333,12 +323,7 @@ function BuildPCFormAdd({ Type, handleSetChosenProduct, Products, chosenProducts
                 }
                 break;
             case 'casepc':
-                filteredProducts = casepcs
-                if (chosenProducts.mainboard.id_product !== 0) {
-                    filteredProducts = casepcs.filter(function (product) {
-                        return (product.mainboard_support.toLowerCase().search(mainboards.find(element => element.id_product === chosenProducts.mainboard.id_product).size_mainboard.toLowerCase()))
-                    })
-                }              
+                filteredProducts = casepcs            
                 if (filter.type_case !== "all") {
                     filteredProducts = filteredProducts.filter(function (product) {
                         return (product.type_case.toLowerCase().includes(filter.type_case.toLowerCase()))
@@ -349,7 +334,6 @@ function BuildPCFormAdd({ Type, handleSetChosenProduct, Products, chosenProducts
                         return (product.color_case.toLowerCase().includes(filter.color_case.toLowerCase()))
                     })
                 }
-
                 break;
             default:
                 break;

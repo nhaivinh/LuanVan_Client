@@ -16,6 +16,13 @@ import { useNavigate } from "react-router-dom";
 import { styled } from '@mui/material/styles';
 import { orange } from '@mui/material/colors';
 import { useStore } from "../../Store";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import FormLabel from '@mui/material/FormLabel';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 const ColorButtonContained = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(orange[500]),
@@ -41,6 +48,8 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
     const [state,] = useStore();
     const [, dispatch] = React.useContext(SnackBarContext);
 
+    const [typePC, setTypePC] = React.useState(1);
+
     //get form api
     const [products, setProducts] = React.useState([])
     const [coupleProducts, setCoupleProduct] = React.useState([])
@@ -52,6 +61,7 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
     const [harddisks, setHarddisks] = React.useState([])
     const [casepcs, setCasepcs] = React.useState([])
 
+    const checkGPURef = React.useRef(null);
 
     //Đồ vật
     /*
@@ -69,30 +79,32 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
 
     const [totalPrice, setTotalPrice] = React.useState(0)
 
+    const [checkGPU, setCheckGPU] = React.useState(true);
+
     const [typeProducts, setTypeProducts] = React.useState([
         //CPU, GPU , Main, Ram, PSU, ssd, hdd , casepc
         {
             type: 'cpu',
             quantity: 0,
-            priority: 4,
+            priority: 5,
             isChosen: false,
         },
         {
             type: 'gpu',
             quantity: 0,
-            priority: 4,
+            priority: 5,
             isChosen: false,
         },
         {
             type: 'mainboard',
             quantity: 0,
-            priority: 1,
+            priority: 2,
             isChosen: false
         },
         {
             type: 'ram',
             quantity: 0,
-            priority: 12,
+            priority: 15,
             isChosen: false,
         },
         {
@@ -104,18 +116,124 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
         {
             type: 'harddisk',
             quantity: 0,
-            priority: 8,
+            priority: 5,
             isChosen: false,
         },
         {
             type: 'casepc',
             quantity: 0,
-            priority: 8,
+            priority: 5,
             isChosen: false,
         },
     ])
 
     const [W, setW] = React.useState(0)
+
+    const handleChangeTypePC = (event) => {
+        switch (event.target.value) {
+            case 1:
+                setCheckGPU(true)
+                setSLLK(7)
+                setTypeProducts(
+                    [
+                        {
+                            type: 'cpu',
+                            quantity: 0,
+                            priority: 5,
+                            isChosen: false,
+                        },
+                        {
+                            type: 'gpu',
+                            quantity: 0,
+                            priority: 5,
+                            isChosen: false,
+                        },
+                        {
+                            type: 'mainboard',
+                            quantity: 0,
+                            priority: 2,
+                            isChosen: false
+                        },
+                        {
+                            type: 'ram',
+                            quantity: 0,
+                            priority: 15,
+                            isChosen: false,
+                        },
+                        {
+                            type: 'psu',
+                            quantity: 0,
+                            priority: 5,
+                            isChosen: false,
+                        },
+                        {
+                            type: 'harddisk',
+                            quantity: 0,
+                            priority: 2,
+                            isChosen: false,
+                        },
+                        {
+                            type: 'casepc',
+                            quantity: 0,
+                            priority: 2,
+                            isChosen: false,
+                        },
+                    ]
+                )
+                break;
+            case 2:
+                setTypeProducts(
+                    [
+                        {
+                            type: 'cpu',
+                            quantity: 0,
+                            priority: 1,
+                            isChosen: false,
+                        },
+                        {
+                            type: 'gpu',
+                            quantity: 0,
+                            priority: 2,
+                            isChosen: false,
+                        },
+                        {
+                            type: 'mainboard',
+                            quantity: 0,
+                            priority: 1,
+                            isChosen: false
+                        },
+                        {
+                            type: 'ram',
+                            quantity: 0,
+                            priority: 3,
+                            isChosen: false,
+                        },
+                        {
+                            type: 'psu',
+                            quantity: 0,
+                            priority: 2,
+                            isChosen: false,
+                        },
+                        {
+                            type: 'harddisk',
+                            quantity: 0,
+                            priority: 3,
+                            isChosen: false,
+                        },
+                        {
+                            type: 'casepc',
+                            quantity: 0,
+                            priority: 3,
+                            isChosen: false,
+                        },
+                    ]
+                )
+                break;
+            default:
+                break;
+        }
+        setTypePC(event.target.value);
+    };
 
     React.useEffect(() => {
         axios.get(`https://localhost:7253/api/product`)
@@ -177,18 +295,40 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
         var filteredProducts = products.filter(function (product) {
             switch (product.type_product) {
                 case 'cpu':
-                    //return (true)
-                    //return (product.unit_price_product > (W * 20 / 100))
-                    return (product.unit_price_product < (W * 50 / 100) && product.unit_price_product > (W * 30 / 100))
+                    switch (typePC) {
+                        case 1:
+                            return (product.unit_price_product < (W * 80 / 100) && product.unit_price_product > (W * 30 / 100))
+                            break;
+                        case 2:
+                            if (checkGPU !== false) {
+                                return (product.unit_price_product < (W * 40 / 100) && product.unit_price_product > (W * 10 / 100))
+                            } else {
+                                return (product.unit_price_product < (W * 70 / 100) && product.unit_price_product > (W * 20 / 100))
+                            }
+                            break;
+                    }
                 case 'gpu':
-                    //return (true)
-                    return (product.unit_price_product < (W * 50 / 100) && product.unit_price_product > (W * 30 / 100))
+                    switch (typePC) {
+                        case 1:
+                            return (product.unit_price_product < (W * 80 / 100) && product.unit_price_product > (W * 30 / 100))
+                            break;
+                        case 2:
+                            if (checkGPU === false && typePC === 2) {
+                                return (false)
+                            } else {
+                                return (product.unit_price_product < (W * 40 / 100) && product.unit_price_product > (W * 10 / 100))
+                            }
+
+                            break;
+                    }
+                    break;
                 case 'mainboard':
-                    //return (true)
-                    //return (product.unit_price_product > (W * 5 / 100))
-                    return (product.unit_price_product < (W * 20 / 100) && product.unit_price_product > (W * 10 / 100))
+                    return (true)
+                    break;
+                //return (product.unit_price_product > (W * 5 / 100))
+                //return (product.unit_price_product < (W * 20 / 100) && product.unit_price_product > (W * 10 / 100))
                 default:
-                    return (product.unit_price_product > (W * 2 / 100) && product.type_product !== "cooling_system")
+                    return (product.unit_price_product > (W * 5 / 100) && product.type_product !== "cooling_system") && product.unit_price_product < (W * 20 / 100)
                 //return (product.type_product !== "cooling_system")
             }
         })
@@ -213,23 +353,38 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
         var filterCasePCs = casepcs.filter(function (product) {
             return (handleGetIDProduct(filteredProducts).includes(product.id_product))
         })
-        if (
-            filterCpus.length !== 0
-            && filterMainboards.length !== 0
-            && filterGpus.length !== 0
-            && filterRams.length !== 0
-            && filterPsus.length !== 0
-            && filterHarddisks.length !== 0
-            && filterCasePCs.length !== 0
-        ) {
-            setValidW(true)
+        if (typePC === 2 && checkGPU === false) {
+            if (
+                filterCpus.length !== 0
+                && filterMainboards.length !== 0
+                && filterRams.length !== 0
+                && filterPsus.length !== 0
+                && filterHarddisks.length !== 0
+                && filterCasePCs.length !== 0
+            ) {
+                setValidW(true)
+            } else {
+                setValidW(false)
+            }
         } else {
-            setValidW(false)
+            if (
+                filterCpus.length !== 0
+                && filterMainboards.length !== 0
+                && filterGpus.length !== 0
+                && filterRams.length !== 0
+                && filterPsus.length !== 0
+                && filterHarddisks.length !== 0
+                && filterCasePCs.length !== 0
+            ) {
+                setValidW(true)
+            } else {
+                setValidW(false)
+            }
         }
         handleListChosenProduct(filteredProducts)
         HandleQuantityProductByType(filterCpus.length, filterGpus.length, filterMainboards.length, filterRams.length, filterPsus.length, filterHarddisks.length, filterCasePCs.length)
 
-    }, [W])
+    }, [W, typePC, checkGPU])
 
     function handleAnalyzeArrayChosenProduct(items) {
         let chosenCPUGPU = []
@@ -240,36 +395,57 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
             let Gpu = items.find(element => element.type_product === 'gpu')
             let Mainboard = items.find(element => element.type_product === 'mainboard')
 
-            items
-                .map(function (product) {
-                    if (product.type_product !== 'cpu' && product.type_product !== 'gpu' && product.type_product !== 'mainboard')
-                        chosenProducts.push(product.id_product)
-                })
-            chosenCPUGPU =
-                coupleProducts.filter(function (item) {
-                    return (Math.abs(item.totalprice - (Cpu.unit_price_product + Gpu.unit_price_product)) < 1000000)
-                }).sort((a, b) => Math.abs(a.totalprice) < Math.abs(b.totalprice) ? 1 : -1)
-                    .sort((a, b) => Math.abs(a.percentCompatible - 1) > Math.abs(b.percentCompatible - 1) ? 1 : -1)[0]
+            if (Gpu !== undefined) {
+                items
+                    .map(function (product) {
+                        if (product.type_product !== 'cpu' && product.type_product !== 'gpu' && product.type_product !== 'mainboard')
+                            chosenProducts.push(product.id_product)
+                    })
+                chosenCPUGPU =
+                    coupleProducts.filter(function (item) {
+                        return (Math.abs(item.totalprice - (Cpu.unit_price_product + Gpu.unit_price_product)) < 1000000)
+                    }).sort((a, b) => Math.abs(a.totalprice) < Math.abs(b.totalprice) ? 1 : -1)
+                        .sort((a, b) => Math.abs(a.percentCompatible - 1) > Math.abs(b.percentCompatible - 1) ? 1 : -1)[0]
 
-            chosenMainboard = mainboards.filter(function (item) {
-                return (
-                    item.socket_mainboard
-                    ===
-                    cpus.find(function (item) {
-                        return (item.id_product === chosenCPUGPU.cpu_id)
-                    }).socket_cpu
-                )
-            }).sort((a, b) => Math.abs(a.unit_price_product - Mainboard.unit_price_product) > Math.abs(b.unit_price_product - Mainboard.unit_price_product) ? 1 : -1)
+                chosenMainboard = mainboards.filter(function (item) {
+                    return (
+                        item.socket_mainboard
+                        ===
+                        cpus.find(function (item) {
+                            return (item.id_product === chosenCPUGPU.cpu_id)
+                        }).socket_cpu
+                    )
+                }).sort((a, b) => Math.abs(a.unit_price_product - Mainboard.unit_price_product) > Math.abs(b.unit_price_product - Mainboard.unit_price_product) ? 1 : -1)
 
-            chosenProducts.push(chosenCPUGPU.cpu_id)
-            chosenProducts.push(chosenCPUGPU.gpu_id)
-            chosenProducts.push(chosenMainboard[0].id_product)
+                chosenProducts.push(chosenCPUGPU.cpu_id)
+                chosenProducts.push(chosenCPUGPU.gpu_id)
+                chosenProducts.push(chosenMainboard[0].id_product)
+            } else {
+                items
+                    .map(function (product) {
+                        if (product.type_product !== 'cpu' && product.type_product !== 'mainboard')
+                            chosenProducts.push(product.id_product)
+                    })
 
+                chosenMainboard = mainboards.filter(function (item) {
+                    return (
+                        item.socket_mainboard
+                        ===
+                        cpus.find(function (item) {
+                            return (item.id_product === Cpu.id_product)
+                        }).socket_cpu
+                    )
+                }).sort((a, b) => Math.abs(a.unit_price_product - Mainboard.unit_price_product) > Math.abs(b.unit_price_product - Mainboard.unit_price_product) ? 1 : -1)
+
+                chosenProducts.push(Cpu.id_product)
+                chosenProducts.push(chosenMainboard[0].id_product)
+            }
             return (
                 chosenProducts
             )
         }
     }
+
 
     function handleAnalyzeSelectedProduct(items) {
         if (items.length !== 0) {
@@ -280,49 +456,91 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
             let Ram = items.find(element => element.type_product === 'ram')
             let Harddisk = items.find(element => element.type_product === 'harddisk')
             let Casepc = items.find(element => element.type_product === 'casepc')
-            return (
-                {
-                    cpu: {
-                        id_product: Cpu.id_product,
-                        quantity: 1,
-                        unit_price_product: Cpu.unit_price_product
-                    },
-                    mainboard: {
-                        id_product: Mainboard.id_product,
-                        quantity: 1,
-                        unit_price_product: Mainboard.unit_price_product
-                    },
-                    ram: {
-                        id_product: Ram.id_product,
-                        quantity: 1,
-                        unit_price_product: Ram.unit_price_product
-                    },
-                    gpu: {
-                        id_product: Gpu.id_product,
-                        quantity: 1,
-                        unit_price_product: Gpu.unit_price_product
-                    },
-                    psu: {
-                        id_product: Psu.id_product,
-                        quantity: 1,
-                        unit_price_product: Psu.unit_price_product
-                    },
-                    harddisk1: {
-                        id_product: Harddisk.id_product,
-                        quantity: 1,
-                        unit_price_product: Harddisk.unit_price_product
-                    },
-                    harddisk2: {
-                        id_product: 0,
-                        quantity: 0
-                    },
-                    casepc: {
-                        id_product: Casepc.id_product,
-                        quantity: 1,
-                        unit_price_product: Casepc.unit_price_product
-                    },
-                }
-            )
+            if (Gpu !== undefined) {
+                return (
+                    {
+                        cpu: {
+                            id_product: Cpu.id_product,
+                            quantity: 1,
+                            unit_price_product: Cpu.unit_price_product
+                        },
+                        mainboard: {
+                            id_product: Mainboard.id_product,
+                            quantity: 1,
+                            unit_price_product: Mainboard.unit_price_product
+                        },
+                        ram: {
+                            id_product: Ram.id_product,
+                            quantity: 1,
+                            unit_price_product: Ram.unit_price_product
+                        },
+                        gpu: {
+                            id_product: Gpu.id_product,
+                            quantity: 1,
+                            unit_price_product: Gpu.unit_price_product
+                        },
+                        psu: {
+                            id_product: Psu.id_product,
+                            quantity: 1,
+                            unit_price_product: Psu.unit_price_product
+                        },
+                        harddisk1: {
+                            id_product: Harddisk.id_product,
+                            quantity: 1,
+                            unit_price_product: Harddisk.unit_price_product
+                        },
+                        harddisk2: {
+                            id_product: 0,
+                            quantity: 0
+                        },
+                        casepc: {
+                            id_product: Casepc.id_product,
+                            quantity: 1,
+                            unit_price_product: Casepc.unit_price_product
+                        },
+                    }
+                )
+            } else {
+                return (
+                    {
+                        cpu: {
+                            id_product: Cpu.id_product,
+                            quantity: 1,
+                            unit_price_product: Cpu.unit_price_product
+                        },
+                        mainboard: {
+                            id_product: Mainboard.id_product,
+                            quantity: 1,
+                            unit_price_product: Mainboard.unit_price_product
+                        },
+                        ram: {
+                            id_product: Ram.id_product,
+                            quantity: 1,
+                            unit_price_product: Ram.unit_price_product
+                        },
+                        psu: {
+                            id_product: Psu.id_product,
+                            quantity: 1,
+                            unit_price_product: Psu.unit_price_product
+                        },
+                        harddisk1: {
+                            id_product: Harddisk.id_product,
+                            quantity: 1,
+                            unit_price_product: Harddisk.unit_price_product
+                        },
+                        harddisk2: {
+                            id_product: 0,
+                            quantity: 0
+                        },
+                        casepc: {
+                            id_product: Casepc.id_product,
+                            quantity: 1,
+                            unit_price_product: Casepc.unit_price_product
+                        },
+                    }
+                )
+            }
+
         }
     }
 
@@ -413,6 +631,15 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
             ))
     }
 
+    const handleCheckGPU = (event) => {
+        if (event.target.checked === true) {
+            setSLLK(7)
+        } else {
+            setSLLK(6)
+        }
+        setCheckGPU(event.target.checked)
+    }
+
     function handleGetChosenProduct(Products) {
         var exportProducts = products
         var filteredProducts = Products.filter(function (product) {
@@ -426,7 +653,7 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
         //         )
         //     })
         // }
-
+        console.log(filteredProducts)
         if (filteredProducts.length !== 0) {
             exportProducts = handleAnalyzeArrayChosenProduct(filteredProducts).map(function (id) {
                 return (
@@ -437,17 +664,31 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
             alert("Số tiền nhập vào chưa phù hợp")
         }
 
-        setSelectedProducts(
-            [
-                exportProducts.find(element => element.type_product === 'cpu'),
-                exportProducts.find(element => element.type_product === 'mainboard'),
-                exportProducts.find(element => element.type_product === 'gpu'),
-                exportProducts.find(element => element.type_product === 'ram'),
-                exportProducts.find(element => element.type_product === 'psu'),
-                exportProducts.find(element => element.type_product === 'harddisk'),
-                exportProducts.find(element => element.type_product === 'casepc'),
-            ]
-        )
+        if (typePC === 2 && checkGPU === false) {
+            setSelectedProducts(
+                [
+                    exportProducts.find(element => element.type_product === 'cpu'),
+                    exportProducts.find(element => element.type_product === 'mainboard'),
+                    exportProducts.find(element => element.type_product === 'ram'),
+                    exportProducts.find(element => element.type_product === 'psu'),
+                    exportProducts.find(element => element.type_product === 'harddisk'),
+                    exportProducts.find(element => element.type_product === 'casepc'),
+                ]
+            )
+        } else {
+            setSelectedProducts(
+                [
+                    exportProducts.find(element => element.type_product === 'cpu'),
+                    exportProducts.find(element => element.type_product === 'mainboard'),
+                    exportProducts.find(element => element.type_product === 'gpu'),
+                    exportProducts.find(element => element.type_product === 'ram'),
+                    exportProducts.find(element => element.type_product === 'psu'),
+                    exportProducts.find(element => element.type_product === 'harddisk'),
+                    exportProducts.find(element => element.type_product === 'casepc'),
+                ]
+            )
+        }
+
     }
 
     let product = listChosenProduct
@@ -458,7 +699,7 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
     let aBool = [false, false, false, false, false, false, false]
     let achosen = []
     let aX = []
-    console.log(listChosenProduct)
+    // console.log(listChosenProduct)
 
     function capNhatDaLayTT() {
         for (let i = 0; i < aBool.length; i++) {
@@ -482,7 +723,6 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
         } else {
             alert("Số tiền nhập vào chưa phù hợp")
         }
-
     }
 
     function nhanhCan(i) {
@@ -717,54 +957,61 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
     const [posts, setPosts] = React.useState([]);
 
     function handleClickAdd(chosenPC) {
-        if (
-            chosenPC.cpu.id !== 0 &&
-            chosenPC.cpu.quantity !== 0 &&
-            chosenPC.mainboard.id !== 0 &&
-            chosenPC.mainboard.quantity !== 0 &&
-            chosenPC.ram.id !== 0 &&
-            chosenPC.ram.quantity !== 0 &&
-            chosenPC.gpu.id !== 0 &&
-            chosenPC.gpu.quantity !== 0 &&
-            chosenPC.psu.id !== 0 &&
-            chosenPC.psu.quantity !== 0 &&
-            chosenPC.casepc.id !== 0 &&
-            chosenPC.casepc.quantity !== 0 &&
-            (
+        if (cookies.Account !== undefined) {
+            if (
+                chosenPC.cpu.id !== 0 &&
+                chosenPC.cpu.quantity !== 0 &&
+                chosenPC.mainboard.id !== 0 &&
+                chosenPC.mainboard.quantity !== 0 &&
+                chosenPC.ram.id !== 0 &&
+                chosenPC.ram.quantity !== 0 &&
+                chosenPC.psu.id !== 0 &&
+                chosenPC.psu.quantity !== 0 &&
+                chosenPC.casepc.id !== 0 &&
+                chosenPC.casepc.quantity !== 0 &&
                 (
+                    (
+                        chosenPC.harddisk1.id !== 0 &&
+                        chosenPC.harddisk1.quantity !== 0
+                    ) ||
+                    (
+                        chosenPC.harddisk2.id !== 0 &&
+                        chosenPC.harddisk2.quantity !== 0
+                    )
+                )
+            ) {
+                addPosts(cookies.Account, chosenPC.cpu.id_product, chosenPC.cpu.quantity);
+                addPosts(cookies.Account, chosenPC.mainboard.id_product, chosenPC.mainboard.quantity);
+                addPosts(cookies.Account, chosenPC.ram.id_product, chosenPC.ram.quantity);
+                addPosts(cookies.Account, chosenPC.psu.id_product, chosenPC.psu.quantity);
+                addPosts(cookies.Account, chosenPC.casepc.id_product, chosenPC.casepc.quantity);
+                if (
                     chosenPC.harddisk1.id !== 0 &&
                     chosenPC.harddisk1.quantity !== 0
-                ) ||
-                (
+                ) {
+                    addPosts(cookies.Account, chosenPC.harddisk1.id_product, chosenPC.harddisk1.quantity);
+                }
+                if (
                     chosenPC.harddisk2.id !== 0 &&
                     chosenPC.harddisk2.quantity !== 0
-                )
-            )
-        ) {
-            addPosts(cookies.Account, chosenPC.cpu.id_product, chosenPC.cpu.quantity);
-            addPosts(cookies.Account, chosenPC.mainboard.id_product, chosenPC.mainboard.quantity);
-            addPosts(cookies.Account, chosenPC.ram.id_product, chosenPC.ram.quantity);
-            addPosts(cookies.Account, chosenPC.gpu.id_product, chosenPC.gpu.quantity);
-            addPosts(cookies.Account, chosenPC.psu.id_product, chosenPC.psu.quantity);
-            addPosts(cookies.Account, chosenPC.casepc.id_product, chosenPC.casepc.quantity);
-            if (
-                chosenPC.harddisk1.id !== 0 &&
-                chosenPC.harddisk1.quantity !== 0
-            ) {
-                addPosts(cookies.Account, chosenPC.harddisk1.id_product, chosenPC.harddisk1.quantity);
+                ) {
+                    addPosts(cookies.Account, chosenPC.harddisk2.id_product, chosenPC.harddisk2.quantity);
+                }
+                if (chosenPC.gpu.id !== 0 &&
+                    chosenPC.gpu.quantity !== 0) {
+                    addPosts(cookies.Account, chosenPC.gpu.id_product, chosenPC.gpu.quantity);
+                }
+            } else {
+                dispatch(setOpenSnackBar());
+                dispatch(setMessage("Lỗi: Cần nhập đủ sản phẩm yêu cầu"));
+                dispatch(setSeverity("error"));
             }
-            if (
-                chosenPC.harddisk2.id !== 0 &&
-                chosenPC.harddisk2.quantity !== 0
-            ) {
-                addPosts(cookies.Account, chosenPC.harddisk2.id_product, chosenPC.harddisk2.quantity);
-            }
-        } else {
+        }else{
             dispatch(setOpenSnackBar());
-            dispatch(setMessage("Lỗi: Cần nhập đủ sản phẩm yêu cầu"));
+            dispatch(setMessage("Lỗi: Cần đăng nhập trước khi sử dụng chức năng này"));
             dispatch(setSeverity("error"));
+            navigate('/cart')
         }
-
     }
 
     function handleClickBuyNow(chosenPC) {
@@ -800,7 +1047,7 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
     };
 
     return (
-        <Container maxWidth="lg" style={{ backgroundColor: 'var(--background1)', marginTop: 50, borderRadius: '10px' }}>
+        <Container maxWidth="xl" style={{ backgroundColor: 'var(--background1)', marginTop: 50, borderRadius: '10px' }}>
             <Box
                 style={{
                     display: 'flex',
@@ -815,11 +1062,11 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
                 </Breadcrumbs>
             </Box>
             <Grid container spacing={2} minHeight={600}>
-                <Grid item xs={2}>
+                <Grid item xs={3}>
                     <Box
                         style={{
                             display: 'flex',
-                            height: 170,
+                            height: 300,
                             flexDirection: 'column',
                             justifyContent: 'space-between',
                             backgroundColor: 'white',
@@ -827,8 +1074,26 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
                             padding: 10
                         }}
                     >
-                        <Typography color="text.primary">Hãy nhập số tiền:</Typography>
-                        <TextField type={'number'} variant='outlined' size='small' onChange={(e) => setW(e.target.value)}></TextField>
+                        <>
+                            <Typography color="text.primary">Hãy nhập số tiền:</Typography>
+                            <TextField type={'number'} variant='outlined' size='small' onChange={(e) => setW(e.target.value)}></TextField>
+                        </>
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Loại máy tính</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={typePC}
+                                label="Loại máy tính"
+                                onChange={handleChangeTypePC}
+                            >
+                                <MenuItem value={1}>Chơi game</MenuItem>
+                                <MenuItem value={2}>Làm việc văn phòng</MenuItem>
+                            </Select>
+                        </FormControl>
+                        {typePC === 2 &&
+                            <FormControlLabel control={<Checkbox inputRef={checkGPURef} value="1" checked={checkGPU} onChange={handleCheckGPU} />} label="Card đồ hoạ" />
+                        }
                         <Typography color="text.primary">
                             Số tiền: &nbsp;
                             {parseInt(W).toLocaleString('vi-VI',
@@ -848,8 +1113,8 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
                     </Box>
 
                 </Grid>
-                <Grid item xs={7}>
-                    {(selectedProducts.length !== 0)&&
+                <Grid item xs={6}>
+                    {(selectedProducts.length !== 0) &&
                         <Box
                             style={{
                                 display: 'flex',
@@ -860,85 +1125,92 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
                             }}
                         >
                             <Typography variant="h6">Kết quả phân tích</Typography>
-                            {selectedProducts.map(function (Product) {
+                            {selectedProducts.map(function (Product, index) {
                                 return (
                                     <Box
-                                        key={Product.id_product}
-                                        style={{
-                                            display: 'flex',
-                                            width: '100%',
-                                            borderBottom: '1px solid lightgrey',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'center',
-                                            marginBottom: 10
-                                        }}
+                                        key={index}
                                     >
-                                        <Box
-                                            style={{
-                                                display: 'flex',
-                                                width: '75%',
-                                                alignItems: 'center',
-                                                marginBottom: 10,
-                                            }}
-                                        >
-                                            <Box style={{
-                                                border: '2px solid lightgrey',
-                                                borderRadius: '10px',
-                                                padding: 2,
-                                                marginRight: 20
-                                            }}>
-                                                {Product.picture_product !== null ?
-                                                    <img src={Product.picture_product} alt="product images" width={'80px'} />
-                                                    :
-                                                    <img src={"data:image/png;base64, " + Product.picture_link_product} alt="product images" width={'80px'} height={'80px'} />
-                                                }
-                                            </Box>
+                                        {(typePC !== 2 || checkGPU !== false || Product.type_product !== 'gpu') &&
                                             <Box
                                                 style={{
                                                     display: 'flex',
-                                                    flexDirection: 'column'
-                                                }}
-                                            >
-                                                {handleShowInfoProduct(Product)}
-                                            </Box>
-                                        </Box>
-                                        <Box
-                                            style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                marginBottom: 10,
-                                                justifyContent: ' space-between',
-                                                paddingRight: 10
-                                            }}
-                                        >
-                                            <Box
-                                                style={{
-                                                    display: 'flex',
+                                                    width: '100%',
+                                                    borderBottom: '1px solid lightgrey',
+                                                    justifyContent: 'space-between',
                                                     alignItems: 'center',
-                                                    flexDirection: 'column',
-                                                    width: '25%',
+                                                    marginBottom: 10
                                                 }}
                                             >
-                                                <Typography >
-                                                    {(Product.unit_price_product * (1 - Product.discount_product * 0.01)).toLocaleString('vi-VI',
+                                                <Box
+                                                    style={{
+                                                        display: 'flex',
+                                                        width: '75%',
+                                                        alignItems: 'center',
+                                                        marginBottom: 10,
+                                                    }}
+                                                >
+                                                    <Box style={{
+                                                        border: '2px solid lightgrey',
+                                                        borderRadius: '10px',
+                                                        padding: 2,
+                                                        marginRight: 20
+                                                    }}>
+                                                        {Product.picture_product !== null ?
+                                                            <img src={Product.picture_product} alt="product images" width={'80px'} />
+                                                            :
+                                                            <img src={"data:image/png;base64, " + Product.picture_link_product} alt="product images" width={'80px'} height={'80px'} />
+                                                        }
+                                                    </Box>
+                                                    <Box
+                                                        style={{
+                                                            display: 'flex',
+                                                            flexDirection: 'column'
+                                                        }}
+                                                    >
                                                         {
-                                                            style: 'currency',
-                                                            currency: 'VND'
-                                                        })}
-                                                </Typography>
-                                                {Product.discount_product !== 0 &&
-                                                    <Typography variant='body2'>
-                                                        <del>
-                                                            {Product.unit_price_product.toLocaleString('vi-VI',
+                                                            handleShowInfoProduct(Product)
+                                                        }
+                                                    </Box>
+                                                </Box>
+                                                <Box
+                                                    style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        marginBottom: 10,
+                                                        justifyContent: ' space-between',
+                                                        paddingRight: 10
+                                                    }}
+                                                >
+                                                    <Box
+                                                        style={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            flexDirection: 'column',
+                                                            width: '25%',
+                                                        }}
+                                                    >
+                                                        <Typography >
+                                                            {(Product.unit_price_product * (1 - Product.discount_product * 0.01)).toLocaleString('vi-VI',
                                                                 {
                                                                     style: 'currency',
                                                                     currency: 'VND'
                                                                 })}
-                                                        </del>
-                                                    </Typography>
-                                                }
+                                                        </Typography>
+                                                        {Product.discount_product !== 0 &&
+                                                            <Typography variant='body2'>
+                                                                <del>
+                                                                    {Product.unit_price_product.toLocaleString('vi-VI',
+                                                                        {
+                                                                            style: 'currency',
+                                                                            currency: 'VND'
+                                                                        })}
+                                                                </del>
+                                                            </Typography>
+                                                        }
+                                                    </Box>
+                                                </Box>
                                             </Box>
-                                        </Box>
+                                        }
                                     </Box>
                                 )
                             })}
@@ -988,8 +1260,10 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
                     }
                 </Grid>
                 <Grid item xs={12}>
-                    {selectedProducts.length !== 0 &&
-                        <AnalyzeBuildPc chosenPC={handleAnalyzeSelectedProduct(selectedProducts)} Products={products} />
+                    {(selectedProducts.length === 7 && checkGPU === true) &&
+                        <>
+                            <AnalyzeBuildPc chosenPC={handleAnalyzeSelectedProduct(selectedProducts)} Products={products} showHint={false} />
+                        </>
                     }
                 </Grid>
             </Grid>
