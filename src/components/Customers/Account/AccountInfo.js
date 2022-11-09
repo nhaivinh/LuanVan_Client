@@ -22,8 +22,10 @@ import { Tabs } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import ImageIcon from '@mui/icons-material/Image';
 import LockIcon from '@mui/icons-material/Lock';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { styled } from '@mui/material/styles';
 import { orange } from '@mui/material/colors';
+import AddressCustomer from '../AddressCustomer/AddressCustomer';
 
 const AntTabs = styled(Tabs)({
     '& .MuiTabs-indicator': {
@@ -386,6 +388,10 @@ function AccountInfo() {
                         </Box>
                     </Box>
                 )
+            case '3':
+                return (
+                    <AddressCustomer Customer={account[0]}/>
+                )
             default:
                 break;
         }
@@ -528,6 +534,7 @@ function AccountInfo() {
                                     <AntTab icon={<InfoIcon />} iconPosition="start" label="Thông tin cá nhân" value="0" />
                                     <AntTab icon={<ImageIcon />} iconPosition="start" label="Ảnh đại diện" value="1" />
                                     <AntTab icon={<LockIcon />} iconPosition="start" label="Bảo mật" value="2" />
+                                    <AntTab icon={<LocationOnIcon />} iconPosition="start" label="Quản lý địa chỉ" value="3" />
                                 </AntTabs>
                             </Box>
                         </Grid>

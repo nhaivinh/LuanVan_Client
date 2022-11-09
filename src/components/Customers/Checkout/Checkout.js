@@ -25,8 +25,22 @@ import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
 import { useSearchParams } from 'react-router-dom';
 import { useStore } from "../../Store";
+import { styled } from '@mui/material/styles';
+import { orange } from '@mui/material/colors';
+
+const ColorButtonContained = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[500]),
+    fontWeight: 900,
+    backgroundColor: orange[500],
+    '&:hover': {
+        backgroundColor: orange[700],
+    },
+}));
+
 
 function Checkout() {
+
+    const textInput = React.useRef(null);
 
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -36,7 +50,9 @@ function Checkout() {
 
     const [state, dispatchStore] = useStore();
 
-    console.log(state.account)
+    const [typeAddress, setTypeAddress] = React.useState('new')
+
+    const [address, setAddress] = React.useState([]);
 
     const [infoPayment, setInfoPayment] = React.useState({
         NameDelivery: state.account.name_customer,
@@ -52,7 +68,7 @@ function Checkout() {
     if (params.status !== undefined) {
         if (params.status == 'success') {
             clientStatusPayment
-                .put('', {                  
+                .put('', {
                 })
                 .then((response) => {
                     setPosts([response.data, ...posts]);
@@ -119,7 +135,13 @@ function Checkout() {
                 const Customer = res.data;
                 setCustomer(Customer[0]);
             })
+        axios.get(`https://localhost:7253/api/Address/getaddressidCustomer/` + state.account.id_customer)
+            .then(res => {
+                const Address = res.data;
+                setAddress(Address);
+            })
     }, [])
+
     function handleClickBuy() {
 
         let thongbao = "Hãy thêm thông tin đúng dạng cho :";
@@ -164,7 +186,7 @@ function Checkout() {
             alert(thongbao);
         }
     }
-    function handlePaymentCart (Cart){
+    function handlePaymentCart(Cart) {
         var chosenPaymentCart = [];
         if (Cart.length > 0) {
             Cart
@@ -236,6 +258,14 @@ function Checkout() {
             });
     };
 
+    console.log(infoPayment)
+
+
+    function handleChooseAddress(index) {
+        setInfoPayment({ ...infoPayment, AddressDelivery: address[index].address_customer })
+        textInput.current.value = address[index].address_customer
+    }
+
     return (
         <Container maxWidth="lg" style={{ backgroundColor: 'rgb(248, 248, 252)', borderRadius: '10px', marginTop: 50 }}>
             <Box
@@ -275,7 +305,7 @@ function Checkout() {
                                 backgroundColor: 'white',
                                 padding: 20,
                                 borderRadius: 10,
-                                height: 300
+                                minHeight: 350
                             }}>
                             <Typography>Họ tên người nhận</Typography>
                             <TextField
@@ -292,11 +322,72 @@ function Checkout() {
                                 size="small"
                                 defaultValue={infoPayment.PhoneDelivery}
                                 onChange={(e) => { setInfoPayment({ ...infoPayment, PhoneDelivery: e.target.value }) }}
+                                sx={{ marginBottom: 2 }}
                             />
+                            <Box>
+                                <FormControl>
+                                    <FormLabel id="demo-controlled-radio-buttons-group">Chọn loại địa chỉ</FormLabel>
+                                    <RadioGroup
+                                        row
+                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                        name="row-radio-buttons-group"
+                                        value={typeAddress}
+                                        onChange={(e) => { setTypeAddress(e.target.value) }}
+                                    >
+                                        <FormControlLabel value="new" control={<Radio />} label="Địa chỉ mới" />
+                                        {address.length !== 0 &&
+                                            <FormControlLabel value="exist" control={<Radio />} label="Địa chỉ đã lưu" />
+                                        }
+                                    </RadioGroup>
+                                </FormControl>
+                                {typeAddress === "exist" &&
+                                    <>
+                                        {
+                                            address.map(function (item, index) {
+                                                return (
+                                                    <Box
+                                                        key={index}
+                                                        style={{
+                                                            display: 'flex',
+                                                            backgroundColor: '#e6e6e6',
+                                                            padding: 20,
+                                                            borderRadius: 10,
+                                                            marginRight: 10,
+                                                            marginBottom: 10
+                                                        }}
+                                                    >
+                                                        <Box
+                                                            style={{
+                                                                display: 'flex',
+                                                                width: '85%'
+                                                            }}
+                                                        >
+                                                            <Typography variant='body2' style={{ width: '15%' }}><b>Địa chỉ {index + 1}:</b></Typography>
+                                                            <Typography variant='body2' style={{ width: '85%' }}>{item.address_customer}</Typography>
+                                                        </Box>
+                                                        <Box
+                                                            style={{
+                                                                display: 'flex',
+                                                                width: '10%'
+                                                            }}
+                                                        >
+                                                            <ColorButtonContained onClick={() => { handleChooseAddress(index) }}> Chọn </ColorButtonContained>
+                                                        </Box>
+                                                    </Box>
+                                                )
+                                            })
+                                        }
+                                    </>
+                                }
+                            </Box>
                             <Typography>Địa chỉ giao hàng</Typography>
                             <TextField
                                 id="outlined-basic"
                                 variant="outlined" size="small"
+                                multiline
+                                fullWidth
+                                rows={3}
+                                inputRef={textInput}
                                 defaultValue={infoPayment.AddressDelivery}
                                 onChange={(e) => { setInfoPayment({ ...infoPayment, AddressDelivery: e.target.value }) }}
                             />
@@ -437,7 +528,7 @@ function Checkout() {
                                     currency: 'VND'
                                 })}
                         </Typography>
-                        <Button variant='contained' onClick={handleClickBuy}>Đặt mua</Button>
+                        <ColorButtonContained variant='contained' onClick={handleClickBuy}>Đặt mua</ColorButtonContained>
                     </Box>
                 </Grid>
             </Grid>

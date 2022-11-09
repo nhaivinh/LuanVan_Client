@@ -1799,7 +1799,7 @@ function ProductSearch() {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
-                                height: 50,
+                                minHeight: 50,
                                 flexDirection: 'row-reverse'
                             }}>
                                 <Pagination
@@ -1809,17 +1809,18 @@ function ProductSearch() {
                                     showFirstButton
                                     showLastButton
                                 />
-                                {params.name !== undefined &&
-                                    <Box style={{              
-                                        width: '30%',                        
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        display: 'flex',
-                                    }}>
+                                <Box style={{
+                                    width: '55%',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'flex-start',
+                                    display: 'flex',
+                                    flexDirection: 'column'
+                                }}>
+                                    {params.name !== undefined &&
                                         <Typography>Kết quả tìm kiếm cho : <b>{params.name}</b></Typography>
-                                        <Typography>Có <b>{handleChosenProducts(products).length}</b> kết quả</Typography>
-                                    </Box>
-                                }
+                                    }
+                                    <Typography>Có <b>{handleChosenProducts(products).length}</b> kết quả</Typography>
+                                </Box>
                             </Box>
                             <Box style={{
                                 display: 'flex',

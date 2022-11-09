@@ -653,39 +653,40 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
         //         )
         //     })
         // }
-        console.log(filteredProducts)
         if (filteredProducts.length !== 0) {
             exportProducts = handleAnalyzeArrayChosenProduct(filteredProducts).map(function (id) {
                 return (
                     products.find(element => element.id_product === id)
                 )
             })
+            if (typePC === 2 && checkGPU === false) {
+                setSelectedProducts(
+                    [
+                        exportProducts.find(element => element.type_product === 'cpu'),
+                        exportProducts.find(element => element.type_product === 'mainboard'),
+                        exportProducts.find(element => element.type_product === 'ram'),
+                        exportProducts.find(element => element.type_product === 'psu'),
+                        exportProducts.find(element => element.type_product === 'harddisk'),
+                        exportProducts.find(element => element.type_product === 'casepc'),
+                    ]
+                )
+            } else {
+                setSelectedProducts(
+                    [
+                        exportProducts.find(element => element.type_product === 'cpu'),
+                        exportProducts.find(element => element.type_product === 'mainboard'),
+                        exportProducts.find(element => element.type_product === 'gpu'),
+                        exportProducts.find(element => element.type_product === 'ram'),
+                        exportProducts.find(element => element.type_product === 'psu'),
+                        exportProducts.find(element => element.type_product === 'harddisk'),
+                        exportProducts.find(element => element.type_product === 'casepc'),
+                    ]
+                )
+            }
         } else {
             alert("Số tiền nhập vào chưa phù hợp")
-        }
-
-        if (typePC === 2 && checkGPU === false) {
             setSelectedProducts(
-                [
-                    exportProducts.find(element => element.type_product === 'cpu'),
-                    exportProducts.find(element => element.type_product === 'mainboard'),
-                    exportProducts.find(element => element.type_product === 'ram'),
-                    exportProducts.find(element => element.type_product === 'psu'),
-                    exportProducts.find(element => element.type_product === 'harddisk'),
-                    exportProducts.find(element => element.type_product === 'casepc'),
-                ]
-            )
-        } else {
-            setSelectedProducts(
-                [
-                    exportProducts.find(element => element.type_product === 'cpu'),
-                    exportProducts.find(element => element.type_product === 'mainboard'),
-                    exportProducts.find(element => element.type_product === 'gpu'),
-                    exportProducts.find(element => element.type_product === 'ram'),
-                    exportProducts.find(element => element.type_product === 'psu'),
-                    exportProducts.find(element => element.type_product === 'harddisk'),
-                    exportProducts.find(element => element.type_product === 'casepc'),
-                ]
+                []
             )
         }
 
@@ -699,7 +700,7 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
     let aBool = [false, false, false, false, false, false, false]
     let achosen = []
     let aX = []
-    // console.log(listChosenProduct)
+    //console.log(listChosenProduct)
 
     function capNhatDaLayTT() {
         for (let i = 0; i < aBool.length; i++) {
@@ -1006,7 +1007,7 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
                 dispatch(setMessage("Lỗi: Cần nhập đủ sản phẩm yêu cầu"));
                 dispatch(setSeverity("error"));
             }
-        }else{
+        } else {
             dispatch(setOpenSnackBar());
             dispatch(setMessage("Lỗi: Cần đăng nhập trước khi sử dụng chức năng này"));
             dispatch(setSeverity("error"));
