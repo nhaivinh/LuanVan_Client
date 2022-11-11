@@ -29,7 +29,7 @@ function IncreaseCart({ idAccount, idProduct, handleResetPage }) {
     function handleClick() {
         addPutPlus(idAccount, idProduct);
     }
-    const addPutPlus = (idAccount , idProduct) => {
+    const addPutPlus = (idAccount, idProduct) => {
         client
             .put('', {
                 "idAccount": idAccount,
@@ -38,6 +38,11 @@ function IncreaseCart({ idAccount, idProduct, handleResetPage }) {
             .then((response) => {
                 setPosts([response.data, ...posts]);
                 handleResetPage();
+                if (response.data.severity === "warning") {
+                    dispatch(setOpenSnackBar());
+                    dispatch(setMessage(response.data.message));
+                    dispatch(setSeverity(response.data.severity));
+                }
             })
             .catch((err) => {
                 if (err.response) {
@@ -54,7 +59,7 @@ function IncreaseCart({ idAccount, idProduct, handleResetPage }) {
     };
 
     return (
-        <IconButton onClick={handleClick}><AddOutlinedIcon/></IconButton>
+        <IconButton onClick={handleClick}><AddOutlinedIcon /></IconButton>
     )
 }
 

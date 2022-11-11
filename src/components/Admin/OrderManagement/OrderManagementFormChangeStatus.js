@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import SnackBarContext from '../../SnackBar/SnackBarContext';
 import { setMessage, setOpenSnackBar, setSeverity } from '../../SnackBar/SnackBarAction';
+import OrderManagementFormAccept from './OrderManagementFormAccept';
 
 function OrderManagementFormChangeStatus({ idOrder, Order, idStaff, handleResetPage }) {
 
@@ -44,10 +45,14 @@ function OrderManagementFormChangeStatus({ idOrder, Order, idStaff, handleResetP
         switch (Order.delivery_status) {
             case 0:
                 return (
-                    <>
-                        <Button variant='contained' size='small' sx={{ marginRight: 1 }} onClick={() => handleSubmit(1)}> Duyệt </Button>
+                    <Box
+                    style={{
+                        display: 'flex'
+                    }}
+                    >                  
+                        <OrderManagementFormAccept Order={Order} handleResetPage={handleResetPage} IDStaff = {idStaff}/>
                         <Button variant='contained' size='small' color='error' onClick={() => handleSubmit(4)}> Huỷ </Button>
-                    </>
+                    </Box>
                 )
             case 1:
                 return (

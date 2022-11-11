@@ -195,6 +195,10 @@ function ProductSearch() {
         var filteredProducts
 
         exportProduct = exportProduct.filter(function (product) {
+            return (product.status_product === 1)
+        })
+
+        exportProduct = exportProduct.filter(function (product) {
             return (product.unit_price_product > rangePrice[0] && product.unit_price_product < rangePrice[1])
         })
 

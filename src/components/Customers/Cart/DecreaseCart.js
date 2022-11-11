@@ -39,6 +39,11 @@ function DecreaseCart({ idAccount, idProduct, handleResetPage }) {
             .then((response) => {
                 setPosts([response.data, ...posts]);
                 handleResetPage();
+                if (response.data.severity === "warning") {
+                    dispatch(setOpenSnackBar());
+                    dispatch(setMessage(response.data.message));
+                    dispatch(setSeverity(response.data.severity));
+                }
             })
             .catch((err) => {
                 if (err.response) {

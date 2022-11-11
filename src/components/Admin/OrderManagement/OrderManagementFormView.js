@@ -162,6 +162,9 @@ function OrderManagementFormView({ idOrder, Order }) {
                             <Typography variant="body1" style={{ paddingBottom: 20 }}>
                                 Trạng thái thanh toán: {showStatusPaymentOrder(Order.payment_status)}
                             </Typography>
+                            <Typography variant="body1" style={{ paddingBottom: 20 }}>
+                                Trạng thái đơn hàng: {showStatusOrder(Order.delivery_status)}
+                            </Typography>
                         </Grid>
                         <Grid item xs={6} >
                             <Typography variant="body1" style={{ paddingBottom: 20 }}>
@@ -174,7 +177,7 @@ function OrderManagementFormView({ idOrder, Order }) {
                                 }
                             </Typography>
                             <Typography variant="body1" style={{ paddingBottom: 20 }}>
-                                Tổng tiền:  &nbsp;
+                                Tổng tiền hàng:  &nbsp;
                                 {
                                     Order.total_payment.toLocaleString('vi-VI',
                                         {
@@ -184,7 +187,33 @@ function OrderManagementFormView({ idOrder, Order }) {
                                 }
                             </Typography>
                             <Typography variant="body1" style={{ paddingBottom: 20 }}>
-                                Trạng thái đơn hàng: {showStatusOrder(Order.delivery_status)}
+                                Phí vận chuyển:  &nbsp;
+                                {Order.delivery_price !== null ?
+                                    Order.delivery_price.toLocaleString('vi-VI',
+                                        {
+                                            style: 'currency',
+                                            currency: 'VND'
+                                        })
+                                    :
+                                    'Chưa xác định'
+                                }
+                            </Typography>
+                            <Typography variant="body1" style={{ paddingBottom: 20 }}>
+                                Tổng tiền thanh toán:  &nbsp;
+                                {
+                                    Order.delivery_price !== null ?
+                                        (Order.total_payment + Order.delivery_price).toLocaleString('vi-VI',
+                                            {
+                                                style: 'currency',
+                                                currency: 'VND'
+                                            })
+                                        :
+                                        (Order.total_payment).toLocaleString('vi-VI',
+                                            {
+                                                style: 'currency',
+                                                currency: 'VND'
+                                            })
+                                }
                             </Typography>
                             <Typography variant="body1" style={{ paddingBottom: 20 }}>
                                 Ngày đặt hàng: {getFormattedDate(new Date(Order.order_date))}

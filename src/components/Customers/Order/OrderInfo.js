@@ -177,8 +177,8 @@ function OrderInfo() {
                                     </Typography>
                                 </Breadcrumbs>
                             </Box>
-                            <Box style={{ height: 450 }}>
-                                <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
+                            <Box style={{ height: 650 }}>
+                                <TableContainer component={Paper} sx={{ maxHeight: 650 }}>
                                     <Table stickyHeader={true} sx={{ minWidth: 650 }} size="small" aria-label="simple table">
                                         <TableHead>
                                             <TableRow>

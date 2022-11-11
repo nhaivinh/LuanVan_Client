@@ -346,18 +346,26 @@ function ProductDetails({ resetPage, handleResetPage }) {
                                             justifyContent: 'space-between'
                                         }}
                                         key={product[0].id_product}
-                                    >
-                                        {cookies.Account === undefined ?
-                                            <>
-                                                <ColorButton variant="contained" className={classes.addToCartButton} onClick={() => navigate('/login')}>Mua Ngay</ColorButton>
-                                                <ColorButton variant="contained" className={classes.addToCartButton} onClick={() => navigate('/login')}>Thêm Vào Giỏ Hàng</ColorButton>
-                                            </>
-                                            :
-                                            <>
-                                                <ColorButton variant="contained" className={classes.addToCartButton} onClick={handleClickBuyNow}>Mua Ngay</ColorButton>
-                                                <ColorButton variant="contained" className={classes.addToCartButton} onClick={handleClickAdd}>Thêm Vào Giỏ Hàng</ColorButton>
-                                            </>
+                                    >{product[0].quantity_product !== 0 ?
+                                        <>
+                                            {cookies.Account === undefined ?
+                                                <>
+                                                    <ColorButton variant="contained" className={classes.addToCartButton} onClick={() => navigate('/login')}>Mua Ngay</ColorButton>
+                                                    <ColorButton variant="contained" className={classes.addToCartButton} onClick={() => navigate('/login')}>Thêm Vào Giỏ Hàng</ColorButton>
+                                                </>
+                                                :
+                                                <>
+                                                    <ColorButton variant="contained" className={classes.addToCartButton} onClick={handleClickBuyNow}>Mua Ngay</ColorButton>
+                                                    <ColorButton variant="contained" className={classes.addToCartButton} onClick={handleClickAdd}>Thêm Vào Giỏ Hàng</ColorButton>
+                                                </>
+                                            }
+                                        </>
+                                        :
+                                        <>
+                                            <Typography variant='h6'>Sản phẩm tạm thời hết hàng</Typography>
+                                        </>
                                         }
+
 
                                     </Box>
 

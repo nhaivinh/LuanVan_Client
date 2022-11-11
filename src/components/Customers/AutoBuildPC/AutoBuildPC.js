@@ -328,7 +328,8 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
                 //return (product.unit_price_product > (W * 5 / 100))
                 //return (product.unit_price_product < (W * 20 / 100) && product.unit_price_product > (W * 10 / 100))
                 default:
-                    return (product.unit_price_product > (W * 5 / 100) && product.type_product !== "cooling_system") && product.unit_price_product < (W * 20 / 100)
+                    //return(true)
+                    return (product.unit_price_product > (W * 2 / 100) && product.type_product !== "cooling_system") && product.unit_price_product < (W * 30 / 100)
                 //return (product.type_product !== "cooling_system")
             }
         })

@@ -279,7 +279,7 @@ function OrderManagementFormExport({ idOrder, Order }) {
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
                                         <TableCell colSpan={5} component="th" scope="row" align="right">
-                                            <Typography>Tổng Cộng:</Typography>
+                                            <Typography>Tổng Tiền Hàng:</Typography>
                                         </TableCell>
                                         <TableCell component="th" scope="row" align="left">
                                             <Typography variant='h6'>
@@ -288,6 +288,58 @@ function OrderManagementFormExport({ idOrder, Order }) {
                                                         style: 'currency',
                                                         currency: 'VND'
                                                     })}
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow
+                                        key={-1}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell colSpan={5} component="th" scope="row" align="right">
+                                            <Typography>Phí vận chuyển:</Typography>
+                                        </TableCell>
+                                        <TableCell component="th" scope="row" align="left">
+                                            <Typography variant='h6'>
+                                                {
+                                                    Order.delivery_price !== null ?
+                                                        (Order.delivery_price).toLocaleString('vi-VI',
+                                                            {
+                                                                style: 'currency',
+                                                                currency: 'VND'
+                                                            })
+                                                        :
+                                                        (0).toLocaleString('vi-VI',
+                                                            {
+                                                                style: 'currency',
+                                                                currency: 'VND'
+                                                            })
+                                                }
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow
+                                        key={-1}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell colSpan={5} component="th" scope="row" align="right">
+                                            <Typography>Tổng thanh toán:</Typography>
+                                        </TableCell>
+                                        <TableCell component="th" scope="row" align="left">
+                                            <Typography variant='h6'>
+                                                {
+                                                    Order.delivery_price !== null ?
+                                                        (Order.total_payment + Order.delivery_price).toLocaleString('vi-VI',
+                                                            {
+                                                                style: 'currency',
+                                                                currency: 'VND'
+                                                            })
+                                                        :
+                                                        (Order.total_payment).toLocaleString('vi-VI',
+                                                            {
+                                                                style: 'currency',
+                                                                currency: 'VND'
+                                                            })
+                                                }
                                             </Typography>
                                         </TableCell>
                                     </TableRow>
