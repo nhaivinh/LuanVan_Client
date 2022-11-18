@@ -205,13 +205,19 @@ export default function AnalyzeBuildPc({ chosenPC, Products, handleSetChosenProd
                 filteredProducts = mainboards.filter(function (product) {
                     return (product.socket_mainboard === scope)
                 })
-                filteredProducts.sort((a, b) => (Math.abs(a.unit_price_product - mainboard.unit_price_product) > Math.abs(a.unit_price_product - mainboard.unit_price_product)) ? 1 : -1)
+                filteredProducts.sort((a, b) => (Math.abs(a.unit_price_product - mainboard.unit_price_product) > Math.abs(b.unit_price_product - mainboard.unit_price_product)) ? 1 : -1)
                 break;
             case 'ram':
                 filteredProducts = rams.filter(function (product) {
                     return (product.generation_ram === scope)
                 })
-                filteredProducts.sort((a, b) => (Math.abs(a.unit_price_product - mainboard.unit_price_product) > Math.abs(a.unit_price_product - mainboard.unit_price_product)) ? 1 : -1)
+                filteredProducts.sort((a, b) => (Math.abs(a.unit_price_product - ram.unit_price_product) > Math.abs(b.unit_price_product - ram.unit_price_product)) ? 1 : -1)
+                break;
+            case 'psu':
+                filteredProducts = psus.filter(function (product) {
+                    return (product.wattage >= scope)
+                })
+                filteredProducts.sort((a, b) => (Math.abs(a.wattage - scope) > Math.abs(b.wattage - scope)) ? 1 : -1)
                 break;
             default:
                 break;
@@ -539,6 +545,29 @@ export default function AnalyzeBuildPc({ chosenPC, Products, handleSetChosenProd
         }
     }
 
+    function showHintPSU() {
+        if (psu.wattage < (gpu.tdp_gpu + cpu.tdp_cpu)) {
+            return (
+                <Box
+                    style={{
+                        display: 'flex',
+                        background: 'white',
+                        minHeight: 100,
+                        padding: 10,
+                        marginTop: 10,
+                        borderRadius: 10,
+                        flexDirection: 'column'
+                    }}
+                >
+                    <Stack direction="row" spacing={2} justifyContent="space-between" borderLeft={'5px solid black'} marginTop={2} marginBottom={2} paddingRight={3}>
+                        <Typography variant='h6' paddingLeft={2}>Gợi ý PSU (nguồn) phù hợp</Typography>
+                    </Stack>
+                    {handleShowHintProduct('psu', (gpu.tdp_gpu + cpu.tdp_cpu))}
+                </Box>
+            )
+        }
+    }
+
     return (
         <Box
             style={{
@@ -742,6 +771,7 @@ export default function AnalyzeBuildPc({ chosenPC, Products, handleSetChosenProd
                     }
                     {showHintMainboard()}
                     {showHintRam()}
+                    {showHintPSU()}
                 </Grid>
             </Grid>
         </Box >
