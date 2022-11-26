@@ -251,7 +251,14 @@ function AccountInfo() {
                             >
                             </TextField>
                             <FormControl>
-                                <FormLabel id="demo-controlled-radio-buttons-group">Giới tính</FormLabel>
+                                <FormLabel id="demo-controlled-radio-buttons-group"
+                                    sx={{
+                                        "&, &.Mui-focused": {
+                                            color: "orange"
+                                        }
+                                    }}>
+                                    Giới tính
+                                </FormLabel>
                                 <RadioGroup
                                     row
                                     aria-labelledby="demo-row-radio-buttons-group-label"
@@ -259,9 +266,38 @@ function AccountInfo() {
                                     defaultValue={account[0].gender_customer}
                                     onChange={(e) => { setEditAccount({ ...editAccount, gender_customer: e.target.value }) }}
                                 >
-                                    <FormControlLabel value="male" control={<Radio />} label="Nam" />
-                                    <FormControlLabel value="female" control={<Radio />} label="Nữ" />
-                                    <FormControlLabel value="other" control={<Radio />} label="Khác" />
+                                    <FormControlLabel
+                                        value="male"
+                                        control={
+                                            <Radio
+                                                sx={{
+                                                    "&, &.Mui-checked": {
+                                                        color: "orange"
+                                                    }
+                                                }} />
+                                        }
+                                        label="Nam" />
+                                    <FormControlLabel
+                                        value="female"
+                                        control={
+                                            <Radio
+                                                sx={{
+                                                    "&, &.Mui-checked": {
+                                                        color: "orange"
+                                                    }
+                                                }} />
+                                        }
+                                        label="Nữ" />
+                                    <FormControlLabel value="other"
+                                        control={
+                                            <Radio
+                                                sx={{
+                                                    "&, &.Mui-checked": {
+                                                        color: "orange"
+                                                    }
+                                                }} />
+                                        }
+                                        label="Khác" />
                                 </RadioGroup>
                             </FormControl>
                         </Box>
@@ -390,7 +426,7 @@ function AccountInfo() {
                 )
             case '3':
                 return (
-                    <AddressCustomer Customer={account[0]}/>
+                    <AddressCustomer Customer={account[0]} />
                 )
             default:
                 break;

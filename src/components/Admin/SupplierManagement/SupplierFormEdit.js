@@ -146,7 +146,7 @@ function StaffFormEdit({ Supplier, handleResetPage }) {
                 <Box sx={style}>
                     <Stack direction="row" spacing={2} justifyContent="space-between">
                         <Typography id="post-request-error-handling" variant="h5" style={{ paddingBottom: 5 }}>
-                            Chỉnh sửa thông tin nhân viên
+                            Chỉnh sửa thông tin nhà cung cấp
                         </Typography>
                         <IconButton variant="contained" onClick={handleClose}><CloseIcon /></IconButton>
                     </Stack>

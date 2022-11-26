@@ -303,7 +303,7 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
                             if (checkGPU !== false) {
                                 return (product.unit_price_product < (W * 40 / 100) && product.unit_price_product > (W * 10 / 100))
                             } else {
-                                return (product.unit_price_product < (W * 70 / 100) && product.unit_price_product > (W * 20 / 100))
+                                return (product.unit_price_product < (W * 80 / 100) && product.unit_price_product > (W * 30 / 100))
                             }
                             break;
                     }

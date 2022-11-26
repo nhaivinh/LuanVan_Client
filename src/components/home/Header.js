@@ -14,6 +14,8 @@ import MenuItem from '@mui/material/MenuItem';
 import { useCookies, removeCookie } from "react-cookie";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import Container from '@mui/material/Container';
+import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
+import StopCircleIcon from '@mui/icons-material/StopCircle';
 import {
     AppBar,
     Toolbar,
@@ -26,6 +28,7 @@ import {
 import AccountInfo from "../Customers/Account/AccountInfo";
 import { Grid } from "@mui/material";
 import { actions, useStore } from "../Store";
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -108,6 +111,48 @@ const Header = ({ resetPage, handleResetPage }) => {
                 })
         }
     }, [resetPage])
+
+    const {
+        transcript,
+        listening,
+        resetTranscript,
+        browserSupportsSpeechRecognition
+    } = useSpeechRecognition();
+
+    const Dictaphone = () => {
+        if (!browserSupportsSpeechRecognition) {
+            return <span>Browser doesn't support speech recognition.</span>;
+        }
+
+        return (
+            <div>
+                {listening === true ?
+                    <IconButton onClick={SpeechRecognition.stopListening}>
+                        <StopCircleIcon
+                            sx={{
+                                backgroundColor: "red",
+                                borderRadius: "50%"
+                            }}
+                        />
+                    </IconButton>
+                    :
+                    <IconButton onClick={SpeechRecognition.startListening}>
+                        <KeyboardVoiceIcon
+                            sx={{
+                                color: "orange",
+                                borderRadius: "50%"
+                            }}
+                        />
+                    </IconButton>
+                }
+            </div>
+        );
+    };
+
+    React.useEffect(() => {
+        setSearchItem(transcript);
+    }, [transcript])
+
 
     function handleShowAvatar() {
         if (cookies.Account === undefined) {
@@ -272,11 +317,12 @@ const Header = ({ resetPage, handleResetPage }) => {
                                     color: orange[500],
                                 }}
                             />
+                            <Dictaphone />
                         </Box>
                         <Box
                             style={{
                                 display: 'flex',
-                                width: '30%',
+                                width: '25%',
                                 justifyContent: 'flex-end',
                                 alignItems: 'center'
                             }}
@@ -295,7 +341,7 @@ const Header = ({ resetPage, handleResetPage }) => {
                                             alignItems: 'center',
                                             flexDirection: 'column',
                                             marginLeft: 2,
-                                            marginRight: 20
+                                            marginRight: 10
                                         }}>
                                         <Typography variant="body2">Giỏ hàng của bạn</Typography>
                                         <Typography variant="body2">{countCart} sản phẩm</Typography>

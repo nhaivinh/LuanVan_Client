@@ -326,7 +326,15 @@ function Checkout() {
                             />
                             <Box>
                                 <FormControl>
-                                    <FormLabel id="demo-controlled-radio-buttons-group">Chọn loại địa chỉ</FormLabel>
+                                    <FormLabel id="demo-controlled-radio-buttons-group"
+                                        sx={{
+                                            "&, &.Mui-focused": {
+                                                color: "orange"
+                                            }
+                                        }}
+                                    >
+                                        Chọn loại địa chỉ
+                                    </FormLabel>
                                     <RadioGroup
                                         row
                                         aria-labelledby="demo-row-radio-buttons-group-label"
@@ -334,9 +342,27 @@ function Checkout() {
                                         value={typeAddress}
                                         onChange={(e) => { setTypeAddress(e.target.value) }}
                                     >
-                                        <FormControlLabel value="new" control={<Radio />} label="Địa chỉ mới" />
+                                        <FormControlLabel value="new"
+                                            control={
+                                                <Radio
+                                                    sx={{
+                                                        "&, &.Mui-checked": {
+                                                            color: "orange"
+                                                        }
+                                                    }} />
+                                            }
+                                            label="Địa chỉ mới" />
                                         {address.length !== 0 &&
-                                            <FormControlLabel value="exist" control={<Radio />} label="Địa chỉ đã lưu" />
+                                            <FormControlLabel value="exist"
+                                                control={
+                                                    <Radio
+                                                        sx={{
+                                                            "&, &.Mui-checked": {
+                                                                color: "orange"
+                                                            }
+                                                        }} />
+                                                }
+                                                label="Địa chỉ đã lưu" />
                                         }
                                     </RadioGroup>
                                 </FormControl>
@@ -392,7 +418,15 @@ function Checkout() {
                                 onChange={(e) => { setInfoPayment({ ...infoPayment, AddressDelivery: e.target.value }) }}
                             />
                             <FormControl>
-                                <FormLabel id="demo-controlled-radio-buttons-group">Phương thức thanh toán</FormLabel>
+                                <FormLabel id="demo-controlled-radio-buttons-group"
+                                    sx={{
+                                        "&, &.Mui-focused": {
+                                            color: "orange"
+                                        }
+                                    }}
+                                >
+                                    Phương thức thanh toán
+                                </FormLabel>
                                 <RadioGroup
                                     row
                                     aria-labelledby="demo-row-radio-buttons-group-label"
@@ -400,8 +434,26 @@ function Checkout() {
                                     value={infoPayment.TypePayment}
                                     onChange={(e) => { setInfoPayment({ ...infoPayment, TypePayment: e.target.value }) }}
                                 >
-                                    <FormControlLabel value="cod" control={<Radio />} label="Giao hàng nhận tiền - COD" />
-                                    <FormControlLabel value="card" control={<Radio />} label="Thanh toán trực tuyến bằng thẻ ngân hàng" />
+                                    <FormControlLabel value="cod"
+                                        control={
+                                            <Radio
+                                                sx={{
+                                                    "&, &.Mui-checked": {
+                                                        color: "orange"
+                                                    }
+                                                }} />
+                                        }
+                                        label="Giao hàng nhận tiền - COD" />
+                                    <FormControlLabel value="card"
+                                        control={
+                                            <Radio
+                                                sx={{
+                                                    "&, &.Mui-checked": {
+                                                        color: "orange"
+                                                    }
+                                                }} />
+                                        }
+                                        label="Thanh toán trực tuyến bằng thẻ ngân hàng" />
                                 </RadioGroup>
                             </FormControl>
                         </Box>

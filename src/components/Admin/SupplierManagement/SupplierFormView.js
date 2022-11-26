@@ -94,10 +94,10 @@ function SupplierFormView({ Staff }) {
                         </TableHead>
                         <TableBody>
                             {
-                                products.map(function (row) {
+                                products.map(function (row, index) {
                                     return (
                                         <TableRow
-                                            key={row.id_product}
+                                            key={index}
                                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                         >
                                             <TableCell component="th" scope="row" align="left">

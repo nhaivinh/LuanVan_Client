@@ -744,7 +744,7 @@ export default function StatisticHome() {
                                 flexDirection: 'column',
                             }}
                         >
-                            <Typography variant='h6' style={{ paddingTop: 20, paddingLeft: 20 }}><b>Danh Sách tồn hàng</b></Typography>
+                            <Typography variant='h6' style={{ paddingTop: 20, paddingLeft: 20 }}><b>Danh sách doanh số thấp</b></Typography>
                             <Typography variant='body1' style={{ color: "darkgrey", paddingLeft: 20 }}>Những sản phẩm chưa phát sinh giao dịch trong vòng 60 ngày</Typography>
                             <TableContainer style={{ maxHeight: 600 }}>
                                 <Table sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader={true}>

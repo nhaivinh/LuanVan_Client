@@ -292,7 +292,14 @@ const Register = () => {
                                 </Stack>
                                 <Stack direction="column" spacing={2} alignItems="stretch" marginBottom={0}>
                                     <FormControl>
-                                        <FormLabel id="demo-controlled-radio-buttons-group">Giới tính</FormLabel>
+                                        <FormLabel id="demo-controlled-radio-buttons-group"
+                                            sx={{
+                                                "&, &.Mui-focused": {
+                                                    color: "orange"
+                                                }
+                                            }}>
+                                            Giới tính
+                                        </FormLabel>
                                         <RadioGroup
                                             row
                                             aria-labelledby="demo-row-radio-buttons-group-label"
@@ -300,9 +307,39 @@ const Register = () => {
                                             defaultValue='male'
                                             onChange={(e) => { setRegister({ ...register, Gender: e.target.value }) }}
                                         >
-                                            <FormControlLabel value="male" control={<Radio />} label="Nam" />
-                                            <FormControlLabel value="female" control={<Radio />} label="Nữ" />
-                                            <FormControlLabel value="other" control={<Radio />} label="Khác" />
+                                            <FormControlLabel value="male"
+                                                control={
+                                                    <Radio
+                                                        sx={{
+                                                            "&, &.Mui-checked": {
+                                                                color: "orange"
+                                                            }
+                                                        }} />
+                                                }
+                                                label="Nam"
+                                            />
+                                            <FormControlLabel value="female"
+                                                control={
+                                                    <Radio
+                                                        sx={{
+                                                            "&, &.Mui-checked": {
+                                                                color: "orange"
+                                                            }
+                                                        }}
+                                                    />
+                                                }
+                                                label="Nữ" />
+                                            <FormControlLabel value="other"
+                                                control={
+                                                    <Radio
+                                                        sx={{
+                                                            "&, &.Mui-checked": {
+                                                                color: "orange"
+                                                            }
+                                                        }}
+                                                    />
+                                                }
+                                                label="Khác" />
                                         </RadioGroup>
                                     </FormControl>
                                 </Stack>

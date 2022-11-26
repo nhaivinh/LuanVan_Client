@@ -292,7 +292,7 @@ function OrderManagementFormExport({ idOrder, Order }) {
                                         </TableCell>
                                     </TableRow>
                                     <TableRow
-                                        key={-1}
+                                        key={-2}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
                                         <TableCell colSpan={5} component="th" scope="row" align="right">
@@ -318,7 +318,7 @@ function OrderManagementFormExport({ idOrder, Order }) {
                                         </TableCell>
                                     </TableRow>
                                     <TableRow
-                                        key={-1}
+                                        key={-3}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
                                         <TableCell colSpan={5} component="th" scope="row" align="right">

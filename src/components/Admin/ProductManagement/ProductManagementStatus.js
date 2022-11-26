@@ -132,7 +132,12 @@ export default function ProductManagementStatus({ product, handleResetPage }) {
                             value={option}
                             onChange={(e) => { setOption(e.target.value) }}
                         >
-                            <FormControlLabel value="disable" control={<Radio />} label="Tạm dừng kinh doanh" />
+                            {product.status_product === 1 ?
+                                <FormControlLabel value="disable" control={<Radio />} label="Tạm dừng kinh doanh" />
+                                :
+                                <FormControlLabel value="disable" control={<Radio />} label="Phục hồi kinh doanh" />
+                            }
+
                             <FormControlLabel value="delete" control={<Radio />} label="Xoá sản phẩm" />
                         </RadioGroup>
                     </FormControl>

@@ -746,7 +746,12 @@ export default function AnalyzeBuildPc({ chosenPC, Products, handleSetChosenProd
                                 }}
                             >
                                 <Stack direction="row" spacing={2} justifyContent="space-between" borderLeft={'5px solid black'} marginTop={2} marginBottom={2} paddingRight={3}>
-                                    <Typography variant='h6' paddingLeft={2}>Gợi ý nâng cấp vi xử lý</Typography>
+                                    {cpu.scope_cpu > gpu.scope_gpu ?
+                                        <Typography variant='h6' paddingLeft={2}>Gợi ý hạ cấp vi xử lý</Typography>
+                                        :
+                                        <Typography variant='h6' paddingLeft={2}>Gợi ý nâng cấp vi xử lý</Typography>
+                                    }
+
                                 </Stack>
                                 {handleShowHintProduct('cpu', gpu.scope_gpu)}
                             </Box>
@@ -762,7 +767,11 @@ export default function AnalyzeBuildPc({ chosenPC, Products, handleSetChosenProd
                                 }}
                             >
                                 <Stack direction="row" spacing={2} justifyContent="space-between" borderLeft={'5px solid black'} marginTop={2} marginBottom={2} paddingRight={3}>
-                                    <Typography variant='h6' paddingLeft={2}>Gợi ý hạ cấp vi card đồ hoạ</Typography>
+                                    {cpu.scope_cpu > gpu.scope_gpu ?
+                                        <Typography variant='h6' paddingLeft={2}>Gợi ý nâng cấp vi card đồ hoạ</Typography>
+                                        :
+                                        <Typography variant='h6' paddingLeft={2}>Gợi ý hạ cấp vi card đồ hoạ</Typography>
+                                    }                     
                                 </Stack>
                                 {handleShowHintProduct('gpu', cpu.scope_cpu)}
                             </Box>

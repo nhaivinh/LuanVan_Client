@@ -22,8 +22,8 @@ function CatergoryList() {
         <Box
             style={{
                 borderRadius: '0.5rem',   
-                backgroundImage: 'url("https://img.freepik.com/free-photo/low-angle-shot-mesmerizing-starry-sky_181624-27925.jpg?w=1380&t=st=1666258139~exp=1666258739~hmac=b72c76165a7faf4a469076d17d8a549d1b935c30f8531641318bc41a527610a3")',
-                opacity: 0.8,
+                backgroundImage: 'url("https://images.unsplash.com/photo-1566345984367-fa2ba5cedc17?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80")',
+                opacity: 0.9,
                 position: 'relative',
                 overflow: 'hidden',
                 width: '14.375rem',

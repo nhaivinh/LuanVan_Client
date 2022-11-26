@@ -227,7 +227,7 @@ export default function ImportProductFormEdit({ handleResetPage, ImportNote }) {
     return (
         <div>
             <IconButton onClick={handleOpen} variant="text" color="warning">
-                <Tooltip title="Xem Chi Tiết">
+                <Tooltip title="Chỉnh sửa">
                     <EditIcon
                         sx={{ color: 'var(--color8)' }}
                     />
@@ -242,7 +242,7 @@ export default function ImportProductFormEdit({ handleResetPage, ImportNote }) {
                 <Box sx={style}>
                     <Stack direction="row" spacing={2} justifyContent="space-between" style={{ paddingBottom: 30 }}>
                         <Typography id="post-request-error-handling" variant="h5" >
-                            Thêm đợt nhập hàng mới
+                            Sửa đợt nhập hàng
                         </Typography>
                         <IconButton variant="contained" onClick={handleClose}><CloseIcon /></IconButton>
                     </Stack>
@@ -464,7 +464,7 @@ export default function ImportProductFormEdit({ handleResetPage, ImportNote }) {
                             &nbsp;
                             {importProduct.length}
                         </Typography>
-                        <Button variant='contained' onClick={handleClickAdd}>Thêm</Button>
+                        <Button variant='contained' onClick={handleClickAdd}>Lưu chỉnh sửa</Button>
                     </Box>
                 </Box >
             </Modal>

@@ -230,9 +230,11 @@ function SupplierManagementHome() {
             if (rowsPerPage > 0) {
                 return (
                     items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        .map(function (row) {
+                        .map(function (row, index) {
                             return (
-                                <StyledTableRow key={row.id_staff}>
+                                <StyledTableRow
+                                    key={index}
+                                >
                                     <StyledTableCell component="th" scope="row" align="left">
                                         {row.id_supplier}
                                     </StyledTableCell>

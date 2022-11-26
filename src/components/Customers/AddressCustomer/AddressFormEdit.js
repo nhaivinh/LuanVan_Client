@@ -132,7 +132,7 @@ export default function AddressFormEdit({ Address, handleResetPage }) {
                 <Box sx={style}>
                     <Stack direction="row" spacing={2} justifyContent="space-between">
                         <Typography id="post-request-error-handling" variant="h5" style={{ paddingBottom: 5 }}>
-                            Thêm địa chỉ mới
+                            Chỉnh sửa địa chỉ
                         </Typography>
                         <IconButton variant="contained" onClick={handleClose}><CloseIcon /></IconButton>
                     </Stack>
