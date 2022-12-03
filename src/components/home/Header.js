@@ -264,7 +264,9 @@ const Header = ({ resetPage, handleResetPage }) => {
                                 marginRight: 50,
                                 paddingBottom: 15
                             }}>
-                            <img src={require('../../images/Logo/logoPCOrange.png')} width='150px' />
+                            <Link to="/" className={classes.toolbarTitle}>
+                                <img src={require('../../images/Logo/logoPCOrange.png')} width='150px' />
+                            </Link>
                         </Box>
 
                         <Box
@@ -275,13 +277,6 @@ const Header = ({ resetPage, handleResetPage }) => {
                                 alignItems: 'center'
                             }}
                         >
-                            <Box
-                                sx={style}
-                            >
-                                <Link to="/" className={classes.toolbarTitle}>
-                                    <Typography >Trang Chủ</Typography>
-                                </Link>
-                            </Box>
                             <Box
                                 sx={style}
                             >
@@ -311,7 +306,7 @@ const Header = ({ resetPage, handleResetPage }) => {
                                 onRequestSearch={() => navigate('/search/?page=1&name=' + searchItem)}
                                 style={{
                                     margin: "0 auto",
-                                    width: 200,
+                                    width: 250,
                                     borderRadius: 10,
                                     backgroundColor: 'var(--background1)',
                                     color: orange[500],

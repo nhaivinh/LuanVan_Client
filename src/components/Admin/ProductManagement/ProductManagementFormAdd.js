@@ -154,7 +154,6 @@ export default function ProductManagementFormAdd() {
                 default:
                     break;
             }
-
             addPosts(product, infoTech);
             console.log(product);
             console.log(infoTech)

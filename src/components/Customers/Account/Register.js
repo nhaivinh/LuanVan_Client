@@ -81,6 +81,10 @@ const Register = () => {
         Gender: 'male'
     });
 
+    const ClickBack = () => {
+        navigate("/login")
+    }
+
     const CheckRegister = () => {
         const current = new Date();
         const date = getFormattedDate(current);
@@ -348,7 +352,7 @@ const Register = () => {
                     </Stack>
                     <Stack direction="row" spacing={2} justifyContent="center" marginBottom={5}>
                         <ColorButtonContained variant="contained" onClick={CheckRegister}>Đăng ký</ColorButtonContained>
-                        <ColorButtonContained variant="contained">Quay về</ColorButtonContained>
+                        <ColorButtonContained variant="contained" onClick={ClickBack}>Quay về</ColorButtonContained>
                     </Stack>
                 </Box>
             </Container >

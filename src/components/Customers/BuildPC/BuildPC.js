@@ -295,7 +295,33 @@ function BuildPC() {
 
     function handleClickBuyNow() {
         handleClickAdd()
-        navigate('/cart')
+        if (
+            chosenPC.cpu.id !== 0 &&
+            chosenPC.cpu.quantity !== 0 &&
+            chosenPC.mainboard.id !== 0 &&
+            chosenPC.mainboard.quantity !== 0 &&
+            chosenPC.ram.id !== 0 &&
+            chosenPC.ram.quantity !== 0 &&
+            chosenPC.gpu.id !== 0 &&
+            chosenPC.gpu.quantity !== 0 &&
+            chosenPC.psu.id !== 0 &&
+            chosenPC.psu.quantity !== 0 &&
+            chosenPC.casepc.id !== 0 &&
+            chosenPC.casepc.quantity !== 0 &&
+            (
+                (
+                    chosenPC.harddisk1.id !== 0 &&
+                    chosenPC.harddisk1.quantity !== 0
+                ) ||
+                (
+                    chosenPC.harddisk2.id !== 0 &&
+                    chosenPC.harddisk2.quantity !== 0
+                )
+            )
+        ) {
+            navigate('/cart')
+        }
+
     }
     const addPosts = (idAccount, idProduct, quantityProduct) => {
         client

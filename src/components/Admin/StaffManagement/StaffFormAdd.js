@@ -81,9 +81,14 @@ export default function StaffFormAdd({ handleResetPage }) {
         let validAddress = false;
         let validIdentityCard = false;
 
-        if (staff.name_staff === "" || staff.name_staff.search(/[0-9]/) >= 0) {
+        if(staff.name_staff !== undefined && staff.name_staff !== ""){
+            if (staff.name_staff === "" || staff.name_staff.search(/[0-9]/) >= 0) {
+                thongbao = thongbao + "\nHọ và Tên"
+            } else validName = true
+        }else{
             thongbao = thongbao + "\nHọ và Tên"
-        } else validName = true
+        }
+        
 
         if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(staff.email_staff)) {
             thongbao = thongbao + "\nEmail"
