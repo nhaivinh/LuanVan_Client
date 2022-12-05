@@ -60,6 +60,379 @@ export default function ProductManagementFormEdit({ IDProduct }) {
             })
     }, [IDProduct])
 
+function CheckValidInfoTech(typeProduct) {
+        let valid = true;
+        let thongbao = "";
+        switch (typeProduct) {
+            case 'cpu':
+                if (product.core_cpu === "" || product.core_cpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nSố Lõi"
+                }
+                if (product.thread_cpu === "" || product.thread_cpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nSố Luồng"
+                }
+                if (product.tdp_cpu === "" || product.tdp_cpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nTDP"
+                }
+                if (product.scope_cpu === "" || product.scope_cpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nSố điểm"
+                }
+                if (product.clock_speed_cpu === "" || product.clock_speed_cpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nTốc độ xử lý"
+                }
+                if (product.cache_cpu === "" || product.cache_cpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nCache"
+                }
+                if (product.cache_cpu === "" || product.cache_cpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nCache"
+                }
+                if (product.onboard_graphic_cpu === "" || product.onboard_graphic_cpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nCard đồ hoạ tích hợp"
+                }
+                if (product.socket_cpu === "" || product.socket_cpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nSocket"
+                }
+                if (product.architecture_cpu === "" || product.architecture_cpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nKiến trúc"
+                }
+                if (product.generation_cpu === "" || product.generation_cpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nThế hệ"
+                }
+                break;
+            case 'mainboard':
+                if (product.chipset_mainboard === "" || product.chipset_mainboard === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nChipset"
+                }
+                if (product.socket_mainboard === "" || product.socket_mainboard === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nSocket Hỗ trợ"
+                }
+                if (product.size_mainboard === "" || product.size_mainboard === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nChuẩn kích thước"
+                }
+                if (product.type_ram_support === "" || product.type_ram_support === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nLoại Ram hỗ trợ"
+                }
+                if (product.max_slot_ram === "" || product.max_slot_ram === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nSố slot Ram hỗ trợ"
+                }
+                if (product.max_capacity_ram === "" || product.max_capacity_ram === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nDung lượng Ram hỗ trợ"
+                }
+                if (product.bus_ram_support === "" || product.bus_ram_support === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nTốc độ Ram hỗ trợ"
+                }
+                if (product.amount_slot_pci_mainboard === "" || product.amount_slot_pci_mainboard === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nSố cổng PCI"
+                }
+                if (product.multi_gpu_support === "" || product.multi_gpu_support === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nHỗ trợ đa card đồ hoạ"
+                }
+                if (product.led_mainboard === "" || product.led_mainboard === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nHỗ trợ LED"
+                }
+                if (product.audio_chipset === "" || product.audio_chipset === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nChipset Âm thanh"
+                }
+                if (product.wireless_connection === "" || product.wireless_connection === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nKết nối không dây"
+                }
+                if (product.harddisk_support === "" || product.harddisk_support === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nỔ cứng hỗ trợ"
+                }
+                if (product.display_output_mainboard === "" || product.display_output_mainboard === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nCổng xuất ảnh"
+                }
+                if (product.other_connect_port === "" || product.other_connect_port === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nCác cổng khác"
+                }
+                break;
+            case 'gpu':
+                if (product.chipset_gpu === "" || product.chipset_gpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nChipset"
+                }
+                if (product.producer_chipset === "" || product.producer_chipset === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nNhà sản xuất chipset"
+                }
+                if (product.generation_gpu === "" || product.generation_gpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nThế hệ GPU"
+                }
+                if (product.capacity_memory_gpu === "" || product.capacity_memory_gpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nDung lượng bộ nhớ"
+                }
+                if (product.type_memory_gpu === "" || product.type_memory_gpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nLoại bộ nhớ"
+                }
+                if (product.amount_core === "" || product.amount_core === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nSố lõi xử lý"
+                }
+                if (product.clock_speed_gpu === "" || product.clock_speed_gpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nTốc độ xử lý"
+                }
+                if (product.display_output_gpu === "" || product.display_output_gpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nCổng xuất ảnh"
+                }
+                if (product.tdp_gpu === "" || product.tdp_gpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nTDP"
+                }
+                if (product.sub_power_port === "" || product.sub_power_port === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nNguồn phụ"
+                }
+                if (product.type_cooling_gpu === "" || product.type_cooling_gpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nLoại tản nhiệt"
+                }
+                if (product.multi_gpu === "" || product.multi_gpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nĐa card đồ hoạ"
+                }
+                if (product.led_gpu === "" || product.led_gpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nHỗ trợ LED"
+                }
+                if (product.size_gpu === "" || product.size_gpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nChuẩn kích thước"
+                }
+                if (product.scope_gpu === "" || product.scope_gpu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nĐiểm số GPU"
+                }
+                break;
+            case 'harddisk':
+                if (product.capacity_harddisk === "" || product.capacity_harddisk === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nDung lượng"
+                }
+                if (product.size_harddisk === "" || product.size_harddisk === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nChuẩn kích thước"
+                }
+                if (product.type_connection_harddisk === "" || product.type_connection_harddisk === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nLoại kết nối"
+                }
+                switch (product.type_harddisk) {
+                    case 'ssd':
+                        if (product.nand_memory === "" || product.nand_memory === undefined) {
+                            valid = false;
+                            thongbao = thongbao + "\nBộ nhớ NAND"
+                        }
+                        if (product.read_speed === "" || product.read_speed === undefined) {
+                            valid = false;
+                            thongbao = thongbao + "\nTốc độ đọc"
+                        }
+                        if (product.write_speed === "" || product.write_speed === undefined) {
+                            valid = false;
+                            thongbao = thongbao + "\nTốc độ ghi"
+                        }
+                        break;
+                    case 'hdd':
+                        if (product.rotational_speed_hdd === "" || product.rotational_speed_hdd === undefined) {
+                            valid = false;
+                            thongbao = thongbao + "\nTốc độ vòng quay"
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            case 'ram':
+                if (product.generation_ram === "" || product.generation_ram === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nThế hệ"
+                }
+                if (product.speed_bus === "" || product.speed_bus === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nTốc độ"
+                }
+                if (product.voltage === "" || product.voltage === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nHiệu điện thế"
+                }
+                if (product.delay_time === "" || product.delay_time === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nĐộ trễ"
+                }
+                if (product.capacity_ram === "" || product.capacity_ram === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nDung lượng"
+                }
+                if (product.led_ram === "" || product.led_ram === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nHỗ trợ LED"
+                }
+                break;
+            case 'casepc':
+                if (product.type_case === "" || product.type_case === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nLoại case"
+                }
+                if (product.mainboard_support === "" || product.mainboard_support === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nMainboard hỗ trợ"
+                }
+                if (product.color_case === "" || product.color_case === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nMàu sắc"
+                }
+                if (product.material_case === "" || product.material_case === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nChất liệu"
+                }
+                if (product.material_side_case === "" || product.material_side_case === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nChất liệu nắp hông"
+                }
+                if (product.size_case === "" || product.size_case === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nChuẩn kích thước"
+                }
+                if (product.amount_harddisk_support === "" || product.amount_harddisk_support === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nSố ổ cứng hỗ trợ"
+                }
+                if (product.amount_port_connect === "" || product.amount_port_connect === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nSố cổng hỗ trợ"
+                }
+                if (product.height_cpu_fan === "" || product.height_cpu_fan === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nĐộ cao quạt tản CPU"
+                }
+                if (product.height_radiator === "" || product.height_radiator === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nĐộ cao Radiatior"
+                }
+                if (product.type_fan_front === "" || product.type_fan_front === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nLoại quạt trước"
+                }
+                if (product.type_fan_top === "" || product.type_fan_top === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nLoại quạt trên"
+                }
+                if (product.type_fan_behind === "" || product.type_fan_behind === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nLoại quạt sau"
+                }
+                if (product.bonus_fan === "" || product.bonus_fan === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nQuạt tăng kèm"
+                }
+                if (product.amount_slot_pci_case === "" || product.amount_slot_pci_case === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nSố slot PCI"
+                }
+                break;
+            case 'psu':
+                if (product.energy_efficiency === "" || product.energy_efficiency === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nChuẩn hiệu suất"
+                }
+                if (product.wattage === "" || product.wattage === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nCông suất"
+                }
+                if (product.type_size_psu === "" || product.type_size_psu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nChuẩn kích thước"
+                }
+                if (product.modular_support === "" || product.modular_support === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nhỗ trợ mô đun"
+                }
+                if (product.protection_certificate === "" || product.protection_certificate === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nChứng nhận bảo vệ"
+                }
+                if (product.slot_power === "" || product.slot_power === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nSố cổng"
+                }
+                if (product.led_psu === "" || product.led_psu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nHỗ trợ LED"
+                }
+                if (product.type_cooling_psu === "" || product.type_cooling_psu === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nLoại tản nhiệt"
+                }
+                break;
+            case 'cooling_system':
+                if (product.type_cooling_system === "" || product.type_cooling_system === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nLoại tản nhiệt"
+                }
+                if (product.size_cooling_system === "" || product.size_cooling_system === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nChuẩn kích thước"
+                }
+                if (product.support_cpu_socket === "" || product.support_cpu_socket === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nSocket CPU hỗ trợ"
+                }
+                if (product.led_cooling_system === "" || product.led_cooling_system === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nHỗ trợ LED"
+                }
+                if (product.rotational_speed_cooling_system === "" || product.rotational_speed_cooling_system === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nTốc độ vòng quay"
+                }
+                if (product.air_flow === "" || product.air_flow === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nLưu lương khí"
+                }
+                if (product.noise_level === "" || product.noise_level === undefined) {
+                    valid = false;
+                    thongbao = thongbao + "\nĐộ ồn"
+                }
+                break;
+            default:
+                break;
+        }
+        if (valid) {
+            return valid
+        } else {
+            return thongbao
+        }
+    }
+
     const Checkproduct = () => {
         let thongbao = "Hãy thêm thông tin đúng dạng cho :";
         let validNameProduct = false;
@@ -93,7 +466,7 @@ export default function ProductManagementFormEdit({ IDProduct }) {
             thongbao = thongbao + "\nGiảm giá"
         } else validDiscountProduct = true
 
-        if (validNameProduct && validBrandProduct && validTypeProduct && validUnitPriceProduct && validInsuranceProduct && validDiscountProduct) {
+        if (validNameProduct && validBrandProduct && validTypeProduct && validUnitPriceProduct && validInsuranceProduct && validDiscountProduct  && CheckValidInfoTech(product.type_product) === true) {
             switch (product.type_product) {
                 case 'cpu':
                     clientTechInfoProduct = axios.create({
@@ -138,10 +511,13 @@ export default function ProductManagementFormEdit({ IDProduct }) {
                 default:
                     break;
             }
-
             addPosts(product);
         } else {
-            alert(thongbao);
+            if (CheckValidInfoTech(product.type_product) === true) {
+                alert(thongbao);
+            } else {
+                alert(thongbao + CheckValidInfoTech(product.type_product));
+            }
         }
     }
 
@@ -581,6 +957,7 @@ export default function ProductManagementFormEdit({ IDProduct }) {
                                     variant="outlined"
                                     label="Đơn giá"
                                     size="small"
+                                    type="number"
                                     defaultValue={product.unit_price_product}
                                     onChange={(e) => { setProduct({ ...product, unit_price_product: e.target.value }) }}
                                     style={{ paddingBottom: 5 }}
@@ -592,6 +969,7 @@ export default function ProductManagementFormEdit({ IDProduct }) {
                                     variant="outlined"
                                     label="Thời gian bảo hành"
                                     size="small"
+                                    type="number"
                                     defaultValue={product.insurance_product}
                                     onChange={(e) => { setProduct({ ...product, insurance_product: e.target.value }) }}
                                     style={{ paddingBottom: 5 }}
@@ -603,6 +981,8 @@ export default function ProductManagementFormEdit({ IDProduct }) {
                                     variant="outlined"
                                     label="Giảm giá"
                                     size="small"
+                                    InputProps={{ inputProps: { min: 0, max: 99 } }}
+                                    type="number"
                                     defaultValue={product.discount_product}
                                     onChange={(e) => { setProduct({ ...product, discount_product: e.target.value }) }}
                                     style={{ paddingBottom: 5 }}

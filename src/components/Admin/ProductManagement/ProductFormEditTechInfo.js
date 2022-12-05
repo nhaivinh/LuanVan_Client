@@ -8,7 +8,6 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 
 export default function ProductFormEditTechInfo({ product, setProduct, typeProduct }) {
-    console.log(product)
     function showProductByTypeHarddisk() {
         if (product.type_harddisk !== undefined) {
             switch (product.type_harddisk) {
@@ -41,6 +40,7 @@ export default function ProductFormEditTechInfo({ product, setProduct, typeProdu
                                 variant="outlined"
                                 label="Tốc độ đọc"
                                 size="small"
+                                type="number"
                                 defaultValue={product.read_speed}
                                 onChange={(e) => { setProduct({ ...product, read_speed: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
@@ -50,6 +50,7 @@ export default function ProductFormEditTechInfo({ product, setProduct, typeProdu
                                 variant="outlined"
                                 label="Tốc độ ghi"
                                 size="small"
+                                type="number"
                                 defaultValue={product.write_speed}
                                 onChange={(e) => { setProduct({ ...product, write_speed: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
@@ -71,6 +72,7 @@ export default function ProductFormEditTechInfo({ product, setProduct, typeProdu
                                 fullWidth
                                 variant="outlined"
                                 label="Số nhân xử lý"
+                                type="number"
                                 size="small"
                                 defaultValue={product.core_cpu}
                                 onChange={(e) => { setProduct({ ...product, core_cpu: e.target.value }) }}
@@ -81,6 +83,7 @@ export default function ProductFormEditTechInfo({ product, setProduct, typeProdu
                                 fullWidth
                                 variant="outlined"
                                 label="Luồng xử lý"
+                                type="number"
                                 size="small"
                                 defaultValue={product.thread_cpu}
                                 onChange={(e) => { setProduct({ ...product, thread_cpu: e.target.value }) }}
@@ -124,6 +127,7 @@ export default function ProductFormEditTechInfo({ product, setProduct, typeProdu
                                 variant="outlined"
                                 label="Công suất"
                                 size="small"
+                                type="number"
                                 defaultValue={product.tdp_cpu}
                                 onChange={(e) => { setProduct({ ...product, tdp_cpu: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
@@ -164,6 +168,7 @@ export default function ProductFormEditTechInfo({ product, setProduct, typeProdu
                                 variant="outlined"
                                 label="Điểm số"
                                 size="small"
+                                type="number"
                                 defaultValue={product.scope_cpu}
                                 onChange={(e) => { setProduct({ ...product, scope_cpu: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
@@ -223,6 +228,7 @@ export default function ProductFormEditTechInfo({ product, setProduct, typeProdu
                                 variant="outlined"
                                 label="Tổng số khe ram"
                                 size="small"
+                                type="number"
                                 defaultValue={product.max_slot_ram}
                                 onChange={(e) => { setProduct({ ...product, max_slot_ram: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
@@ -426,6 +432,7 @@ export default function ProductFormEditTechInfo({ product, setProduct, typeProdu
                                 variant="outlined"
                                 label="Công suất"
                                 size="small"
+                                type="number"
                                 defaultValue={product.tdp_gpu}
                                 onChange={(e) => { setProduct({ ...product, tdp_gpu: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
@@ -486,6 +493,7 @@ export default function ProductFormEditTechInfo({ product, setProduct, typeProdu
                                 variant="outlined"
                                 label="Điểm số"
                                 size="small"
+                                type="number"
                                 defaultValue={product.scope_gpu}
                                 onChange={(e) => { setProduct({ ...product, scope_gpu: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
@@ -572,6 +580,7 @@ export default function ProductFormEditTechInfo({ product, setProduct, typeProdu
                                 variant="outlined"
                                 label="Tốc độ"
                                 size="small"
+                                type="number"
                                 defaultValue={product.speed_bus}
                                 onChange={(e) => { setProduct({ ...product, speed_bus: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
@@ -582,6 +591,7 @@ export default function ProductFormEditTechInfo({ product, setProduct, typeProdu
                                 variant="outlined"
                                 label="Hiệu điện thế"
                                 size="small"
+                                type="number"
                                 defaultValue={product.voltage}
                                 onChange={(e) => { setProduct({ ...product, voltage: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
@@ -594,6 +604,7 @@ export default function ProductFormEditTechInfo({ product, setProduct, typeProdu
                                 variant="outlined"
                                 label="Độ trễ"
                                 size="small"
+                                type="number"
                                 defaultValue={product.delay_time}
                                 onChange={(e) => { setProduct({ ...product, delay_time: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
@@ -603,6 +614,7 @@ export default function ProductFormEditTechInfo({ product, setProduct, typeProdu
                                 fullWidth
                                 variant="outlined"
                                 label="Dung lượng"
+                                type="number"
                                 size="small"
                                 defaultValue={product.capacity_ram}
                                 onChange={(e) => { setProduct({ ...product, capacity_ram: e.target.value }) }}
@@ -804,6 +816,7 @@ export default function ProductFormEditTechInfo({ product, setProduct, typeProdu
                                 variant="outlined"
                                 label="Công suất"
                                 size="small"
+                                type="number"
                                 defaultValue={product.wattage}
                                 onChange={(e) => { setProduct({ ...product, wattage: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}

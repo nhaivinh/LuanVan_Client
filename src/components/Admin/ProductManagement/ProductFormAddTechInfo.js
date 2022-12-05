@@ -45,6 +45,7 @@ export default function ProductFormAddTechInfo({ infoTech, setInfoTech, typeProd
                                 variant="outlined"
                                 label="Tốc độ đọc"
                                 size="small"
+                                type="number"
                                 onChange={(e) => { setInfoTech({ ...infoTech, ReadSpeed: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
                             />
@@ -53,6 +54,7 @@ export default function ProductFormAddTechInfo({ infoTech, setInfoTech, typeProd
                                 variant="outlined"
                                 label="Tốc độ ghi"
                                 size="small"
+                                type="number"
                                 onChange={(e) => { setInfoTech({ ...infoTech, WriteSpeed: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
                             />
@@ -75,6 +77,7 @@ export default function ProductFormAddTechInfo({ infoTech, setInfoTech, typeProd
                                 variant="outlined"
                                 label="Số nhân xử lý"
                                 size="small"
+                                type="number"
                                 onChange={(e) => { setInfoTech({ ...infoTech, CoreCPU: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
                             >
@@ -84,6 +87,7 @@ export default function ProductFormAddTechInfo({ infoTech, setInfoTech, typeProd
                                 variant="outlined"
                                 label="Luồng xử lý"
                                 size="small"
+                                type="number"
                                 onChange={(e) => { setInfoTech({ ...infoTech, ThreadCPU: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
                             >
@@ -122,6 +126,7 @@ export default function ProductFormAddTechInfo({ infoTech, setInfoTech, typeProd
                                 variant="outlined"
                                 label="Công suất"
                                 size="small"
+                                type="number"
                                 onChange={(e) => { setInfoTech({ ...infoTech, TDPCPU: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
                             >
@@ -158,6 +163,7 @@ export default function ProductFormAddTechInfo({ infoTech, setInfoTech, typeProd
                                 variant="outlined"
                                 label="Điểm số"
                                 size="small"
+                                type="number"
                                 onChange={(e) => { setInfoTech({ ...infoTech, ScopeCPU: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
                             >
@@ -212,6 +218,7 @@ export default function ProductFormAddTechInfo({ infoTech, setInfoTech, typeProd
                                 variant="outlined"
                                 label="Tổng số khe ram"
                                 size="small"
+                                type="number"
                                 onChange={(e) => { setInfoTech({ ...infoTech, MaxSlotRam: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
                             >
@@ -396,6 +403,7 @@ export default function ProductFormAddTechInfo({ infoTech, setInfoTech, typeProd
                                 variant="outlined"
                                 label="Công suất"
                                 size="small"
+                                type="number"
                                 onChange={(e) => { setInfoTech({ ...infoTech, TDPGPU: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
                             >
@@ -450,6 +458,7 @@ export default function ProductFormAddTechInfo({ infoTech, setInfoTech, typeProd
                                 variant="outlined"
                                 label="Điểm số"
                                 size="small"
+                                type="number"
                                 onChange={(e) => { setInfoTech({ ...infoTech, ScopeGPU: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
                             >
@@ -531,6 +540,7 @@ export default function ProductFormAddTechInfo({ infoTech, setInfoTech, typeProd
                                 variant="outlined"
                                 label="Tốc độ"
                                 size="small"
+                                type="number"
                                 onChange={(e) => { setInfoTech({ ...infoTech, SpeedBus: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
                             >
@@ -540,6 +550,7 @@ export default function ProductFormAddTechInfo({ infoTech, setInfoTech, typeProd
                                 variant="outlined"
                                 label="Hiệu điện thế"
                                 size="small"
+                                type="number"
                                 onChange={(e) => { setInfoTech({ ...infoTech, Voltage: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
                             >
@@ -551,6 +562,7 @@ export default function ProductFormAddTechInfo({ infoTech, setInfoTech, typeProd
                                 variant="outlined"
                                 label="Độ trễ"
                                 size="small"
+                                type="number"
                                 onChange={(e) => { setInfoTech({ ...infoTech, DelayTime: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
                             >
@@ -560,6 +572,7 @@ export default function ProductFormAddTechInfo({ infoTech, setInfoTech, typeProd
                                 variant="outlined"
                                 label="Dung lượng"
                                 size="small"
+                                type="number"
                                 onChange={(e) => { setInfoTech({ ...infoTech, CapacityRam: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
                             >
@@ -742,6 +755,7 @@ export default function ProductFormAddTechInfo({ infoTech, setInfoTech, typeProd
                                 variant="outlined"
                                 label="Công suất"
                                 size="small"
+                                type="number"
                                 onChange={(e) => { setInfoTech({ ...infoTech, Wattage: e.target.value }) }}
                                 style={{ paddingBottom: 20 }}
                             >
