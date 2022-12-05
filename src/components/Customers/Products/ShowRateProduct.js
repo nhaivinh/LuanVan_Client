@@ -106,17 +106,6 @@ IconContainer.propTypes = {
 
 export default function ShowRateProduct({ rate }) {
 
-    const [accountInfo, setAccountInfo] = React.useState([])
-
-
-    React.useEffect(() => {
-        axios.get(`https://localhost:7253/api/Login/getinfobyidCustomer/` + rate.id_customer)
-            .then(res => {
-                const Account = res.data;
-                setAccountInfo(Account[0]);
-            })
-    }, [rate])
-
     return (
         <Box>     
             <Box
@@ -134,16 +123,16 @@ export default function ShowRateProduct({ rate }) {
                         marginTop: 5,
                     }}
                 >
-                    {accountInfo.picture_char !== null ?
+                    {rate.picture_char !== null ?
                         <Avatar
                             id="basic-button"
-                            src={accountInfo.picture_char}
+                            src={rate.picture_char}
                         >
                         </Avatar>
                         :
                         <Avatar
                             id="basic-button"
-                            src={"data:image/png;base64, " + accountInfo.picture_link_avatar}
+                            src={"data:image/png;base64, " + rate.picture_link_avatar}
                         >
                         </Avatar>
                     }
@@ -167,7 +156,7 @@ export default function ShowRateProduct({ rate }) {
                                 display: 'flex',
                                 flexDirection: 'row',
                             }}>
-                            <Typography><b>{accountInfo.name_customer}</b></Typography>
+                            <Typography><b>{rate.name_customer}</b></Typography>
                             <Box
                                 style={{
                                     display: 'flex',

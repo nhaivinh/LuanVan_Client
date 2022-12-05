@@ -180,16 +180,30 @@ export default function RateProduct({ item, resetPage, handleResetPage }) {
 
             </TableCell>
             <TableCell component="th" scope="row" align="left">
-                <TextField
-                    id="outlined-multiline-static"
-                    multiline
-                    fullWidth
-                    rows={2}
-                    defaultValue={valueContent}
-                    onChange={(event) => {
-                        setValueContent(event.target.value)
-                    }}
-                />
+                {canRate === false ?
+                    <TextField
+                        disabled
+                        id="outlined-multiline-static"
+                        multiline
+                        fullWidth
+                        rows={2}
+                        defaultValue={valueContent}
+                        onChange={(event) => {
+                            setValueContent(event.target.value)
+                        }}
+                    />
+                    :
+                    <TextField
+                        id="outlined-multiline-static"
+                        multiline
+                        fullWidth
+                        rows={2}
+                        defaultValue={valueContent}
+                        onChange={(event) => {
+                            setValueContent(event.target.value)
+                        }}
+                    />
+                }
             </TableCell>
             <TableCell component="th" scope="row" align="left">
                 {canRate === false ?
