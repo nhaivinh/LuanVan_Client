@@ -134,7 +134,6 @@ const Register = () => {
 
         if (validName && validEmail && validPhoneNumber && validDayOfBirth && validIdentityCard && validGender) {
             addPosts(register);
-            console.log(register)
         } else {
             alert(thongbao);
         }
@@ -149,9 +148,16 @@ const Register = () => {
             })
             .then((response) => {
                 setPostsAccount([response.data, ...postsAccount]);
+                dispatch(setOpenSnackBar());
+                dispatch(setMessage(response.data.message));
+                dispatch(setSeverity(response.data.severity));
+                if (response.data.severity === "success") {
+                    navigate("/login")
+                }
             })
-            .then(() => {
-                clientCustomer
+            .then((response) => {
+                if (response.data.severity === "success") {
+                    clientCustomer
                     .post('', {
                         "nameCustomer": Account.Name,
                         "emailCustomer": Account.Email,
@@ -165,7 +171,9 @@ const Register = () => {
                         dispatch(setOpenSnackBar());
                         dispatch(setMessage(response.data.message));
                         dispatch(setSeverity(response.data.severity));
-                        navigate("/login")
+                        if (response.data.severity === "success") {
+                            navigate("/login")
+                        }
                     })
                     .catch((err) => {
                         if (err.response) {
@@ -179,6 +187,8 @@ const Register = () => {
                             // Anything else
                         }
                     });
+                }
+                
             })
             .catch((err) => {
                 if (err.response) {

@@ -685,7 +685,9 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
                 )
             }
         } else {
-            alert("Số tiền nhập vào chưa phù hợp")
+            dispatch(setOpenSnackBar());
+            dispatch(setMessage("Số tiền nhập vào chưa phù hợp"));
+            dispatch(setSeverity("error"));
             setSelectedProducts(
                 []
             )
@@ -723,7 +725,9 @@ function AutoBuildPC({ resetPage, handleResetPage }) {
             nhanhCan(0)
             handleGetChosenProduct(product)
         } else {
-            alert("Số tiền nhập vào chưa phù hợp")
+            dispatch(setOpenSnackBar());
+            dispatch(setMessage("Số tiền nhập vào chưa phù hợp"));
+            dispatch(setSeverity("error"));
         }
     }
 
