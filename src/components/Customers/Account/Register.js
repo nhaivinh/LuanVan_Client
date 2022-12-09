@@ -148,47 +148,42 @@ const Register = () => {
             })
             .then((response) => {
                 setPostsAccount([response.data, ...postsAccount]);
-                dispatch(setOpenSnackBar());
-                dispatch(setMessage(response.data.message));
-                dispatch(setSeverity(response.data.severity));
-                if (response.data.severity === "success") {
-                    navigate("/login")
-                }
-            })
-            .then((response) => {
                 if (response.data.severity === "success") {
                     clientCustomer
-                    .post('', {
-                        "nameCustomer": Account.Name,
-                        "emailCustomer": Account.Email,
-                        "phoneNumberCustomer": Account.Phone,
-                        "dateOfBirthCustomer": Account.Birthday,
-                        "identityCardCustomer": Account.CCCD,
-                        "genderCustomer": Account.Gender,
-                    })
-                    .then((response) => {
-                        setPostsCustomer([response.data, ...postsCustomer]);
-                        dispatch(setOpenSnackBar());
-                        dispatch(setMessage(response.data.message));
-                        dispatch(setSeverity(response.data.severity));
-                        if (response.data.severity === "success") {
-                            navigate("/login")
-                        }
-                    })
-                    .catch((err) => {
-                        if (err.response) {
-                            // The client was given an error response (5xx, 4xx)
-                            console.log(err.response.data);
-                            console.log(err.response.status);
-                            console.log(err.response.headers);
-                        } else if (err.request) {
-                            // The client never received a response, and the request was never left
-                        } else {
-                            // Anything else
-                        }
-                    });
+                        .post('', {
+                            "nameCustomer": Account.Name,
+                            "emailCustomer": Account.Email,
+                            "phoneNumberCustomer": Account.Phone,
+                            "dateOfBirthCustomer": Account.Birthday,
+                            "identityCardCustomer": Account.CCCD,
+                            "genderCustomer": Account.Gender,
+                        })
+                        .then((response) => {
+                            setPostsCustomer([response.data, ...postsCustomer]);
+                            dispatch(setOpenSnackBar());
+                            dispatch(setMessage(response.data.message));
+                            dispatch(setSeverity(response.data.severity));
+                            if (response.data.severity === "success") {
+                                navigate("/login")
+                            }
+                        })
+                        .catch((err) => {
+                            if (err.response) {
+                                // The client was given an error response (5xx, 4xx)
+                                console.log(err.response.data);
+                                console.log(err.response.status);
+                                console.log(err.response.headers);
+                            } else if (err.request) {
+                                // The client never received a response, and the request was never left
+                            } else {
+                                // Anything else
+                            }
+                        });
+                } else {
+                    dispatch(setOpenSnackBar());
+                    dispatch(setMessage(response.data.message));
+                    dispatch(setSeverity(response.data.severity));
                 }
-                
             })
             .catch((err) => {
                 if (err.response) {
